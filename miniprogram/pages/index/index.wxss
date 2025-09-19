@@ -1,7 +1,11 @@
 /**index.wxss**/
+page {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%) !important;
+}
+
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%) !important;
   padding: 40rpx 30rpx;
   box-sizing: border-box;
 }

@@ -2,7 +2,7 @@
 <view class="container">
   <!-- 标题区域 -->
   <view class="header">
-    <text class="title">照片增强AI</text>
+    <text class="title">喵喵美颜</text>
     <text class="subtitle">让每一张照片都变得更加清晰</text>
   </view>
 
