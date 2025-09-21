@@ -205,57 +205,81 @@ Component({
       })
     },
 
-    // 下载增强后的图片
+    // 保存增强后的图片到相册
     downloadImage() {
       if (!this.data.enhancedImage) {
         wx.showToast({
-          title: '没有可下载的图片',
+          title: '没有可保存的图片',
           icon: 'error'
         })
         return
       }
 
       wx.showLoading({
-        title: '下载中...'
+        title: '保存中...'
       })
 
-      wx.downloadFile({
-        url: this.data.enhancedImage,
-        success: (res) => {
-          wx.hideLoading()
-          if (res.statusCode === 200) {
-            // 保存到相册
-            wx.saveImageToPhotosAlbum({
-              filePath: res.tempFilePath,
-              success: () => {
-                wx.showToast({
-                  title: '保存成功',
-                  icon: 'success'
-                })
-              },
-              fail: () => {
-                wx.showToast({
-                  title: '保存失败',
-                  icon: 'error'
-                })
-              }
-            })
-          } else {
+      // 检查是否是本地文件路径
+      if (this.data.enhancedImage.startsWith('http')) {
+        // 如果是网络URL，使用downloadFile
+        wx.downloadFile({
+          url: this.data.enhancedImage,
+          success: (res) => {
+            wx.hideLoading()
+            if (res.statusCode === 200) {
+              // 保存到相册
+              wx.saveImageToPhotosAlbum({
+                filePath: res.tempFilePath,
+                success: () => {
+                  wx.showToast({
+                    title: '保存成功',
+                    icon: 'success'
+                  })
+                },
+                fail: () => {
+                  wx.showToast({
+                    title: '保存失败',
+                    icon: 'error'
+                  })
+                }
+              })
+            } else {
+              wx.showToast({
+                title: '下载失败',
+                icon: 'error'
+              })
+            }
+          },
+          fail: (err) => {
+            wx.hideLoading()
+            console.error('下载失败:', err)
             wx.showToast({
               title: '下载失败',
               icon: 'error'
             })
           }
-        },
-        fail: (err) => {
-          wx.hideLoading()
-          console.error('下载失败:', err)
-          wx.showToast({
-            title: '下载失败',
-            icon: 'error'
-          })
-        }
-      })
+        })
+      } else {
+        // 如果是本地文件路径，直接保存
+        wx.saveImageToPhotosAlbum({
+          filePath: this.data.enhancedImage,
+          success: () => {
+            wx.hideLoading()
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success'
+            })
+          },
+          fail: (err) => {
+            wx.hideLoading()
+            console.error('保存失败:', err)
+            wx.showToast({
+              title: '保存失败',
+              icon: 'error'
+            })
+          }
+        })
+      }
     },
 
     // 格式化文件大小
