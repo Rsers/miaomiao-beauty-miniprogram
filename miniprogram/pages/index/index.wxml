@@ -93,6 +93,7 @@
             </view>
           </view>
           <text class="image-size">{{originalImageSize}}</text>
+          <text class="file-size-info">{{originalFileSize}}</text>
         </view>
         
         <!-- 处理后图片 -->
@@ -105,6 +106,7 @@
             </view>
           </view>
           <text class="image-size">{{enhancedImageSize}}</text>
+          <text class="file-size-info">{{enhancedFileSize}}</text>
         </view>
       </view>
 

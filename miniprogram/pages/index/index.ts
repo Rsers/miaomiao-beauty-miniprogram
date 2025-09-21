@@ -22,6 +22,8 @@ Component({
     progress: 0, // 添加进度数据
     originalImageSize: '', // 原图尺寸
     enhancedImageSize: '', // 增强图尺寸
+    originalFileSize: '', // 原图文件大小
+    enhancedFileSize: '', // 增强图文件大小
   },
   methods: {
     // 选择图片
@@ -47,7 +49,9 @@ Component({
               enhancedImage: '', // 清除之前的结果
               progress: 0, // 重置进度
               originalImageSize: imageSize,
-              enhancedImageSize: '' // 清除增强图尺寸
+              enhancedImageSize: '', // 清除增强图尺寸
+              originalFileSize: formatSize, // 保存原图文件大小
+              enhancedFileSize: '' // 清除增强图文件大小
             })
           })
         },
@@ -73,6 +77,21 @@ Component({
         fail: (err) => {
           console.error('获取图片尺寸失败:', err)
           callback('未知尺寸')
+        }
+      })
+    },
+
+    // 获取文件大小
+    getFileSize(filePath: string, callback: (size: string) => void) {
+      wx.getFileInfo({
+        filePath: filePath,
+        success: (res) => {
+          const formatSize = this.formatFileSize(res.size)
+          callback(formatSize)
+        },
+        fail: (err) => {
+          console.error('获取文件大小失败:', err)
+          callback('未知大小')
         }
       })
     },
@@ -111,10 +130,15 @@ Component({
                 isProcessing: false,
                 progress: 100
               })
-              // 获取增强图尺寸
+              // 获取增强图尺寸和文件大小
               this.getImageSize(data.enhanced_image_url, (imageSize) => {
                 this.setData({
                   enhancedImageSize: imageSize
+                })
+              })
+              this.getFileSize(data.enhanced_image_url, (fileSize) => {
+                this.setData({
+                  enhancedFileSize: fileSize
                 })
               })
               wx.showToast({
@@ -238,10 +262,15 @@ Component({
                 isProcessing: false,
                 progress: 100
               })
-              // 获取增强图尺寸
+              // 获取增强图尺寸和文件大小
               this.getImageSize(filePath, (imageSize) => {
                 this.setData({
                   enhancedImageSize: imageSize
+                })
+              })
+              this.getFileSize(filePath, (fileSize) => {
+                this.setData({
+                  enhancedFileSize: fileSize
                 })
               })
               wx.showToast({
