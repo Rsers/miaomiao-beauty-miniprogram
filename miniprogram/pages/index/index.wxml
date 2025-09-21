@@ -6,47 +6,43 @@
     <text class="subtitle">让每一张照片都变得更加清晰</text>
   </view>
 
-  <!-- 版本选择区域 -->
-  <view class="version-section">
-    <view class="version-title">
-      <text class="version-title-text">选择使用方式</text>
+  <!-- 功能介绍区域 -->
+  <view class="features-section">
+    <view class="section-title">
+      <text>AI 图片增强</text>
     </view>
     
-    <!-- 小程序版 -->
-    <view class="version-card mini-version">
-      <view class="version-header">
-        <text class="version-icon">📱</text>
-        <text class="version-name">小程序版</text>
+    <view class="features-grid">
+      <view class="feature-card">
+        <text class="feature-icon">✨</text>
+        <text class="feature-title">智能增强</text>
+        <text class="feature-desc">AI 算法自动优化图片质量</text>
       </view>
-      <text class="version-desc">快速单张图片增强</text>
-      <view class="version-features">
-        <text class="feature-item">✓ 单张图片处理</text>
-        <text class="feature-item">✓ 快速增强</text>
-        <text class="feature-item">✓ 即时预览</text>
+      
+      <view class="feature-card">
+        <text class="feature-icon">⚡</text>
+        <text class="feature-title">快速处理</text>
+        <text class="feature-desc">10-30秒完成图片增强</text>
       </view>
-    </view>
-    
-    <!-- 完整版 -->
-    <view class="version-card full-version" bindtap="openWebVersion">
-      <view class="version-header">
-        <text class="version-icon">🌐</text>
-        <text class="version-name">完整版</text>
-        <view class="recommend-badge">推荐</view>
+      
+      <view class="feature-card">
+        <text class="feature-icon">📱</text>
+        <text class="feature-title">即时预览</text>
+        <text class="feature-desc">实时对比原图和处理结果</text>
       </view>
-      <text class="version-desc">批量处理，功能更强大</text>
-      <view class="version-features">
-        <text class="feature-item">✓ 批量图片处理</text>
-        <text class="feature-item">✓ 更多增强选项</text>
-        <text class="feature-item">✓ 高级功能</text>
+      
+      <view class="feature-card">
+        <text class="feature-icon">💾</text>
+        <text class="feature-title">一键保存</text>
+        <text class="feature-desc">直接保存到手机相册</text>
       </view>
-      <button class="use-full-btn">立即使用</button>
     </view>
   </view>
 
-  <!-- 小程序版功能区域 -->
-  <view class="mini-features-section">
+  <!-- 图片处理功能区域 -->
+  <view class="processing-section">
     <view class="section-title">
-      <text>小程序版功能</text>
+      <text>开始处理</text>
     </view>
     
     <!-- 图片上传区域 -->

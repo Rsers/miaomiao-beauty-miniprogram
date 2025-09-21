@@ -16,98 +16,49 @@ page {
   margin-bottom: 40rpx;
 }
 
-/* 版本选择区域 */
-.version-section {
+/* 功能介绍区域 */
+.features-section {
   margin-bottom: 40rpx;
 }
 
-.version-title {
-  text-align: center;
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
   margin-bottom: 30rpx;
 }
 
-.version-title-text {
-  font-size: 32rpx;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.version-card {
+.feature-card {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
+  padding: 30rpx 20rpx;
+  text-align: center;
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
-  position: relative;
 }
 
-.version-card:active {
-  transform: scale(0.98);
-  transition: transform 0.1s ease;
-}
-
-.version-header {
-  display: flex;
-  align-items: center;
+.feature-icon {
+  display: block;
+  font-size: 48rpx;
   margin-bottom: 15rpx;
 }
 
-.version-icon {
-  font-size: 36rpx;
-  margin-right: 15rpx;
-}
-
-.version-name {
-  font-size: 32rpx;
+.feature-title {
+  display: block;
+  font-size: 28rpx;
   font-weight: bold;
   color: #333;
-  flex: 1;
+  margin-bottom: 10rpx;
 }
 
-.recommend-badge {
-  background: linear-gradient(45deg, #ff9a9e, #fecfef);
-  color: white;
-  font-size: 20rpx;
-  padding: 6rpx 12rpx;
-  border-radius: 12rpx;
-  font-weight: bold;
-}
-
-.version-desc {
-  font-size: 26rpx;
-  color: #666;
-  margin-bottom: 20rpx;
-}
-
-.version-features {
-  margin-bottom: 20rpx;
-}
-
-.feature-item {
+.feature-desc {
   display: block;
-  font-size: 24rpx;
-  color: #555;
-  margin-bottom: 8rpx;
+  font-size: 22rpx;
+  color: #666;
+  line-height: 1.4;
 }
 
-.use-full-btn {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-  color: white;
-  border: none;
-  border-radius: 12rpx;
-  padding: 16rpx 32rpx;
-  font-size: 26rpx;
-  font-weight: bold;
-  box-shadow: 0 4rpx 16rpx rgba(255, 154, 158, 0.3);
-}
-
-.use-full-btn:active {
-  transform: translateY(1rpx);
-  box-shadow: 0 2rpx 8rpx rgba(255, 154, 158, 0.3);
-}
-
-/* 小程序版功能区域 */
-.mini-features-section {
+/* 图片处理功能区域 */
+.processing-section {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 24rpx;
   padding: 30rpx;
