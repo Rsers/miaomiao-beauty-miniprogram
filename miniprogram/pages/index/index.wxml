@@ -6,7 +6,50 @@
     <text class="subtitle">让每一张照片都变得更加清晰</text>
   </view>
 
-  <!-- 图片上传区域 -->
+  <!-- 版本选择区域 -->
+  <view class="version-section">
+    <view class="version-title">
+      <text class="version-title-text">选择使用方式</text>
+    </view>
+    
+    <!-- 小程序版 -->
+    <view class="version-card mini-version">
+      <view class="version-header">
+        <text class="version-icon">📱</text>
+        <text class="version-name">小程序版</text>
+      </view>
+      <text class="version-desc">快速单张图片增强</text>
+      <view class="version-features">
+        <text class="feature-item">✓ 单张图片处理</text>
+        <text class="feature-item">✓ 快速增强</text>
+        <text class="feature-item">✓ 即时预览</text>
+      </view>
+    </view>
+    
+    <!-- 完整版 -->
+    <view class="version-card full-version" bindtap="openWebVersion">
+      <view class="version-header">
+        <text class="version-icon">🌐</text>
+        <text class="version-name">完整版</text>
+        <view class="recommend-badge">推荐</view>
+      </view>
+      <text class="version-desc">批量处理，功能更强大</text>
+      <view class="version-features">
+        <text class="feature-item">✓ 批量图片处理</text>
+        <text class="feature-item">✓ 更多增强选项</text>
+        <text class="feature-item">✓ 高级功能</text>
+      </view>
+      <button class="use-full-btn">立即使用</button>
+    </view>
+  </view>
+
+  <!-- 小程序版功能区域 -->
+  <view class="mini-features-section">
+    <view class="section-title">
+      <text>小程序版功能</text>
+    </view>
+    
+    <!-- 图片上传区域 -->
   <view class="upload-section">
     <view wx:if="{{!selectedImage}}" class="upload-area" bindtap="chooseImage">
       <view class="upload-icon">📷</view>

@@ -4,7 +4,7 @@ const app = getApp<IAppOption>()
 
 // API配置
 const API_CONFIG = {
-  BASE_URL: 'http://139.186.166.51:8000',
+  BASE_URL: 'https://www.gongjuxiang.work',
   ENDPOINTS: {
     ENHANCE: '/api/v1/enhance',
     STATUS: '/api/v1/status',
@@ -164,6 +164,28 @@ Component({
       const sizes = ['B', 'KB', 'MB', 'GB']
       const i = Math.floor(Math.log(bytes) / Math.log(k))
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+    },
+
+    // 打开Web版本
+    openWebVersion() {
+      wx.showLoading({
+        title: '正在跳转...'
+      })
+
+      wx.navigateTo({
+        url: '/pages/webview/webview',
+        success: () => {
+          wx.hideLoading()
+        },
+        fail: (err) => {
+          wx.hideLoading()
+          console.error('跳转失败:', err)
+          wx.showToast({
+            title: '跳转失败，请重试',
+            icon: 'error'
+          })
+        }
+      })
     },
   },
 })
