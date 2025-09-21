@@ -106,7 +106,7 @@ Component({
         return
       }
 
-      this.setData({ 
+      this.setData({
         isProcessing: true,
         progress: 5 // 开始处理，设置初始进度
       })
@@ -154,7 +154,7 @@ Component({
               title: '处理失败，请重试',
               icon: 'error'
             })
-            this.setData({ 
+            this.setData({
               isProcessing: false,
               progress: 0
             })
@@ -166,7 +166,7 @@ Component({
             title: '网络错误，请重试',
             icon: 'error'
           })
-          this.setData({ 
+          this.setData({
             isProcessing: false,
             progress: 0
           })
@@ -182,26 +182,26 @@ Component({
 
       const poll = () => {
         attempts++
-        
+
         // 计算进度百分比
         const baseProgress = 15 // 上传完成的基础进度
         const processingProgress = Math.min(85, baseProgress + (attempts * 1.2)) // 每次轮询增加1.2%
-        
+
         this.setData({ progress: Math.floor(processingProgress) })
-        
+
         wx.request({
           url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.STATUS}/${taskId}`,
           method: 'GET',
           success: (res) => {
             const data = res.data
-            
+
             if (data.status === 'completed') {
               // 处理完成，下载结果
               this.setData({ progress: 90 })
               this.downloadResult(taskId)
             } else if (data.status === 'failed') {
               // 处理失败
-              this.setData({ 
+              this.setData({
                 isProcessing: false,
                 progress: 0
               })
@@ -214,7 +214,7 @@ Component({
               if (attempts < maxAttempts) {
                 setTimeout(poll, interval)
               } else {
-                this.setData({ 
+                this.setData({
                   isProcessing: false,
                   progress: 0
                 })
@@ -226,7 +226,7 @@ Component({
             }
           },
           fail: (error) => {
-            this.setData({ 
+            this.setData({
               isProcessing: false,
               progress: 0
             })
@@ -252,7 +252,7 @@ Component({
           // 将ArrayBuffer转换为临时文件
           const fs = wx.getFileSystemManager()
           const filePath = `${wx.env.USER_DATA_PATH}/enhanced_${taskId}.jpg`
-          
+
           fs.writeFile({
             filePath: filePath,
             data: res.data,
@@ -279,7 +279,7 @@ Component({
               })
             },
             fail: (error) => {
-              this.setData({ 
+              this.setData({
                 isProcessing: false,
                 progress: 0
               })
@@ -292,7 +292,7 @@ Component({
           })
         },
         fail: (error) => {
-          this.setData({ 
+          this.setData({
             isProcessing: false,
             progress: 0
           })

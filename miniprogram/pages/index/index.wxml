@@ -123,6 +123,14 @@
       <view class="loading-spinner"></view>
       <text class="processing-text">AI正在增强您的图片...</text>
       <text class="progress-text">{{progress}}%</text>
+      
+      <!-- 进度条 -->
+      <view class="progress-bar-container">
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{progress}}%"></view>
+        </view>
+      </view>
+      
       <text class="processing-hint">请耐心等待，通常需要10-30秒</text>
     </view>
   </view>
