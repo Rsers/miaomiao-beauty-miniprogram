@@ -80,6 +80,7 @@
       <view class="result-title">
         <text>处理结果</text>
         <text class="preview-hint">点击图片可放大查看，支持左右滑动切换</text>
+        <text class="preview-tip">💡 建议先放大到相同倍数再滑动对比</text>
       </view>
       
       <view class="comparison-container">
@@ -110,9 +111,16 @@
         </view>
       </view>
 
-      <!-- 下载按钮 -->
-      <view class="download-section">
-        <button class="download-btn" bindtap="downloadImage">下载增强图片</button>
+      <!-- 操作按钮区域 -->
+      <view class="action-buttons">
+        <button class="download-btn" bindtap="downloadImage">
+          <text class="btn-icon">💾</text>
+          <text class="btn-text">保存图片</text>
+        </button>
+        <button class="share-btn" bindtap="shareImage">
+          <text class="btn-icon">📤</text>
+          <text class="btn-text">分享图片</text>
+        </button>
       </view>
     </view>
   </view>

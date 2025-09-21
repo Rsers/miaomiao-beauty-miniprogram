@@ -42,10 +42,10 @@ Component({
 
           // 获取图片尺寸信息
           this.getImageSize(tempFilePath, (imageSize) => {
-            this.setData({
-              selectedImage: tempFilePath,
-              fileName: `图片_${Date.now()}`,
-              fileSize: formatSize,
+          this.setData({
+            selectedImage: tempFilePath,
+            fileName: `图片_${Date.now()}`,
+            fileSize: formatSize,
               enhancedImage: '', // 清除之前的结果
               progress: 0, // 重置进度
               originalImageSize: imageSize,
@@ -106,7 +106,7 @@ Component({
         return
       }
 
-      this.setData({
+      this.setData({ 
         isProcessing: true,
         progress: 5 // 开始处理，设置初始进度
       })
@@ -154,7 +154,7 @@ Component({
               title: '处理失败，请重试',
               icon: 'error'
             })
-            this.setData({
+            this.setData({ 
               isProcessing: false,
               progress: 0
             })
@@ -166,7 +166,7 @@ Component({
             title: '网络错误，请重试',
             icon: 'error'
           })
-          this.setData({
+          this.setData({ 
             isProcessing: false,
             progress: 0
           })
@@ -182,26 +182,26 @@ Component({
 
       const poll = () => {
         attempts++
-
+        
         // 计算进度百分比
         const baseProgress = 15 // 上传完成的基础进度
         const processingProgress = Math.min(85, baseProgress + (attempts * 1.2)) // 每次轮询增加1.2%
-
+        
         this.setData({ progress: Math.floor(processingProgress) })
-
+        
         wx.request({
           url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.STATUS}/${taskId}`,
           method: 'GET',
           success: (res) => {
             const data = res.data
-
+            
             if (data.status === 'completed') {
               // 处理完成，下载结果
               this.setData({ progress: 90 })
               this.downloadResult(taskId)
             } else if (data.status === 'failed') {
               // 处理失败
-              this.setData({
+              this.setData({ 
                 isProcessing: false,
                 progress: 0
               })
@@ -214,7 +214,7 @@ Component({
               if (attempts < maxAttempts) {
                 setTimeout(poll, interval)
               } else {
-                this.setData({
+                this.setData({ 
                   isProcessing: false,
                   progress: 0
                 })
@@ -226,7 +226,7 @@ Component({
             }
           },
           fail: (error) => {
-            this.setData({
+            this.setData({ 
               isProcessing: false,
               progress: 0
             })
@@ -252,7 +252,7 @@ Component({
           // 将ArrayBuffer转换为临时文件
           const fs = wx.getFileSystemManager()
           const filePath = `${wx.env.USER_DATA_PATH}/enhanced_${taskId}.jpg`
-
+          
           fs.writeFile({
             filePath: filePath,
             data: res.data,
@@ -279,7 +279,7 @@ Component({
               })
             },
             fail: (error) => {
-              this.setData({
+              this.setData({ 
                 isProcessing: false,
                 progress: 0
               })
@@ -292,7 +292,7 @@ Component({
           })
         },
         fail: (error) => {
-          this.setData({
+          this.setData({ 
             isProcessing: false,
             progress: 0
           })
@@ -375,6 +375,58 @@ Component({
       })
     },
 
+    // 分享图片到微信
+    shareImage() {
+      if (!this.data.enhancedImage) {
+        wx.showToast({
+          title: '没有可分享的图片',
+          icon: 'error'
+        })
+        return
+      }
+
+      wx.showActionSheet({
+        itemList: ['分享到微信好友', '分享到朋友圈', '保存到相册'],
+        success: (res) => {
+          switch (res.tapIndex) {
+            case 0:
+              // 分享到微信好友
+              this.shareToWeChat()
+              break
+            case 1:
+              // 分享到朋友圈
+              this.shareToMoments()
+              break
+            case 2:
+              // 保存到相册
+              this.downloadImage()
+              break
+          }
+        },
+        fail: () => {
+          console.log('用户取消分享')
+        }
+      })
+    },
+
+    // 分享到微信好友
+    shareToWeChat() {
+      wx.showToast({
+        title: '请使用右上角分享按钮',
+        icon: 'none',
+        duration: 2000
+      })
+    },
+
+    // 分享到朋友圈
+    shareToMoments() {
+      wx.showToast({
+        title: '请使用右上角分享按钮',
+        icon: 'none',
+        duration: 2000
+      })
+    },
+
     // 保存增强后的图片到相册
     downloadImage() {
       if (!this.data.enhancedImage) {
@@ -392,43 +444,43 @@ Component({
       // 检查是否是本地文件路径
       if (this.data.enhancedImage.startsWith('http')) {
         // 如果是网络URL，使用downloadFile
-        wx.downloadFile({
-          url: this.data.enhancedImage,
-          success: (res) => {
-            wx.hideLoading()
-            if (res.statusCode === 200) {
-              // 保存到相册
-              wx.saveImageToPhotosAlbum({
-                filePath: res.tempFilePath,
-                success: () => {
-                  wx.showToast({
-                    title: '保存成功',
-                    icon: 'success'
-                  })
-                },
-                fail: () => {
-                  wx.showToast({
-                    title: '保存失败',
-                    icon: 'error'
-                  })
-                }
-              })
-            } else {
-              wx.showToast({
-                title: '下载失败',
-                icon: 'error'
-              })
-            }
-          },
-          fail: (err) => {
-            wx.hideLoading()
-            console.error('下载失败:', err)
+      wx.downloadFile({
+        url: this.data.enhancedImage,
+        success: (res) => {
+          wx.hideLoading()
+          if (res.statusCode === 200) {
+            // 保存到相册
+            wx.saveImageToPhotosAlbum({
+              filePath: res.tempFilePath,
+              success: () => {
+                wx.showToast({
+                  title: '保存成功',
+                  icon: 'success'
+                })
+              },
+              fail: () => {
+                wx.showToast({
+                  title: '保存失败',
+                  icon: 'error'
+                })
+              }
+            })
+          } else {
             wx.showToast({
               title: '下载失败',
               icon: 'error'
             })
           }
-        })
+        },
+        fail: (err) => {
+          wx.hideLoading()
+          console.error('下载失败:', err)
+          wx.showToast({
+            title: '下载失败',
+            icon: 'error'
+          })
+        }
+      })
       } else {
         // 如果是本地文件路径，直接保存
         wx.saveImageToPhotosAlbum({
@@ -462,4 +514,23 @@ Component({
     },
 
   },
+
+  // 分享配置
+  onShareAppMessage() {
+    return {
+      title: '喵喵美颜 - AI图片增强神器',
+      desc: '让每一张照片都变得更加清晰，支持智能增强、批量处理',
+      path: '/pages/index/index',
+      imageUrl: this.data.enhancedImage || '/喵喵美颜-logo.png'
+    }
+  },
+
+  // 分享到朋友圈
+  onShareTimeline() {
+    return {
+      title: '喵喵美颜 - AI图片增强神器',
+      query: '',
+      imageUrl: this.data.enhancedImage || '/喵喵美颜-logo.png'
+    }
+  }
 })

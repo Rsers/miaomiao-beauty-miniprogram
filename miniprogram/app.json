@@ -16,5 +16,8 @@
     "scope.writePhotosAlbum": {
       "desc": "保存增强后的图片到相册"
     }
-  }
+  },
+  "requiredBackgroundModes": ["audio"],
+  "plugins": {},
+  "resizable": true
 }

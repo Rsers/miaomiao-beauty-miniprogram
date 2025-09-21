@@ -220,6 +220,14 @@ page {
   font-weight: normal;
 }
 
+.preview-tip {
+  display: block;
+  font-size: 22rpx;
+  color: #ff9a9e;
+  margin-top: 8rpx;
+  font-weight: normal;
+}
+
 .comparison-container {
   display: flex;
   gap: 20rpx;
@@ -295,19 +303,49 @@ page {
   font-weight: normal;
 }
 
-/* 下载按钮 */
-.download-section {
-  text-align: center;
+/* 操作按钮区域 */
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 30rpx;
 }
 
 .download-btn {
+  flex: 1;
   background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
   color: white;
   border: none;
   border-radius: 12rpx;
-  padding: 20rpx 40rpx;
-  font-size: 28rpx;
+  padding: 20rpx;
+  font-size: 26rpx;
   box-shadow: 0 4rpx 16rpx rgba(255, 154, 158, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-btn {
+  flex: 1;
+  background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  font-size: 26rpx;
+  box-shadow: 0 4rpx 16rpx rgba(76, 175, 80, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon {
+  font-size: 28rpx;
+  margin-right: 8rpx;
+}
+
+.btn-text {
+  font-size: 26rpx;
+  font-weight: bold;
 }
 
 /* 处理进度覆盖层 */
