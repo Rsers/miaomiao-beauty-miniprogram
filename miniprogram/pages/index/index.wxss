@@ -340,6 +340,14 @@ page {
   font-weight: bold;
 }
 
+.progress-text {
+  display: block;
+  font-size: 48rpx;
+  color: #ff9a9e;
+  margin-bottom: 15rpx;
+  font-weight: bold;
+}
+
 .processing-hint {
   display: block;
   font-size: 24rpx;

@@ -19,6 +19,7 @@ Component({
     fileSize: '',
     enhancedImage: '',
     isProcessing: false,
+    progress: 0, // 添加进度数据
   },
   methods: {
     // 选择图片
@@ -39,7 +40,8 @@ Component({
             selectedImage: tempFilePath,
             fileName: `图片_${Date.now()}`,
             fileSize: formatSize,
-            enhancedImage: '' // 清除之前的结果
+            enhancedImage: '', // 清除之前的结果
+            progress: 0 // 重置进度
           })
         },
         fail: (err) => {
@@ -62,7 +64,10 @@ Component({
         return
       }
 
-      this.setData({ isProcessing: true })
+      this.setData({ 
+        isProcessing: true,
+        progress: 5 // 开始处理，设置初始进度
+      })
 
       // 上传图片到服务器进行处理
       wx.uploadFile({
@@ -74,12 +79,14 @@ Component({
             const data = JSON.parse(res.data)
             if (data.task_id) {
               // 异步处理，开始轮询状态
+              this.setData({ progress: 15 }) // 上传完成
               this.pollTaskStatus(data.task_id)
             } else if (data.success && data.enhanced_image_url) {
               // 同步处理完成
               this.setData({
                 enhancedImage: data.enhanced_image_url,
-                isProcessing: false
+                isProcessing: false,
+                progress: 100
               })
               wx.showToast({
                 title: '图片增强完成',
@@ -94,7 +101,10 @@ Component({
               title: '处理失败，请重试',
               icon: 'error'
             })
-            this.setData({ isProcessing: false })
+            this.setData({ 
+              isProcessing: false,
+              progress: 0
+            })
           }
         },
         fail: (err) => {
@@ -103,7 +113,10 @@ Component({
             title: '网络错误，请重试',
             icon: 'error'
           })
-          this.setData({ isProcessing: false })
+          this.setData({ 
+            isProcessing: false,
+            progress: 0
+          })
         }
       })
     },
@@ -117,6 +130,12 @@ Component({
       const poll = () => {
         attempts++
         
+        // 计算进度百分比
+        const baseProgress = 15 // 上传完成的基础进度
+        const processingProgress = Math.min(85, baseProgress + (attempts * 1.2)) // 每次轮询增加1.2%
+        
+        this.setData({ progress: Math.floor(processingProgress) })
+        
         wx.request({
           url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.STATUS}/${taskId}`,
           method: 'GET',
@@ -125,10 +144,14 @@ Component({
             
             if (data.status === 'completed') {
               // 处理完成，下载结果
+              this.setData({ progress: 90 })
               this.downloadResult(taskId)
             } else if (data.status === 'failed') {
               // 处理失败
-              this.setData({ isProcessing: false })
+              this.setData({ 
+                isProcessing: false,
+                progress: 0
+              })
               wx.showToast({
                 title: '处理失败',
                 icon: 'error'
@@ -138,7 +161,10 @@ Component({
               if (attempts < maxAttempts) {
                 setTimeout(poll, interval)
               } else {
-                this.setData({ isProcessing: false })
+                this.setData({ 
+                  isProcessing: false,
+                  progress: 0
+                })
                 wx.showToast({
                   title: '处理超时',
                   icon: 'error'
@@ -147,7 +173,10 @@ Component({
             }
           },
           fail: (error) => {
-            this.setData({ isProcessing: false })
+            this.setData({ 
+              isProcessing: false,
+              progress: 0
+            })
             wx.showToast({
               title: '查询失败',
               icon: 'error'
@@ -177,7 +206,8 @@ Component({
             success: () => {
               this.setData({
                 enhancedImage: filePath,
-                isProcessing: false
+                isProcessing: false,
+                progress: 100
               })
               wx.showToast({
                 title: '图片增强完成',
@@ -185,7 +215,10 @@ Component({
               })
             },
             fail: (error) => {
-              this.setData({ isProcessing: false })
+              this.setData({ 
+                isProcessing: false,
+                progress: 0
+              })
               wx.showToast({
                 title: '保存失败',
                 icon: 'error'
@@ -195,7 +228,10 @@ Component({
           })
         },
         fail: (error) => {
-          this.setData({ isProcessing: false })
+          this.setData({ 
+            isProcessing: false,
+            progress: 0
+          })
           wx.showToast({
             title: '下载失败',
             icon: 'error'
