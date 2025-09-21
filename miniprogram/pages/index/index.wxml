@@ -1,5 +1,21 @@
 <!--index.wxml-->
 <view class="container">
+  <!-- 用户头像区域 -->
+  <view class="user-avatar-section">
+    <button class="avatar-wrapper" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+    </button>
+    <text class="avatar-tip">点击选择头像</text>
+  </view>
+
+  <!-- 昵称输入区域 -->
+  <view class="nickname-section">
+    <view class="nickname-label">
+      <text>昵称</text>
+    </view>
+    <input type="nickname" class="nickname-input" placeholder="请输入昵称" value="{{nickName}}" bindinput="onNicknameInput" />
+  </view>
+
   <!-- 标题区域 -->
   <view class="header">
     <text class="title">喵喵美颜</text>

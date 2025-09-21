@@ -2,6 +2,9 @@
 // 获取应用实例
 const app = getApp<IAppOption>()
 
+// 微信官方默认头像URL
+const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+
 // API配置
 const API_CONFIG = {
   BASE_URL: 'https://www.gongjuxiang.work',
@@ -14,6 +17,11 @@ const API_CONFIG = {
 
 Component({
   data: {
+    // 用户信息
+    avatarUrl: defaultAvatarUrl,
+    nickName: '',
+    
+    // 图片处理
     selectedImage: '',
     fileName: '',
     fileSize: '',
@@ -25,7 +33,74 @@ Component({
     originalFileSize: '', // 原图文件大小
     enhancedFileSize: '', // 增强图文件大小
   },
+
+  lifetimes: {
+    attached() {
+      // 组件加载时读取用户信息
+      this.loadUserInfo();
+    }
+  },
+
+  pageLifetimes: {
+    show() {
+      // 页面显示时读取用户信息
+      this.loadUserInfo();
+    }
+  },
+
   methods: {
+    // 加载用户信息
+    loadUserInfo() {
+      try {
+        const savedAvatar = wx.getStorageSync('userAvatar');
+        const savedNickname = wx.getStorageSync('userNickname');
+        
+        if (savedAvatar) {
+          this.setData({
+            avatarUrl: savedAvatar
+          });
+        }
+        
+        if (savedNickname) {
+          this.setData({
+            nickName: savedNickname
+          });
+        }
+        
+        console.log('加载用户信息:', { avatarUrl: savedAvatar, nickName: savedNickname });
+      } catch (error) {
+        console.error('加载用户信息失败:', error);
+      }
+    },
+    // 选择头像
+    onChooseAvatar(e: any) {
+      console.log('选择头像:', e.detail);
+      const { avatarUrl } = e.detail;
+      this.setData({
+        avatarUrl: avatarUrl
+      });
+      
+      // 保存头像到本地存储
+      wx.setStorageSync('userAvatar', avatarUrl);
+      
+      wx.showToast({
+        title: '头像设置成功',
+        icon: 'success',
+        duration: 1500
+      });
+    },
+
+    // 昵称输入
+    onNicknameInput(e: any) {
+      const nickName = e.detail.value;
+      this.setData({
+        nickName: nickName
+      });
+      
+      // 保存昵称到本地存储
+      wx.setStorageSync('userNickname', nickName);
+    },
+
     // 选择图片
     chooseImage() {
       wx.chooseMedia({
