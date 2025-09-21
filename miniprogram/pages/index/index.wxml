@@ -79,7 +79,7 @@
     <view class="result-section" wx:if="{{enhancedImage}}">
       <view class="result-title">
         <text>处理结果</text>
-        <text class="preview-hint">点击图片可放大查看</text>
+        <text class="preview-hint">点击图片可放大查看，支持左右滑动切换</text>
       </view>
       
       <view class="comparison-container">

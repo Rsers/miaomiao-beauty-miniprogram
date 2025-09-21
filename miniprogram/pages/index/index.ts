@@ -205,7 +205,7 @@ Component({
       })
     },
 
-    // 预览原图
+    // 预览原图（支持左右滑动切换）
     previewOriginalImage() {
       if (!this.data.selectedImage) {
         wx.showToast({
@@ -215,11 +215,20 @@ Component({
         return
       }
 
+      // 构建图片数组，支持左右滑动
+      const imageUrls = []
+      if (this.data.selectedImage) {
+        imageUrls.push(this.data.selectedImage)
+      }
+      if (this.data.enhancedImage) {
+        imageUrls.push(this.data.enhancedImage)
+      }
+
       wx.previewImage({
-        current: this.data.selectedImage,
-        urls: [this.data.selectedImage],
+        current: this.data.selectedImage, // 当前显示原图
+        urls: imageUrls, // 支持左右滑动的图片数组
         success: () => {
-          console.log('预览原图成功')
+          console.log('预览原图成功，支持左右滑动切换')
         },
         fail: (err) => {
           console.error('预览原图失败:', err)
@@ -231,7 +240,7 @@ Component({
       })
     },
 
-    // 预览增强后的图片
+    // 预览增强后的图片（支持左右滑动切换）
     previewEnhancedImage() {
       if (!this.data.enhancedImage) {
         wx.showToast({
@@ -241,11 +250,20 @@ Component({
         return
       }
 
+      // 构建图片数组，支持左右滑动
+      const imageUrls = []
+      if (this.data.selectedImage) {
+        imageUrls.push(this.data.selectedImage)
+      }
+      if (this.data.enhancedImage) {
+        imageUrls.push(this.data.enhancedImage)
+      }
+
       wx.previewImage({
-        current: this.data.enhancedImage,
-        urls: [this.data.enhancedImage],
+        current: this.data.enhancedImage, // 当前显示增强图
+        urls: imageUrls, // 支持左右滑动的图片数组
         success: () => {
-          console.log('预览增强图片成功')
+          console.log('预览增强图片成功，支持左右滑动切换')
         },
         fail: (err) => {
           console.error('预览增强图片失败:', err)
