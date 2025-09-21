@@ -68,11 +68,15 @@ Component({
       wx.uploadFile({
         url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ENHANCE}`,
         filePath: this.data.selectedImage,
-        name: 'image',
+        name: 'file',
         success: (res) => {
           try {
             const data = JSON.parse(res.data)
-            if (data.success && data.enhanced_image_url) {
+            if (data.task_id) {
+              // 异步处理，开始轮询状态
+              this.pollTaskStatus(data.task_id)
+            } else if (data.success && data.enhanced_image_url) {
+              // 同步处理完成
               this.setData({
                 enhancedImage: data.enhanced_image_url,
                 isProcessing: false
@@ -100,6 +104,103 @@ Component({
             icon: 'error'
           })
           this.setData({ isProcessing: false })
+        }
+      })
+    },
+
+    // 轮询任务状态
+    pollTaskStatus(taskId) {
+      const maxAttempts = 60 // 最大轮询次数
+      const interval = 5000   // 轮询间隔5秒
+      let attempts = 0
+
+      const poll = () => {
+        attempts++
+        
+        wx.request({
+          url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.STATUS}/${taskId}`,
+          method: 'GET',
+          success: (res) => {
+            const data = res.data
+            
+            if (data.status === 'completed') {
+              // 处理完成，下载结果
+              this.downloadResult(taskId)
+            } else if (data.status === 'failed') {
+              // 处理失败
+              this.setData({ isProcessing: false })
+              wx.showToast({
+                title: '处理失败',
+                icon: 'error'
+              })
+            } else if (data.status === 'processing' || data.status === 'queued') {
+              // 继续轮询
+              if (attempts < maxAttempts) {
+                setTimeout(poll, interval)
+              } else {
+                this.setData({ isProcessing: false })
+                wx.showToast({
+                  title: '处理超时',
+                  icon: 'error'
+                })
+              }
+            }
+          },
+          fail: (error) => {
+            this.setData({ isProcessing: false })
+            wx.showToast({
+              title: '查询失败',
+              icon: 'error'
+            })
+            console.error('查询状态失败:', error)
+          }
+        })
+      }
+
+      poll()
+    },
+
+    // 下载处理结果
+    downloadResult(taskId) {
+      wx.request({
+        url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.DOWNLOAD}/${taskId}`,
+        method: 'GET',
+        responseType: 'arraybuffer',
+        success: (res) => {
+          // 将ArrayBuffer转换为临时文件
+          const fs = wx.getFileSystemManager()
+          const filePath = `${wx.env.USER_DATA_PATH}/enhanced_${taskId}.jpg`
+          
+          fs.writeFile({
+            filePath: filePath,
+            data: res.data,
+            success: () => {
+              this.setData({
+                enhancedImage: filePath,
+                isProcessing: false
+              })
+              wx.showToast({
+                title: '图片增强完成',
+                icon: 'success'
+              })
+            },
+            fail: (error) => {
+              this.setData({ isProcessing: false })
+              wx.showToast({
+                title: '保存失败',
+                icon: 'error'
+              })
+              console.error('保存失败:', error)
+            }
+          })
+        },
+        fail: (error) => {
+          this.setData({ isProcessing: false })
+          wx.showToast({
+            title: '下载失败',
+            icon: 'error'
+          })
+          console.error('下载失败:', error)
         }
       })
     },
