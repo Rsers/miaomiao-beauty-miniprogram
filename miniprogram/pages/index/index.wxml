@@ -18,39 +18,92 @@
 
   <!-- 标题区域 -->
   <view class="header">
-    <text class="title">喵喵美颜</text>
-    <text class="subtitle">让每一张照片都变得更加清晰</text>
+    <text class="title">AI图片增强 - 喵喵美颜</text>
+    <text class="subtitle">免费AI智能图片处理，无需下载，微信内即可使用</text>
+    <view class="highlight-badge">
+      <text class="badge-text">🔥 热门工具</text>
+      <text class="badge-text">✨ 免费使用</text>
+      <text class="badge-text">⚡ 无需下载</text>
+    </view>
   </view>
 
   <!-- 功能介绍区域 -->
   <view class="features-section">
     <view class="section-title">
-      <text>AI 图片增强</text>
+      <text>🚀 为什么选择我们？</text>
     </view>
     
     <view class="features-grid">
-      <view class="feature-card">
-        <text class="feature-icon">✨</text>
-        <text class="feature-title">智能增强</text>
-        <text class="feature-desc">AI 算法自动优化图片质量</text>
+      <view class="feature-card highlight-card">
+        <text class="feature-icon">🤖</text>
+        <text class="feature-title">AI智能增强</text>
+        <text class="feature-desc">比醒图、美图秀秀更先进的AI算法</text>
+        <text class="feature-tag">技术领先</text>
       </view>
       
-      <view class="feature-card">
-        <text class="feature-icon">⚡</text>
-        <text class="feature-title">快速处理</text>
-        <text class="feature-desc">10-30秒完成图片增强</text>
+      <view class="feature-card highlight-card">
+        <text class="feature-icon">💰</text>
+        <text class="feature-title">完全免费</text>
+        <text class="feature-desc">无需付费，无广告干扰，纯净体验</text>
+        <text class="feature-tag">免费使用</text>
       </view>
       
-      <view class="feature-card">
+      <view class="feature-card highlight-card">
         <text class="feature-icon">📱</text>
-        <text class="feature-title">即时预览</text>
-        <text class="feature-desc">实时对比原图和处理结果</text>
+        <text class="feature-title">无需下载</text>
+        <text class="feature-desc">微信内直接使用，告别APP下载烦恼</text>
+        <text class="feature-tag">便捷高效</text>
       </view>
       
-      <view class="feature-card">
+      <view class="feature-card highlight-card">
         <text class="feature-icon">💾</text>
         <text class="feature-title">一键保存</text>
         <text class="feature-desc">直接保存到手机相册</text>
+        <text class="feature-tag">操作简单</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 竞品对比区域 -->
+  <view class="comparison-section">
+    <view class="section-title">
+      <text>🏆 与其他工具对比</text>
+    </view>
+    
+    <view class="comparison-table">
+      <view class="comparison-header">
+        <text class="feature-column">功能对比</text>
+        <text class="our-tool">喵喵美颜</text>
+        <text class="competitor">醒图</text>
+        <text class="competitor">美图秀秀</text>
+      </view>
+      
+      <view class="comparison-row">
+        <text class="feature-name">免费使用</text>
+        <text class="our-value">✅ 完全免费</text>
+        <text class="comp-value">❌ 部分付费</text>
+        <text class="comp-value">❌ 部分付费</text>
+      </view>
+      
+      <view class="comparison-row">
+        <text class="feature-name">无需下载</text>
+        <text class="our-value">✅ 微信内使用</text>
+        <text class="comp-value">❌ 需要下载APP</text>
+        <text class="comp-value">❌ 需要下载APP</text>
+      </view>
+      
+      <view class="comparison-row">
+        <text class="feature-name">AI技术</text>
+        <text class="our-value">✅ 最新AI算法</text>
+        <text class="comp-value">✅ AI技术</text>
+        <text class="comp-value">⚠️ 传统算法</text>
+      </view>
+      
+      <view class="comparison-row">
+        <text class="feature-name">微信分享</text>
+        <text class="our-value">✅ 一键分享</text>
+        <text class="comp-value">⚠️ 需要保存后分享</text>
+        <text class="comp-value">⚠️ 需要保存后分享</text>
       </view>
     </view>
   </view>
