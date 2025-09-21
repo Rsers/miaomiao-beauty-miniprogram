@@ -116,13 +116,13 @@ Component({
 
       const poll = () => {
         attempts++
-        
+
         wx.request({
           url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.STATUS}/${taskId}`,
           method: 'GET',
           success: (res) => {
             const data = res.data
-            
+
             if (data.status === 'completed') {
               // 处理完成，下载结果
               this.downloadResult(taskId)
@@ -170,7 +170,7 @@ Component({
           // 将ArrayBuffer转换为临时文件
           const fs = wx.getFileSystemManager()
           const filePath = `${wx.env.USER_DATA_PATH}/enhanced_${taskId}.jpg`
-          
+
           fs.writeFile({
             filePath: filePath,
             data: res.data,
