@@ -116,13 +116,13 @@ Component({
 
       const poll = () => {
         attempts++
-
+        
         wx.request({
           url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.STATUS}/${taskId}`,
           method: 'GET',
           success: (res) => {
             const data = res.data
-
+            
             if (data.status === 'completed') {
               // 处理完成，下载结果
               this.downloadResult(taskId)
@@ -170,7 +170,7 @@ Component({
           // 将ArrayBuffer转换为临时文件
           const fs = wx.getFileSystemManager()
           const filePath = `${wx.env.USER_DATA_PATH}/enhanced_${taskId}.jpg`
-
+          
           fs.writeFile({
             filePath: filePath,
             data: res.data,
@@ -201,6 +201,58 @@ Component({
             icon: 'error'
           })
           console.error('下载失败:', error)
+        }
+      })
+    },
+
+    // 预览原图
+    previewOriginalImage() {
+      if (!this.data.selectedImage) {
+        wx.showToast({
+          title: '没有可预览的图片',
+          icon: 'error'
+        })
+        return
+      }
+
+      wx.previewImage({
+        current: this.data.selectedImage,
+        urls: [this.data.selectedImage],
+        success: () => {
+          console.log('预览原图成功')
+        },
+        fail: (err) => {
+          console.error('预览原图失败:', err)
+          wx.showToast({
+            title: '预览失败',
+            icon: 'error'
+          })
+        }
+      })
+    },
+
+    // 预览增强后的图片
+    previewEnhancedImage() {
+      if (!this.data.enhancedImage) {
+        wx.showToast({
+          title: '没有可预览的图片',
+          icon: 'error'
+        })
+        return
+      }
+
+      wx.previewImage({
+        current: this.data.enhancedImage,
+        urls: [this.data.enhancedImage],
+        success: () => {
+          console.log('预览增强图片成功')
+        },
+        fail: (err) => {
+          console.error('预览增强图片失败:', err)
+          wx.showToast({
+            title: '预览失败',
+            icon: 'error'
+          })
         }
       })
     },

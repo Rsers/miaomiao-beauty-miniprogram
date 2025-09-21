@@ -79,19 +79,30 @@
     <view class="result-section" wx:if="{{enhancedImage}}">
       <view class="result-title">
         <text>处理结果</text>
+        <text class="preview-hint">点击图片可放大查看</text>
       </view>
       
       <view class="comparison-container">
         <!-- 原图 -->
         <view class="image-container">
           <text class="image-label">原图</text>
-          <image class="result-image" src="{{selectedImage}}" mode="aspectFit"></image>
+          <view class="image-wrapper" bindtap="previewOriginalImage">
+            <image class="result-image" src="{{selectedImage}}" mode="aspectFit"></image>
+            <view class="preview-overlay">
+              <text class="preview-icon">🔍</text>
+            </view>
+          </view>
         </view>
         
         <!-- 处理后图片 -->
         <view class="image-container">
           <text class="image-label">增强后</text>
-          <image class="result-image" src="{{enhancedImage}}" mode="aspectFit"></image>
+          <view class="image-wrapper" bindtap="previewEnhancedImage">
+            <image class="result-image" src="{{enhancedImage}}" mode="aspectFit"></image>
+            <view class="preview-overlay">
+              <text class="preview-icon">🔍</text>
+            </view>
+          </view>
         </view>
       </view>
 
