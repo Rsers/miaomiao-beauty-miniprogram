@@ -1,0 +1,137 @@
+<!--privacy.wxml-->
+<view class="container">
+  <!-- 标题区域 -->
+  <view class="header">
+    <text class="title">隐私政策</text>
+    <text class="subtitle">保护您的隐私是我们的责任</text>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 1. 信息收集 -->
+    <view class="section">
+      <text class="section-title">1. 我们收集的信息</text>
+      <text class="section-content">
+        1.1 设备信息：设备型号、操作系统版本、小程序版本等基础信息<br/>
+        1.2 使用信息：功能使用情况、处理次数、使用时长等统计信息<br/>
+        1.3 图片信息：您上传的图片仅用于AI处理，不会用于其他用途<br/>
+        1.4 支付信息：通过微信支付完成交易，我们不会存储您的支付密码等敏感信息
+      </text>
+    </view>
+
+    <!-- 2. 信息使用 -->
+    <view class="section">
+      <text class="section-title">2. 信息使用目的</text>
+      <text class="section-content">
+        2.1 提供服务：使用您的图片进行AI增强处理<br/>
+        2.2 改善服务：分析使用数据以优化产品功能<br/>
+        2.3 技术支持：解决技术问题，提供客户服务<br/>
+        2.4 安全保障：检测和防范安全威胁，保护用户权益
+      </text>
+    </view>
+
+    <!-- 3. 信息存储 -->
+    <view class="section">
+      <text class="section-title">3. 信息存储与保护</text>
+      <text class="section-content">
+        3.1 存储期限：处理后的图片会在24小时后自动删除<br/>
+        3.2 存储安全：采用加密技术保护数据安全<br/>
+        3.3 访问控制：严格限制数据访问权限<br/>
+        3.4 数据备份：重要数据会进行安全备份
+      </text>
+    </view>
+
+    <!-- 4. 信息共享 -->
+    <view class="section">
+      <text class="section-title">4. 信息共享与披露</text>
+      <text class="section-content">
+        4.1 我们不会向第三方出售、出租或分享您的个人信息<br/>
+        4.2 仅在以下情况下可能共享信息：<br/>
+        • 获得您的明确同意<br/>
+        • 法律法规要求<br/>
+        • 保护我们的合法权益<br/>
+        • 保护用户或公众的安全
+      </text>
+    </view>
+
+    <!-- 5. 用户权利 -->
+    <view class="section">
+      <text class="section-title">5. 您的权利</text>
+      <text class="section-content">
+        5.1 访问权：您可以查看我们收集的您的信息<br/>
+        5.2 更正权：您可以要求更正不准确的信息<br/>
+        5.3 删除权：您可以要求删除您的个人信息<br/>
+        5.4 撤回同意：您可以随时撤回对信息处理的同意
+      </text>
+    </view>
+
+    <!-- 6. 第三方服务 -->
+    <view class="section">
+      <text class="section-title">6. 第三方服务</text>
+      <text class="section-content">
+        6.1 微信支付：支付功能由微信提供，遵循微信隐私政策<br/>
+        6.2 云服务：使用云服务提供商存储数据，遵循其隐私政策<br/>
+        6.3 分析工具：使用数据分析工具改善用户体验<br/>
+        6.4 我们要求第三方服务商保护您的隐私
+      </text>
+    </view>
+
+    <!-- 7. 儿童隐私 -->
+    <view class="section">
+      <text class="section-title">7. 儿童隐私保护</text>
+      <text class="section-content">
+        7.1 我们不会故意收集14岁以下儿童的个人信息<br/>
+        7.2 如果您发现我们收集了儿童信息，请立即联系我们<br/>
+        7.3 我们会立即删除相关儿童信息<br/>
+        7.4 建议儿童在监护人指导下使用本服务
+      </text>
+    </view>
+
+    <!-- 8. 数据安全 -->
+    <view class="section">
+      <text class="section-title">8. 数据安全措施</text>
+      <text class="section-content">
+        8.1 技术保护：使用SSL加密、防火墙等技术保护数据<br/>
+        8.2 管理保护：建立严格的数据访问管理制度<br/>
+        8.3 物理保护：服务器设备有完善的物理安全措施<br/>
+        8.4 应急响应：建立数据安全事件应急响应机制
+      </text>
+    </view>
+
+    <!-- 9. 政策更新 -->
+    <view class="section">
+      <text class="section-title">9. 隐私政策更新</text>
+      <text class="section-content">
+        9.1 我们可能会更新本隐私政策<br/>
+        9.2 重大变更会提前通知用户<br/>
+        9.3 继续使用服务视为同意更新后的政策<br/>
+        9.4 您可以在本页面查看最新版本
+      </text>
+    </view>
+
+    <!-- 10. 联系我们 -->
+    <view class="section">
+      <text class="section-title">10. 隐私问题联系</text>
+      <text class="section-content">
+        如果您对隐私政策有任何疑问，请通过以下方式联系我们：<br/>
+        邮箱：privacy@gongjuxiang.work<br/>
+        微信：通过小程序内反馈功能<br/>
+        我们将在24小时内回复您的咨询
+      </text>
+    </view>
+
+    <!-- 11. 生效时间 -->
+    <view class="section">
+      <text class="section-title">11. 生效时间</text>
+      <text class="section-content">
+        本隐私政策自2024年1月1日起生效，最后更新时间：2024年1月1日。
+      </text>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="footer">
+    <button class="agree-btn" bindtap="agreePrivacy">我已阅读并同意</button>
+    <button class="disagree-btn" bindtap="disagreePrivacy">不同意</button>
+  </view>
+</view>

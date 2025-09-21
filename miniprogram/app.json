@@ -1,13 +1,16 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/terms/terms",
+    "pages/privacy/privacy"
   ],
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "喵喵美颜",
     "navigationBarBackgroundColor": "#ff9a9e",
-    "backgroundColor": "#ff9a9e"
+    "backgroundColor": "#ff9a9e",
+    "enablePullDownRefresh": false
   },
   "style": "v2",
   "componentFramework": "glass-easel",
@@ -17,7 +20,11 @@
       "desc": "保存增强后的图片到相册"
     }
   },
-  "requiredBackgroundModes": ["audio"],
+  "requiredBackgroundModes": [
+    "audio"
+  ],
   "plugins": {},
-  "resizable": true
+  "resizable": true,
+  "navigateToMiniProgramAppIdList": [],
+  "usingComponents": {}
 }

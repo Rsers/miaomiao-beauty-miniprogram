@@ -1,0 +1,110 @@
+<!--terms.wxml-->
+<view class="container">
+  <!-- 标题区域 -->
+  <view class="header">
+    <text class="title">服务条款</text>
+    <text class="subtitle">使用前请仔细阅读</text>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 1. 服务说明 -->
+    <view class="section">
+      <text class="section-title">1. 服务说明</text>
+      <text class="section-content">
+        喵喵美颜是一款AI图片增强工具，为用户提供智能图片处理服务。我们致力于通过先进的AI技术，帮助用户提升图片质量，让每一张照片都变得更加清晰。
+      </text>
+    </view>
+
+    <!-- 2. 服务内容 -->
+    <view class="section">
+      <text class="section-title">2. 服务内容</text>
+      <text class="section-content">
+        2.1 图片增强处理：使用AI算法对用户上传的图片进行智能优化<br/>
+        2.2 图片预览：提供原图与处理后图片的对比预览<br/>
+        2.3 图片保存：支持将处理后的图片保存到用户设备<br/>
+        2.4 分享功能：支持将处理结果分享给其他用户
+      </text>
+    </view>
+
+    <!-- 3. 用户责任 -->
+    <view class="section">
+      <text class="section-title">3. 用户责任</text>
+      <text class="section-content">
+        3.1 用户应确保上传的图片内容合法合规，不得包含违法违规内容<br/>
+        3.2 用户应保护个人账号安全，不得将账号借给他人使用<br/>
+        3.3 用户应遵守相关法律法规，不得利用本服务从事违法活动<br/>
+        3.4 用户应尊重他人权益，不得上传侵犯他人版权的图片
+      </text>
+    </view>
+
+    <!-- 4. 服务限制 -->
+    <view class="section">
+      <text class="section-title">4. 服务限制</text>
+      <text class="section-content">
+        4.1 图片格式：支持JPG、PNG、AVIF格式<br/>
+        4.2 图片大小：单张图片不超过10MB<br/>
+        4.3 处理时间：通常需要10-30秒，高峰期可能延长<br/>
+        4.4 服务可用性：我们努力保证服务稳定，但不承诺100%可用性
+      </text>
+    </view>
+
+    <!-- 5. 隐私保护 -->
+    <view class="section">
+      <text class="section-title">5. 隐私保护</text>
+      <text class="section-content">
+        5.1 我们重视用户隐私，详细政策请查看《隐私政策》<br/>
+        5.2 用户上传的图片仅用于处理，不会用于其他用途<br/>
+        5.3 我们不会收集用户的个人敏感信息<br/>
+        5.4 用户可随时删除已上传的图片
+      </text>
+    </view>
+
+    <!-- 6. 免责声明 -->
+    <view class="section">
+      <text class="section-title">6. 免责声明</text>
+      <text class="section-content">
+        6.1 我们不对处理结果的质量做绝对保证<br/>
+        6.2 用户因使用本服务产生的任何损失，我们不承担责任<br/>
+        6.3 因不可抗力导致的服务中断，我们不承担责任<br/>
+        6.4 用户应自行备份重要图片，我们不对数据丢失负责
+      </text>
+    </view>
+
+    <!-- 7. 服务变更 -->
+    <view class="section">
+      <text class="section-title">7. 服务变更</text>
+      <text class="section-content">
+        7.1 我们有权根据业务需要调整服务内容<br/>
+        7.2 重大变更将提前通知用户<br/>
+        7.3 用户继续使用服务视为同意变更<br/>
+        7.4 如不同意变更，用户可停止使用服务
+      </text>
+    </view>
+
+    <!-- 8. 联系方式 -->
+    <view class="section">
+      <text class="section-title">8. 联系我们</text>
+      <text class="section-content">
+        如有疑问或建议，请通过以下方式联系我们：<br/>
+        邮箱：support@gongjuxiang.work<br/>
+        微信：通过小程序内反馈功能<br/>
+        我们将在24小时内回复您的咨询
+      </text>
+    </view>
+
+    <!-- 9. 生效时间 -->
+    <view class="section">
+      <text class="section-title">9. 生效时间</text>
+      <text class="section-content">
+        本服务条款自2024年1月1日起生效，如有更新将及时通知用户。
+      </text>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="footer">
+    <button class="agree-btn" bindtap="agreeTerms">我已阅读并同意</button>
+    <button class="disagree-btn" bindtap="disagreeTerms">不同意</button>
+  </view>
+</view>

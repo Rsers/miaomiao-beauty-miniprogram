@@ -41,11 +41,11 @@ Component({
           const formatSize = this.formatFileSize(size)
 
           // 获取图片尺寸信息
-          this.getImageSize(tempFilePath, (imageSize) => {
-          this.setData({
-            selectedImage: tempFilePath,
-            fileName: `图片_${Date.now()}`,
-            fileSize: formatSize,
+          this.getImageSize(tempFilePath, (imageSize: string) => {
+            this.setData({
+              selectedImage: tempFilePath,
+              fileName: `图片_${Date.now()}`,
+              fileSize: formatSize,
               enhancedImage: '', // 清除之前的结果
               progress: 0, // 重置进度
               originalImageSize: imageSize,
@@ -106,7 +106,7 @@ Component({
         return
       }
 
-      this.setData({ 
+      this.setData({
         isProcessing: true,
         progress: 5 // 开始处理，设置初始进度
       })
@@ -131,12 +131,12 @@ Component({
                 progress: 100
               })
               // 获取增强图尺寸和文件大小
-              this.getImageSize(data.enhanced_image_url, (imageSize) => {
+              this.getImageSize(data.enhanced_image_url, (imageSize: string) => {
                 this.setData({
                   enhancedImageSize: imageSize
                 })
               })
-              this.getFileSize(data.enhanced_image_url, (fileSize) => {
+              this.getFileSize(data.enhanced_image_url, (fileSize: string) => {
                 this.setData({
                   enhancedFileSize: fileSize
                 })
@@ -154,7 +154,7 @@ Component({
               title: '处理失败，请重试',
               icon: 'error'
             })
-            this.setData({ 
+            this.setData({
               isProcessing: false,
               progress: 0
             })
@@ -166,7 +166,7 @@ Component({
             title: '网络错误，请重试',
             icon: 'error'
           })
-          this.setData({ 
+          this.setData({
             isProcessing: false,
             progress: 0
           })
@@ -175,33 +175,33 @@ Component({
     },
 
     // 轮询任务状态
-    pollTaskStatus(taskId) {
+    pollTaskStatus(taskId: string) {
       const maxAttempts = 60 // 最大轮询次数
       const interval = 5000   // 轮询间隔5秒
       let attempts = 0
 
       const poll = () => {
         attempts++
-        
+
         // 计算进度百分比
         const baseProgress = 15 // 上传完成的基础进度
         const processingProgress = Math.min(85, baseProgress + (attempts * 1.2)) // 每次轮询增加1.2%
-        
+
         this.setData({ progress: Math.floor(processingProgress) })
-        
+
         wx.request({
           url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.STATUS}/${taskId}`,
           method: 'GET',
           success: (res) => {
-            const data = res.data
-            
+            const data = res.data as any
+
             if (data.status === 'completed') {
               // 处理完成，下载结果
               this.setData({ progress: 90 })
               this.downloadResult(taskId)
             } else if (data.status === 'failed') {
               // 处理失败
-              this.setData({ 
+              this.setData({
                 isProcessing: false,
                 progress: 0
               })
@@ -214,7 +214,7 @@ Component({
               if (attempts < maxAttempts) {
                 setTimeout(poll, interval)
               } else {
-                this.setData({ 
+                this.setData({
                   isProcessing: false,
                   progress: 0
                 })
@@ -226,7 +226,7 @@ Component({
             }
           },
           fail: (error) => {
-            this.setData({ 
+            this.setData({
               isProcessing: false,
               progress: 0
             })
@@ -243,7 +243,7 @@ Component({
     },
 
     // 下载处理结果
-    downloadResult(taskId) {
+    downloadResult(taskId: string) {
       wx.request({
         url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.DOWNLOAD}/${taskId}`,
         method: 'GET',
@@ -252,10 +252,10 @@ Component({
           // 将ArrayBuffer转换为临时文件
           const fs = wx.getFileSystemManager()
           const filePath = `${wx.env.USER_DATA_PATH}/enhanced_${taskId}.jpg`
-          
+
           fs.writeFile({
             filePath: filePath,
-            data: res.data,
+            data: res.data as ArrayBuffer,
             success: () => {
               this.setData({
                 enhancedImage: filePath,
@@ -263,12 +263,12 @@ Component({
                 progress: 100
               })
               // 获取增强图尺寸和文件大小
-              this.getImageSize(filePath, (imageSize) => {
+              this.getImageSize(filePath, (imageSize: string) => {
                 this.setData({
                   enhancedImageSize: imageSize
                 })
               })
-              this.getFileSize(filePath, (fileSize) => {
+              this.getFileSize(filePath, (fileSize: string) => {
                 this.setData({
                   enhancedFileSize: fileSize
                 })
@@ -279,7 +279,7 @@ Component({
               })
             },
             fail: (error) => {
-              this.setData({ 
+              this.setData({
                 isProcessing: false,
                 progress: 0
               })
@@ -292,7 +292,7 @@ Component({
           })
         },
         fail: (error) => {
-          this.setData({ 
+          this.setData({
             isProcessing: false,
             progress: 0
           })
@@ -444,43 +444,43 @@ Component({
       // 检查是否是本地文件路径
       if (this.data.enhancedImage.startsWith('http')) {
         // 如果是网络URL，使用downloadFile
-      wx.downloadFile({
-        url: this.data.enhancedImage,
-        success: (res) => {
-          wx.hideLoading()
-          if (res.statusCode === 200) {
-            // 保存到相册
-            wx.saveImageToPhotosAlbum({
-              filePath: res.tempFilePath,
-              success: () => {
-                wx.showToast({
-                  title: '保存成功',
-                  icon: 'success'
-                })
-              },
-              fail: () => {
-                wx.showToast({
-                  title: '保存失败',
-                  icon: 'error'
-                })
-              }
-            })
-          } else {
+        wx.downloadFile({
+          url: this.data.enhancedImage,
+          success: (res) => {
+            wx.hideLoading()
+            if (res.statusCode === 200) {
+              // 保存到相册
+              wx.saveImageToPhotosAlbum({
+                filePath: res.tempFilePath,
+                success: () => {
+                  wx.showToast({
+                    title: '保存成功',
+                    icon: 'success'
+                  })
+                },
+                fail: () => {
+                  wx.showToast({
+                    title: '保存失败',
+                    icon: 'error'
+                  })
+                }
+              })
+            } else {
+              wx.showToast({
+                title: '下载失败',
+                icon: 'error'
+              })
+            }
+          },
+          fail: (err) => {
+            wx.hideLoading()
+            console.error('下载失败:', err)
             wx.showToast({
               title: '下载失败',
               icon: 'error'
             })
           }
-        },
-        fail: (err) => {
-          wx.hideLoading()
-          console.error('下载失败:', err)
-          wx.showToast({
-            title: '下载失败',
-            icon: 'error'
-          })
-        }
-      })
+        })
       } else {
         // 如果是本地文件路径，直接保存
         wx.saveImageToPhotosAlbum({
@@ -513,24 +513,52 @@ Component({
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
     },
 
-  },
+    // 打开服务条款
+    openTerms() {
+      wx.navigateTo({
+        url: '/pages/terms/terms',
+        fail: (err) => {
+          console.error('打开服务条款失败:', err)
+          wx.showToast({
+            title: '打开失败',
+            icon: 'error'
+          })
+        }
+      })
+    },
 
-  // 分享配置
-  onShareAppMessage() {
-    return {
-      title: '喵喵美颜 - AI图片增强神器',
-      desc: '让每一张照片都变得更加清晰，支持智能增强、批量处理',
-      path: '/pages/index/index',
-      imageUrl: this.data.enhancedImage || '/喵喵美颜-logo.png'
-    }
-  },
+    // 打开隐私政策
+    openPrivacy() {
+      wx.navigateTo({
+        url: '/pages/privacy/privacy',
+        fail: (err) => {
+          console.error('打开隐私政策失败:', err)
+          wx.showToast({
+            title: '打开失败',
+            icon: 'error'
+          })
+        }
+      })
+    },
 
-  // 分享到朋友圈
-  onShareTimeline() {
-    return {
-      title: '喵喵美颜 - AI图片增强神器',
-      query: '',
-      imageUrl: this.data.enhancedImage || '/喵喵美颜-logo.png'
+    // 分享配置
+    onShareAppMessage() {
+      return {
+        title: '喵喵美颜 - AI图片增强神器',
+        desc: '让每一张照片都变得更加清晰，支持智能增强、批量处理',
+        path: '/pages/index/index',
+        imageUrl: this.data.enhancedImage || '/喵喵美颜-logo.png'
+      }
+    },
+
+    // 分享到朋友圈
+    onShareTimeline() {
+      return {
+        title: '喵喵美颜 - AI图片增强神器',
+        query: '',
+        imageUrl: this.data.enhancedImage || '/喵喵美颜-logo.png'
+      }
     }
+
   }
 })
