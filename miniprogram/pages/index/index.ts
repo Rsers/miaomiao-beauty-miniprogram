@@ -20,6 +20,8 @@ Component({
     enhancedImage: '',
     isProcessing: false,
     progress: 0, // 添加进度数据
+    originalImageSize: '', // 原图尺寸
+    enhancedImageSize: '', // 增强图尺寸
   },
   methods: {
     // 选择图片
@@ -36,12 +38,17 @@ Component({
           // 格式化文件大小
           const formatSize = this.formatFileSize(size)
 
-          this.setData({
-            selectedImage: tempFilePath,
-            fileName: `图片_${Date.now()}`,
-            fileSize: formatSize,
-            enhancedImage: '', // 清除之前的结果
-            progress: 0 // 重置进度
+          // 获取图片尺寸信息
+          this.getImageSize(tempFilePath, (imageSize) => {
+            this.setData({
+              selectedImage: tempFilePath,
+              fileName: `图片_${Date.now()}`,
+              fileSize: formatSize,
+              enhancedImage: '', // 清除之前的结果
+              progress: 0, // 重置进度
+              originalImageSize: imageSize,
+              enhancedImageSize: '' // 清除增强图尺寸
+            })
           })
         },
         fail: (err) => {
@@ -50,6 +57,22 @@ Component({
             title: '选择图片失败',
             icon: 'error'
           })
+        }
+      })
+    },
+
+    // 获取图片尺寸
+    getImageSize(filePath: string, callback: (size: string) => void) {
+      wx.getImageInfo({
+        src: filePath,
+        success: (res) => {
+          const { width, height } = res
+          const size = `${width} × ${height}`
+          callback(size)
+        },
+        fail: (err) => {
+          console.error('获取图片尺寸失败:', err)
+          callback('未知尺寸')
         }
       })
     },
@@ -87,6 +110,12 @@ Component({
                 enhancedImage: data.enhanced_image_url,
                 isProcessing: false,
                 progress: 100
+              })
+              // 获取增强图尺寸
+              this.getImageSize(data.enhanced_image_url, (imageSize) => {
+                this.setData({
+                  enhancedImageSize: imageSize
+                })
               })
               wx.showToast({
                 title: '图片增强完成',
@@ -208,6 +237,12 @@ Component({
                 enhancedImage: filePath,
                 isProcessing: false,
                 progress: 100
+              })
+              // 获取增强图尺寸
+              this.getImageSize(filePath, (imageSize) => {
+                this.setData({
+                  enhancedImageSize: imageSize
+                })
               })
               wx.showToast({
                 title: '图片增强完成',
