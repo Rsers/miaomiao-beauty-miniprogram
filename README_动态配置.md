@@ -1,219 +1,131 @@
-# 动态配置API网关使用说明
+# 喵喵美颜小程序 - 动态配置说明
 
 ## 📋 概述
 
-为了解决后端IP地址随时变化的问题，我们创建了一个支持动态配置的API网关系统。
+喵喵美颜小程序已配置为使用HTTPS API接口，支持动态后端IP地址更新。
 
-## 🗂️ 文件结构
+## 🏗️ 架构说明
 
 ```
-miaomiaomeiyan/
-├── config.json                 # 配置文件
-├── update_backend.py          # Python更新脚本
-├── quick_update.sh            # 快速更新脚本
-├── api_gateway_dynamic.py     # 动态配置API网关
-└── README_动态配置.md         # 使用说明
+小程序 → https://www.gongjuxiang.work/api/v1/ → API网关 → 后端服务(IP可动态更新)
 ```
 
-## ⚙️ 配置文件 (config.json)
+## ⚙️ 小程序配置
 
-```json
-{
-  "backend": {
-    "host": "43.143.246.112",    # 后端IP地址
-    "port": 8000,                # 后端端口
-    "protocol": "http",           # 协议
-    "timeout": 30,               # 超时时间(秒)
-    "retry_count": 3             # 重试次数
-  },
-  "gateway": {
-    "host": "0.0.0.0",          # 网关监听地址
-    "port": 5000,               # 网关端口
-    "debug": false               # 调试模式
-  }
-}
-```
+### API配置
+小程序已配置为调用HTTPS接口：
+- **基础URL**: `https://www.gongjuxiang.work`
+- **图片增强**: `/api/v1/enhance`
+- **状态查询**: `/api/v1/status/{task_id}`
+- **结果下载**: `/api/v1/download/{task_id}`
 
-## 🚀 使用方法
+### 页面结构
+- **首页**: 原生小程序页面，展示版本选择功能
+- **Webview页面**: 加载完整版网站 `https://www.gongjuxiang.work`
 
-### 方法1: 使用快速更新脚本 (推荐)
+## 🎯 功能特点
 
-```bash
-# 更新IP地址
-./quick_update.sh 192.168.1.100
+### 首页功能
+- ✅ **版本选择**: 小程序版 vs 完整版
+- ✅ **图片处理**: 单张图片增强功能
+- ✅ **完整版入口**: 跳转到webview页面
 
-# 脚本会自动：
-# 1. 验证IP地址格式
-# 2. 备份配置文件
-# 3. 更新配置文件
-# 4. 测试新IP连接
-# 5. 重启API网关服务
-# 6. 测试API功能
-```
+### Webview功能
+- ✅ **网站加载**: 直接访问完整版网站
+- ✅ **加载状态**: 优雅的加载动画
+- ✅ **错误处理**: 网络错误重试机制
 
-### 方法2: 使用Python脚本
+## 📱 用户体验
 
-```bash
-# 更新IP地址
-python3 update_backend.py 192.168.1.100
+### 小程序版
+- 快速单张图片处理
+- 即时预览结果
+- 保存到相册
 
-# 脚本功能：
-# 1. 验证IP地址格式
-# 2. 测试新IP连接
-# 3. 更新配置文件
-# 4. 重启API网关服务
-# 5. 测试API功能
-```
+### 完整版
+- 批量图片处理
+- 更多增强选项
+- 高级功能
 
-### 方法3: 手动编辑配置文件
+## 🔧 技术实现
 
-```bash
-# 1. 编辑配置文件
-nano config.json
+### 合规设计
+- ✅ **原生首页**: 符合微信小程序审核规范
+- ✅ **HTTPS接口**: 满足小程序安全要求
+- ✅ **业务域名**: 已配置 `https://www.gongjuxiang.work`
 
-# 2. 修改backend.host字段
-{
-  "backend": {
-    "host": "新的IP地址",
-    ...
-  }
-}
+### 配置管理
+- ✅ **API网关**: 服务器端支持动态IP更新
+- ✅ **域名配置**: 使用www子域名，享受CDN优势
+- ✅ **错误处理**: 完善的网络错误处理机制
 
-# 3. 重启API网关服务
-pm2 restart api-gateway
-```
+## 🚀 部署说明
 
-### 方法4: 使用API接口更新
+### 小程序部署
+1. 在微信开发者工具中预览
+2. 上传代码到微信小程序后台
+3. 提交审核
 
-```bash
-# 通过API更新配置
-curl -X POST https://www.gongjuxiang.work/api/v1/config \
-  -H "Content-Type: application/json" \
-  -d '{
-    "backend": {
-      "host": "192.168.1.100",
-      "port": 8000
-    }
-  }'
-```
+### 服务器配置
+服务器端需要部署API网关系统，支持：
+- 动态后端IP地址更新
+- HTTPS证书配置
+- nginx代理配置
 
-## 🔧 部署动态API网关
+## 📊 监控和维护
 
-### 1. 停止旧服务
+### 小程序监控
+- 用户使用情况
+- 错误日志收集
+- 性能监控
 
-```bash
-pm2 stop api-gateway
-pm2 delete api-gateway
-```
-
-### 2. 启动新服务
-
-```bash
-# 使用动态配置API网关
-pm2 start api_gateway_dynamic.py --name api-gateway --interpreter python3
-pm2 save
-pm2 startup
-```
-
-### 3. 验证服务
-
-```bash
-# 检查服务状态
-pm2 status
-
-# 测试API
-curl https://www.gongjuxiang.work/api/v1/health
-curl https://www.gongjuxiang.work/api/v1/info
-```
-
-## 📊 监控和调试
-
-### 查看配置
-
-```bash
-# 查看当前配置
-curl https://www.gongjuxiang.work/api/v1/config
-
-# 查看API信息
-curl https://www.gongjuxiang.work/api/v1/info
-
-# 健康检查
-curl https://www.gongjuxiang.work/api/v1/health
-```
-
-### 查看日志
-
-```bash
-# 查看PM2日志
-pm2 logs api-gateway
-
-# 实时查看日志
-pm2 logs api-gateway --lines 100 -f
-```
-
-## 🔄 配置更新流程
-
-1. **备份配置**: 自动备份到 `config.json.backup.时间戳`
-2. **验证IP**: 检查IP地址格式和连接性
-3. **更新配置**: 修改配置文件
-4. **重启服务**: 自动重启API网关
-5. **测试功能**: 验证API功能正常
+### API监控
+- 后端服务状态
+- 响应时间监控
+- 错误率统计
 
 ## 🛠️ 故障排除
 
 ### 常见问题
 
-1. **IP地址格式错误**
-   ```
-   ❌ 无效的IP地址格式: 192.168.1
-   ```
-   解决：使用正确的IP地址格式，如 `192.168.1.100`
+1. **API调用失败**
+   - 检查网络连接
+   - 确认服务器状态
+   - 查看错误日志
 
-2. **后端连接失败**
-   ```
-   ⚠️ 新IP连接测试失败
-   ```
-   解决：检查后端服务是否运行在指定端口
+2. **Webview加载失败**
+   - 检查业务域名配置
+   - 确认HTTPS证书
+   - 验证网站可访问性
 
-3. **API网关重启失败**
-   ```
-   ❌ 重启API网关失败
-   ```
-   解决：手动重启 `pm2 restart api-gateway`
-
-### 回滚配置
-
-```bash
-# 查看备份文件
-ls config.json.backup.*
-
-# 回滚到之前的配置
-cp config.json.backup.20240921_134500 config.json
-
-# 重启服务
-pm2 restart api-gateway
-```
+3. **图片处理失败**
+   - 检查图片格式
+   - 确认文件大小
+   - 验证后端服务
 
 ## 📈 优势
 
-- ✅ **无需重启**: 动态加载配置
-- ✅ **自动备份**: 防止配置丢失
-- ✅ **连接测试**: 验证新IP可用性
-- ✅ **一键更新**: 简化操作流程
-- ✅ **API接口**: 支持远程配置更新
-- ✅ **日志记录**: 完整的操作日志
+- ✅ **合规设计**: 符合微信小程序审核规范
+- ✅ **用户体验**: 原生页面 + 完整版网站
+- ✅ **技术架构**: HTTPS + API网关 + 动态配置
+- ✅ **维护便利**: 服务器端IP可动态更新
+- ✅ **性能优化**: CDN加速 + 缓存策略
 
-## 🔐 安全建议
+## 🔐 安全特性
 
-1. **限制API访问**: 在生产环境中限制 `/api/v1/config` 接口的访问
-2. **定期备份**: 定期备份配置文件
-3. **监控日志**: 监控配置更新日志
-4. **IP白名单**: 限制可更新的IP地址范围
+- ✅ **HTTPS通信**: 所有API调用使用HTTPS
+- ✅ **域名验证**: 业务域名已配置验证
+- ✅ **CORS支持**: 跨域请求安全处理
+- ✅ **错误处理**: 完善的异常处理机制
 
 ## 📞 技术支持
 
 如果遇到问题，请检查：
-1. 配置文件格式是否正确
-2. 后端服务是否正常运行
-3. API网关服务状态
-4. 网络连接是否正常
+1. 小程序配置是否正确
+2. 网络连接是否正常
+3. 服务器API是否可用
+4. 业务域名是否配置
+
+---
+
+**注意**: 服务器端的动态配置系统由服务器管理员负责维护，小程序开发者无需关心后端IP地址的变化。
