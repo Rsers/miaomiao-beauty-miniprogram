@@ -82,6 +82,14 @@
         <text class="status-value {{userLevel}}">{{userLevelText}}</text>
       </view>
     </view>
+
+    <!-- 调试按钮区域 -->
+    <view class="debug-section">
+      <button class="debug-btn" bindtap="getUserOpenId">
+        <text class="debug-icon">🔍</text>
+        <text class="debug-text">获取OpenID</text>
+      </button>
+    </view>
   </view>
 
   <!-- 标题区域 -->

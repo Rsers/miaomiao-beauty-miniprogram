@@ -811,6 +811,40 @@ page {
   color: #667eea;
 }
 
+/* 调试按钮区域 */
+.debug-section {
+  margin-top: 20rpx;
+  padding: 0 20rpx;
+}
+
+.debug-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  font-size: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(40, 167, 69, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.debug-btn:active {
+  transform: scale(0.98);
+}
+
+.debug-icon {
+  font-size: 24rpx;
+  margin-right: 8rpx;
+}
+
+.debug-text {
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
 /* 法律条款区域样式 */
 .legal-section {
   margin: 40rpx 20rpx 20rpx;
