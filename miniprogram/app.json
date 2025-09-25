@@ -2,6 +2,7 @@
   "pages": [
     "pages/splash/splash",
     "pages/home/home",
+    "pages/camera/camera",
     "pages/index/index",
     "pages/logs/logs",
     "pages/terms/terms",

@@ -14,10 +14,10 @@ Page({
 
   onLoad(options: any) {
     console.log('启动页面加载', options);
-    
+
     // 检查是否是从主页跳转过来的（用于演示）
     this.isFromMainPage = options.from === 'main';
-    
+
     this.initSplash();
   },
 
@@ -36,10 +36,10 @@ Page({
       this.setData({
         showContent: true
       });
-      
+
       // 开始加载文字轮换
       this.startLoadingTextRotation();
-      
+
       // 模拟加载过程
       this.simulateLoading();
     }, 300);
@@ -93,7 +93,7 @@ Page({
   // 跳转到主页
   navigateToMain() {
     console.log('启动完成，跳转到主页');
-    
+
     // 清理定时器
     if (this.loadingTextInterval) {
       clearInterval(this.loadingTextInterval);

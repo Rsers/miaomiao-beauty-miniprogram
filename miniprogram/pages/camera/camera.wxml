@@ -1,0 +1,344 @@
+<!-- 美颜相机页面 -->
+<view class="camera-container">
+  <!-- 渐变背景 -->
+  <view class="camera-background"></view>
+  
+  <!-- 顶部导航 -->
+  <view class="top-navigation">
+    <button class="nav-btn" bindtap="goBack">
+      <text class="nav-icon">☰</text>
+    </button>
+    
+    <view class="app-title">
+      <text class="cat-emoji">🐱</text>
+      <text class="title-text">喵喵美颜</text>
+    </view>
+    
+    <view class="nav-buttons">
+      <button class="nav-btn" bindtap="onSettingsTap">
+        <text class="nav-icon">⚙️</text>
+      </button>
+      <button class="nav-btn" bindtap="onUserTap">
+        <text class="nav-icon">👤</text>
+      </button>
+    </view>
+  </view>
+  
+  <!-- 主内容区域 -->
+  <scroll-view class="main-content" scroll-y="true">
+    <!-- 相机预览区域 -->
+    <view class="camera-preview-section">
+      <view class="camera-preview">
+        <!-- 相机背景 -->
+        <view class="camera-background-image">
+          <image class="preview-image" src="{{previewImage}}" mode="aspectFill"></image>
+          <view class="camera-overlay"></view>
+        </view>
+        
+        <!-- 顶部控制 -->
+        <view class="camera-controls">
+          <button class="control-btn" bindtap="switchCamera">
+            <text class="control-icon">📷</text>
+            <text class="control-text">切换镜头</text>
+          </button>
+          
+          <view class="control-group">
+            <button class="control-btn-small" bindtap="onFlashTap">
+              <text class="control-icon">⚡</text>
+            </button>
+            <button class="control-btn-small" bindtap="onRotateTap">
+              <text class="control-icon">🔄</text>
+            </button>
+          </view>
+        </view>
+        
+        <!-- 装饰爪印 -->
+        <view class="decorative-paws">
+          <text class="paw-icon paw-1">🐾</text>
+          <text class="paw-icon paw-2">🐾</text>
+        </view>
+        
+        <!-- 美颜指示器 -->
+        <view class="beauty-indicator">
+          <view class="beauty-badge">
+            <text class="beauty-icon">💖</text>
+            <text class="beauty-text">美颜 {{beautyLevel}}%</text>
+          </view>
+        </view>
+        
+        <!-- 滤镜选择 -->
+        <view class="filter-selection">
+          <scroll-view class="filter-scroll" scroll-x="true">
+            <view class="filter-list">
+              <view class="filter-item {{item.name === selectedFilter ? 'active' : ''}}" 
+                    wx:for="{{filters}}" wx:key="index" 
+                    bindtap="onFilterTap" data-filter="{{item.name}}">
+                <text class="filter-icon">{{item.icon}}</text>
+                <text class="filter-name">{{item.name}}</text>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- AI换脸区域 -->
+    <view class="face-swap-section">
+      <view class="section-header">
+        <text class="section-icon">✨</text>
+        <text class="section-title">AI 换脸魔法</text>
+        <view class="hot-badge">HOT</view>
+      </view>
+      
+      <view class="face-swap-content">
+        <!-- 左侧上传 -->
+        <view class="upload-slot">
+          <view class="upload-area" bindtap="uploadSourceImage">
+            <image wx:if="{{sourceImage}}" class="upload-image" src="{{sourceImage}}" mode="aspectFill"></image>
+            <view wx:else class="upload-placeholder">
+              <text class="upload-icon">📤</text>
+              <text class="upload-text">上传原图</text>
+            </view>
+          </view>
+          <text class="upload-label">你的照片</text>
+        </view>
+        
+        <!-- 箭头 -->
+        <view class="swap-arrow">
+          <view class="arrow-icon">
+            <text class="arrow-symbol">→</text>
+          </view>
+          <text class="arrow-text">AI换脸</text>
+        </view>
+        
+        <!-- 右侧上传 -->
+        <view class="upload-slot">
+          <view class="upload-area" bindtap="uploadTargetImage">
+            <image wx:if="{{targetImage}}" class="upload-image" src="{{targetImage}}" mode="aspectFill"></image>
+            <view wx:else class="upload-placeholder target-placeholder">
+              <text class="upload-icon">⭐</text>
+              <text class="upload-text">选择模板</text>
+            </view>
+          </view>
+          <text class="upload-label">目标模板</text>
+        </view>
+      </view>
+      
+      <!-- 处理按钮 -->
+      <button class="process-btn" bindtap="startFaceSwap" disabled="{{!sourceImage || !targetImage}}">
+        <text class="process-icon">✨</text>
+        <text class="process-text">开始AI换脸 (消耗1次)</text>
+      </button>
+    </view>
+    
+    <!-- 猫咪特效区域 -->
+    <view class="cat-filters-section">
+      <view class="section-header">
+        <text class="section-icon">🐱</text>
+        <text class="section-title">猫咪特效</text>
+        <view class="meow-badge">喵~</view>
+      </view>
+      
+      <view class="cat-filters-grid">
+        <view class="cat-filter-item {{item.name === selectedCatFilter ? 'active' : ''}}" 
+              wx:for="{{catFilters}}" wx:key="index"
+              bindtap="onCatFilterTap" data-filter="{{item.name}}">
+          <view class="premium-badge" wx:if="{{item.premium}}">👑</view>
+          <text class="cat-filter-emoji">{{item.emoji}}</text>
+          <text class="cat-filter-name">{{item.name}}</text>
+          <text class="cat-filter-preview">{{item.preview}}</text>
+          <view class="selection-indicator" wx:if="{{item.name === selectedCatFilter}}">💖</view>
+        </view>
+      </view>
+      
+      <!-- 特效强度滑块 -->
+      <view class="intensity-slider">
+        <view class="slider-header">
+          <text class="slider-label">特效强度</text>
+          <text class="slider-value">{{filterIntensity}}%</text>
+        </view>
+        <view class="slider-track">
+          <view class="slider-fill" style="width: {{filterIntensity}}%"></view>
+          <view class="slider-thumb" style="left: {{filterIntensity}}%"></view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- VIP购买区域 -->
+    <view class="purchase-section">
+      <view class="section-header">
+        <text class="section-icon">👑</text>
+        <text class="section-title">VIP特权</text>
+        <view class="urgent-badge">限时优惠</view>
+      </view>
+      
+      <!-- 剩余次数警告 -->
+      <view class="usage-warning">
+        <view class="warning-content">
+          <view class="warning-text">
+            <text class="warning-label">免费次数即将用完</text>
+            <text class="warning-count">仅剩 {{remainingUses}} 次</text>
+          </view>
+          <text class="warning-emoji">⚠️</text>
+        </view>
+      </view>
+      
+      <!-- 倒计时 -->
+      <view class="countdown-timer">
+        <text class="timer-icon">⏰</text>
+        <text class="timer-label">优惠倒计时:</text>
+        <text class="timer-value">{{countdownTime}}</text>
+      </view>
+      
+      <!-- 价格对比 -->
+      <view class="price-comparison">
+        <view class="price-row">
+          <text class="original-price">原价: ¥99</text>
+          <view class="discount-badge">7折</view>
+        </view>
+        <view class="current-price">
+          <text class="price-amount">¥69</text>
+          <text class="price-unit">/月</text>
+        </view>
+        <text class="price-desc">无限次数 + 专属滤镜</text>
+      </view>
+      
+      <!-- 购买按钮 -->
+      <button class="purchase-btn" bindtap="onPurchaseTap">
+        <text class="purchase-icon">⚡</text>
+        <text class="purchase-text">立即购买VIP (限时7折)</text>
+      </button>
+      
+      <!-- 装饰爪印 -->
+      <view class="purchase-decoration">
+        <text class="decoration-paw">🐾</text>
+      </view>
+    </view>
+    
+    <!-- 协作区域 -->
+    <view class="collaboration-section">
+      <view class="section-header">
+        <text class="section-icon">🧩</text>
+        <text class="section-title">智能拼图协作</text>
+        <view class="new-badge">新功能</view>
+      </view>
+      
+      <!-- 在线用户 -->
+      <view class="active-users">
+        <view class="users-header">
+          <text class="users-icon">👥</text>
+          <text class="users-label">在线用户 ({{activeUsers.length}})</text>
+        </view>
+        <view class="users-list">
+          <view class="user-avatar" wx:for="{{activeUsers}}" wx:key="index">
+            <text class="user-emoji">{{item.avatar}}</text>
+            <view class="user-status {{item.status}}"></view>
+          </view>
+          <view class="add-user">
+            <text class="add-icon">+</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 拼图进度 -->
+      <view class="puzzle-progress">
+        <view class="progress-header">
+          <text class="progress-label">拼图进度</text>
+          <text class="progress-value">50%</text>
+        </view>
+        <view class="puzzle-grid">
+          <view class="puzzle-piece {{item.completed ? 'completed' : ''}}" 
+                wx:for="{{puzzlePieces}}" wx:key="index">
+            <text class="piece-icon" wx:if="{{item.completed}}">💖</text>
+            <text class="piece-placeholder" wx:else>?</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 协作按钮 -->
+      <view class="collaboration-actions">
+        <button class="collab-btn" bindtap="inviteCollaboration">
+          <text class="collab-icon">📤</text>
+          <text class="collab-text">邀请好友协作</text>
+        </button>
+        <button class="collab-btn" bindtap="startChat">
+          <text class="collab-icon">💬</text>
+          <text class="collab-text">实时聊天</text>
+        </button>
+      </view>
+      
+      <!-- 装饰爪印 -->
+      <view class="collab-decoration">
+        <text class="decoration-paw">🐾</text>
+      </view>
+    </view>
+    
+    <!-- 社交分享区域 -->
+    <view class="social-section">
+      <view class="section-header">
+        <text class="section-icon">📤</text>
+        <text class="section-title">社交分享</text>
+        <view class="trending-badge">热门</view>
+      </view>
+      
+      <!-- 快速操作 -->
+      <view class="quick-actions">
+        <view class="action-item {{item.active ? 'active' : ''}}" 
+              wx:for="{{quickActions}}" wx:key="index"
+              bindtap="onQuickActionTap" data-action="{{item.type}}">
+          <text class="action-emoji">{{item.icon}}</text>
+          <text class="action-label">{{item.label}}</text>
+          <text class="action-count" wx:if="{{item.count}}">{{item.count}}</text>
+        </view>
+      </view>
+      
+      <!-- 社交平台 -->
+      <view class="social-platforms">
+        <text class="platforms-label">分享到平台</text>
+        <view class="platform-list">
+          <view class="platform-item" 
+                wx:for="{{socialPlatforms}}" wx:key="index"
+                bindtap="onPlatformTap" data-platform="{{item.id}}">
+            <view class="platform-icon" style="background: {{item.gradient}}">
+              <text class="platform-emoji">{{item.icon}}</text>
+            </view>
+            <view class="platform-info">
+              <text class="platform-name">{{item.name}}</text>
+              <text class="platform-count">{{item.count}} 次分享</text>
+            </view>
+            <text class="platform-arrow">📤</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 群组分享 -->
+      <button class="group-share-btn" bindtap="shareToGroup">
+        <text class="group-icon">👥</text>
+        <text class="group-text">分享到猫咪群组</text>
+      </button>
+      
+      <!-- 热门话题 -->
+      <view class="trending-topics">
+        <text class="topics-label">热门话题</text>
+        <view class="topics-list">
+          <text class="topic-tag" wx:for="{{trendingTopics}}" wx:key="index">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  
+  <!-- 浮动装饰元素 -->
+  <view class="floating-elements">
+    <text class="floating-paw floating-paw-1">🐾</text>
+    <text class="floating-paw floating-paw-2">🐾</text>
+    <text class="floating-paw floating-paw-3">🐾</text>
+  </view>
+  
+  <!-- 背景图案 -->
+  <view class="background-pattern">
+    <text class="pattern-cat pattern-1">🐱</text>
+    <text class="pattern-paw pattern-2">🐾</text>
+    <text class="pattern-cat pattern-3">🐱</text>
+    <text class="pattern-paw pattern-4">🐾</text>
+  </view>
+</view>

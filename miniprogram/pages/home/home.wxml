@@ -61,6 +61,12 @@
         <text class="button-text">开始拍照</text>
       </button>
       
+      <!-- 美颜相机按钮 -->
+      <button class="cta-button camera-button" bindtap="openBeautyCamera">
+        <text class="camera-icon">🎨</text>
+        <text class="button-text">美颜相机</text>
+      </button>
+      
       <!-- 装饰爪印 -->
       <view class="decorative-paw decorative-paw-1">🐾</view>
       <view class="decorative-paw decorative-paw-2">🐾</view>

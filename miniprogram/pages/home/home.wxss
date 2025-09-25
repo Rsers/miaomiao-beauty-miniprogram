@@ -278,6 +278,13 @@
   font-size: 16px;
 }
 
+/* 美颜相机按钮 */
+.camera-button {
+  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%) !important;
+  margin-top: 12px;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+}
+
 /* 装饰爪印 */
 .decorative-paw {
   position: absolute;
