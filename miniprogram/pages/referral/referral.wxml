@@ -1,0 +1,244 @@
+<!-- 推荐奖励页面 -->
+<view class="referral-container">
+  <!-- 渐变背景 -->
+  <view class="referral-background"></view>
+  
+  <!-- 背景装饰元素 -->
+  <view class="decorative-elements">
+    <view class="decorative-circle decorative-circle-1"></view>
+    <view class="decorative-circle decorative-circle-2"></view>
+    <view class="floating-hearts">
+      <block wx:for="{{[0,1,2,3,4]}}" wx:key="*this">
+        <view class="heart-animation heart-{{index}}">💖</view>
+      </block>
+    </view>
+  </view>
+  
+  <!-- 手机容器 -->
+  <view class="mobile-container">
+    <!-- 顶部导航 -->
+    <view class="top-navigation">
+      <button class="nav-btn" bindtap="navigateBack">
+        <text class="nav-icon">←</text>
+      </button>
+      <text class="nav-title">推荐奖励</text>
+      <button class="nav-btn">
+        <text class="nav-icon">⋯</text>
+      </button>
+    </view>
+    
+    <!-- 主内容区域 -->
+    <scroll-view scroll-y class="main-content">
+      <!-- 推荐头部 -->
+      <view class="referral-header">
+        <view class="header-content">
+          <view class="app-title-row">
+            <text class="crown-icon">👑</text>
+            <text class="app-title">喵喵美颜</text>
+            <text class="crown-icon">👑</text>
+          </view>
+          <text class="app-subtitle">邀请好友，共享美丽</text>
+          
+          <!-- 累计收益 -->
+          <view class="earnings-card">
+            <view class="earnings-header">
+              <text class="sparkle-icon">✨</text>
+              <text class="earnings-label">累计收益</text>
+            </view>
+            <view class="earnings-amount">
+              <text class="currency-symbol">¥</text>
+              <text class="amount-main">2,888</text>
+              <text class="amount-decimal">.88</text>
+            </view>
+          </view>
+          
+          <!-- 猫咪吉祥物 -->
+          <view class="cat-mascot">
+            <image src="{{catMascotImage}}" mode="aspectFill" class="mascot-image" />
+          </view>
+        </view>
+      </view>
+      
+      <!-- 邀请码区域 -->
+      <view class="invite-code-section">
+        <view class="invite-card">
+          <view class="invite-header">
+            <text class="invite-title">我的专属邀请码</text>
+          </view>
+          <view class="code-display">
+            <text class="invite-code">{{inviteCode}}</text>
+            <text class="code-description">分享给好友，双方都能获得奖励</text>
+          </view>
+          <view class="action-buttons">
+            <button class="copy-btn" bindtap="copyInviteCode">
+              <text class="copy-icon">📋</text>
+              <text class="copy-text">复制邀请码</text>
+            </button>
+            <button class="share-btn" bindtap="shareInviteCode">
+              <text class="share-icon">📤</text>
+              <text class="share-text">立即分享</text>
+            </button>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 统计数据行 -->
+      <view class="stats-section">
+        <view class="stats-card">
+          <view class="stats-grid">
+            <view class="stat-item">
+              <view class="stat-icon-wrapper">
+                <text class="stat-icon users-icon">👥</text>
+              </view>
+              <text class="stat-value">12</text>
+              <text class="stat-unit">人</text>
+              <text class="stat-label">已邀请</text>
+            </view>
+            <view class="stat-item">
+              <view class="stat-icon-wrapper">
+                <text class="stat-icon active-icon">✅</text>
+              </view>
+              <text class="stat-value">8</text>
+              <text class="stat-unit">人</text>
+              <text class="stat-label">活跃用户</text>
+            </view>
+            <view class="stat-item">
+              <view class="stat-icon-wrapper">
+                <text class="stat-icon coins-icon">💰</text>
+              </view>
+              <text class="stat-value">588</text>
+              <text class="stat-unit">元</text>
+              <text class="stat-label">本月收益</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- VIP礼品卡 -->
+      <view class="vip-gift-cards-section">
+        <view class="section-header">
+          <text class="section-icon">🎁</text>
+          <text class="section-title">VIP礼品卡</text>
+          <text class="gift-badge">可转赠</text>
+        </view>
+        
+        <view class="gift-cards-list">
+          <block wx:for="{{giftCards}}" wx:key="id">
+            <view class="gift-card">
+              <view class="card-header">
+                <view class="card-icon-wrapper {{item.gradientClass}}">
+                  <text class="card-icon">{{item.icon}}</text>
+                </view>
+                <view class="card-info">
+                  <view class="card-title-row">
+                    <text class="card-title">{{item.title}}</text>
+                    <text class="available-badge">x{{item.available}}</text>
+                  </view>
+                  <text class="card-subtitle">{{item.subtitle}}</text>
+                  <view class="price-row">
+                    <text class="current-price">{{item.value}}</text>
+                    <text class="original-price">{{item.originalPrice}}</text>
+                  </view>
+                </view>
+                <button class="transfer-btn">转赠</button>
+              </view>
+              <view class="card-features">
+                <block wx:for="{{item.features}}" wx:key="*this" wx:for-item="feature">
+                  <text class="feature-tag">{{feature}}</text>
+                </block>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+      
+      <!-- 奖励等级 -->
+      <view class="reward-tiers-section">
+        <view class="section-header">
+          <text class="section-icon">📈</text>
+          <text class="section-title">奖励等级</text>
+        </view>
+        
+        <view class="reward-tiers-list">
+          <block wx:for="{{rewardTiers}}" wx:key="id">
+            <view class="reward-tier {{item.isAchieved ? 'achieved' : ''}}">
+              <block wx:if="{{item.isAchieved}}">
+                <view class="achievement-badge">已达成</view>
+              </block>
+              <view class="tier-content">
+                <view class="tier-icon-wrapper {{item.colorClass}}">
+                  <text class="tier-icon">{{item.icon}}</text>
+                </view>
+                <view class="tier-info">
+                  <view class="tier-title-row">
+                    <text class="tier-title">{{item.title}}</text>
+                    <block wx:if="{{item.isAchieved}}">
+                      <text class="achieved-icon">✓</text>
+                    </block>
+                  </view>
+                  <text class="tier-description">{{item.description}}</text>
+                  <view class="progress-container">
+                    <view class="progress-bar">
+                      <view class="progress-fill {{item.isAchieved ? 'achieved' : ''}}" style="width: {{item.progress}}%;"></view>
+                    </view>
+                    <text class="progress-text">{{item.completed}}/{{item.total}}</text>
+                  </view>
+                </view>
+                <view class="tier-reward">
+                  <text class="reward-amount">{{item.reward}}</text>
+                  <block wx:if="{{item.isAchieved}}">
+                    <text class="reward-status">已获得</text>
+                  </block>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+      
+      <!-- 用户好评 -->
+      <view class="social-proof-section">
+        <view class="section-header">
+          <text class="section-icon">💬</text>
+          <text class="section-title">用户好评</text>
+        </view>
+        
+        <!-- 用户评价 -->
+        <view class="testimonials-list">
+          <block wx:for="{{testimonials}}" wx:key="id">
+            <view class="testimonial-card">
+              <image src="{{item.avatar}}" mode="aspectFill" class="user-avatar" />
+              <view class="testimonial-content">
+                <view class="user-info">
+                  <text class="user-name">{{item.name}}</text>
+                  <view class="star-rating">
+                    <block wx:for="{{item.stars}}" wx:key="*this">
+                      <text class="star">⭐</text>
+                    </block>
+                  </view>
+                </view>
+                <text class="testimonial-text">{{item.text}}</text>
+                <view class="earnings-badge">
+                  <text class="earnings-text">累计收益: {{item.earnings}}</text>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+        
+        <!-- 成就统计 -->
+        <view class="achievements-card">
+          <view class="achievements-grid">
+            <block wx:for="{{achievements}}" wx:key="*this" wx:for-item="achievement">
+              <view class="achievement-item">
+                <text class="achievement-icon">{{achievement.icon}}</text>
+                <text class="achievement-value">{{achievement.value}}</text>
+                <text class="achievement-label">{{achievement.label}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

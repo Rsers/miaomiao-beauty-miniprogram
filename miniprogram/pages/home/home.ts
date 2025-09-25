@@ -176,6 +176,26 @@ Page({
     });
   },
 
+  // 打开推荐奖励
+  openReferralRewards() {
+    console.log('打开推荐奖励');
+    
+    // 跳转到推荐奖励页面
+    wx.navigateTo({
+      url: '/pages/referral/referral',
+      success: () => {
+        console.log('成功跳转到推荐奖励页面');
+      },
+      fail: (err) => {
+        console.error('跳转失败:', err);
+        wx.showToast({
+          title: '跳转失败',
+          icon: 'error'
+        });
+      }
+    });
+  },
+
     // 跳转到图片处理页面（调试用）
     goToImageProcess() {
         console.log('跳转到图片处理页面');

@@ -292,6 +292,13 @@
   box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
 }
 
+/* 推荐奖励按钮 */
+.referral-button {
+  background: linear-gradient(135deg, #ec4899 0%, #be185d 100%) !important;
+  margin-top: 12px;
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3);
+}
+
 /* 装饰爪印 */
 .decorative-paw {
   position: absolute;

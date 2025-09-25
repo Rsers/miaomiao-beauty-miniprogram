@@ -67,11 +67,17 @@
         <text class="button-text">美颜相机</text>
       </button>
       
-      <!-- 拼图协作按钮 -->
-      <button class="cta-button puzzle-button" bindtap="openPuzzleCollaboration">
-        <text class="camera-icon">🧩</text>
-        <text class="button-text">拼图协作</text>
-      </button>
+            <!-- 拼图协作按钮 -->
+            <button class="cta-button puzzle-button" bindtap="openPuzzleCollaboration">
+              <text class="camera-icon">🧩</text>
+              <text class="button-text">拼图协作</text>
+            </button>
+            
+            <!-- 推荐奖励按钮 -->
+            <button class="cta-button referral-button" bindtap="openReferralRewards">
+              <text class="camera-icon">🎁</text>
+              <text class="button-text">推荐奖励</text>
+            </button>
       
       <!-- 装饰爪印 -->
       <view class="decorative-paw decorative-paw-1">🐾</view>
