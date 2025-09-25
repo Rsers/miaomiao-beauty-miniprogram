@@ -179,18 +179,168 @@ Component({
       });
     },
 
-    // 显示支付信息（暂时只显示信息，不实际支付）
+    // 显示支付信息并执行支付
     showPaymentInfo(type: string, info: any) {
       wx.showModal({
-        title: '支付功能开发中',
-        content: `您选择了${info.name}，价格¥${info.amount}\n\n支付功能正在开发中，敬请期待！`,
-        showCancel: false,
-        confirmText: '知道了',
-        success: () => {
-          // 这里将来会调用实际的支付接口
-          console.log('用户选择套餐:', { type, info });
+        title: `确认购买 ${info.name}`,
+        content: `价格：¥${info.amount}\n包含：${info.features.join('、')}\n\n确认购买吗？`,
+        confirmText: '立即支付',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            this.executePayment(type, info);
+          }
         }
       });
+    },
+
+    // 执行支付流程
+    async executePayment(type: string, info: any) {
+      try {
+        // 1. 创建支付订单
+        const payParams = await this.createPaymentOrder(
+          info.amount * 100, // 转换为分
+          info.name,
+          type
+        );
+
+        // 2. 调用微信支付
+        await this.callWeChatPay(payParams);
+
+        // 3. 支付成功处理
+        this.onPaymentSuccess(type, info);
+
+      } catch (error) {
+        console.error('支付失败:', error);
+        this.handlePaymentError(error);
+      }
+    },
+
+    // 支付成功处理
+    onPaymentSuccess(type: string, info: any) {
+      // 更新用户状态
+      let newCount = this.data.remainingCount;
+      let newLevel = this.data.userLevel;
+      let newLevelText = this.data.userLevelText;
+
+      switch (type) {
+        case 'basic':
+          newCount += 10;
+          newLevel = 'basic';
+          newLevelText = '基础用户';
+          break;
+        case 'premium':
+          newCount += 100;
+          newLevel = 'premium';
+          newLevelText = '高级用户';
+          break;
+        case 'unlimited':
+          newCount = -1; // -1表示无限
+          newLevel = 'unlimited';
+          newLevelText = 'VIP用户';
+          break;
+      }
+
+      // 保存到本地存储
+      wx.setStorageSync('remainingCount', newCount);
+      wx.setStorageSync('userLevel', newLevel);
+      wx.setStorageSync('userLevelText', newLevelText);
+
+      // 更新页面数据
+      this.setData({
+        remainingCount: newCount,
+        userLevel: newLevel,
+        userLevelText: newLevelText
+      });
+
+      // 显示成功提示
+      wx.showModal({
+        title: '支付成功！',
+        content: `恭喜您获得${info.name}！\n\n${info.features.join('\n')}`,
+        showCancel: false,
+        confirmText: '开始使用',
+        success: () => {
+          wx.showToast({
+            title: '升级成功！',
+            icon: 'success',
+            duration: 2000
+          });
+        }
+      });
+    },
+
+    // 支付错误处理
+    handlePaymentError(error: any) {
+      let errorMessage = '支付失败，请重试';
+
+      if (error.errMsg) {
+        if (error.errMsg.includes('cancel')) {
+          errorMessage = '支付已取消';
+        } else if (error.errMsg.includes('fail')) {
+          errorMessage = '支付失败，请重试';
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      wx.showToast({
+        title: errorMessage,
+        icon: 'error',
+        duration: 2000
+      });
+    },
+
+    // 检查用户剩余次数
+    checkUserRemainingCount() {
+      const remainingCount = this.data.remainingCount;
+      
+      // 无限包用户
+      if (remainingCount === -1) {
+        return true;
+      }
+      
+      // 次数不足
+      if (remainingCount <= 0) {
+        wx.showModal({
+          title: '次数不足',
+          content: '您的增强次数已用完，是否购买套餐继续使用？',
+          confirmText: '购买套餐',
+          cancelText: '取消',
+          success: (res) => {
+            if (res.confirm) {
+              // 滚动到套餐区域
+              wx.pageScrollTo({
+                selector: '.payment-section',
+                duration: 500
+              });
+            }
+          }
+        });
+        return false;
+      }
+      
+      return true;
+    },
+
+    // 使用一次增强机会
+    useEnhanceCount() {
+      const remainingCount = this.data.remainingCount;
+      
+      // 无限包用户不需要减少次数
+      if (remainingCount === -1) {
+        return;
+      }
+      
+      // 减少一次使用次数
+      const newCount = remainingCount - 1;
+      this.setData({
+        remainingCount: newCount
+      });
+      
+      // 保存到本地存储
+      wx.setStorageSync('remainingCount', newCount);
+      
+      console.log(`使用一次增强机会，剩余：${newCount}次`);
     },
 
     // 获取用户OpenID（调试用）
@@ -242,6 +392,124 @@ Component({
             icon: 'error'
           });
         }
+      });
+    },
+
+    // 获取用户OpenID（用于支付）
+    getUserOpenIdForPayment() {
+      return new Promise((resolve, reject) => {
+        // 先检查本地缓存
+        const cachedOpenid = wx.getStorageSync('openid');
+        if (cachedOpenid) {
+          console.log('使用缓存的openid:', cachedOpenid);
+          resolve(cachedOpenid);
+          return;
+        }
+
+        // 获取新的openid
+        wx.login({
+          success: (loginRes) => {
+            if (loginRes.code) {
+              wx.request({
+                url: `${API_CONFIG.BASE_URL}/api/wechat/auth/openid`,
+                method: 'POST',
+                header: {
+                  'Content-Type': 'application/json'
+                },
+                data: {
+                  code: loginRes.code
+                },
+                success: (authRes) => {
+                  if (authRes.data.success) {
+                    const openid = authRes.data.data.openid;
+                    // 保存到本地缓存
+                    wx.setStorageSync('openid', openid);
+                    console.log('获取openid成功:', openid);
+                    resolve(openid);
+                  } else {
+                    console.error('获取openid失败:', authRes.data.error);
+                    reject(new Error(authRes.data.error || '获取openid失败'));
+                  }
+                },
+                fail: (err) => {
+                  console.error('请求openid失败:', err);
+                  reject(err);
+                }
+              });
+            } else {
+              reject(new Error('获取微信登录code失败'));
+            }
+          },
+          fail: (err) => {
+            console.error('微信登录失败:', err);
+            reject(err);
+          }
+        });
+      });
+    },
+
+    // 创建支付订单
+    createPaymentOrder(amount: number, description: string, packageType: string) {
+      return new Promise((resolve, reject) => {
+        wx.showLoading({
+          title: '创建订单中...'
+        });
+
+        this.getUserOpenIdForPayment().then((openid) => {
+          wx.request({
+            url: `${API_CONFIG.BASE_URL}/api/wechat/pay/create`,
+            method: 'POST',
+            header: {
+              'Content-Type': 'application/json'
+            },
+            data: {
+              openid: openid,
+              total_fee: amount, // 金额（分）
+              body: description,
+              attach: `package_${packageType}_${Date.now()}`
+            },
+            success: (res) => {
+              wx.hideLoading();
+              
+              if (res.data.success) {
+                console.log('订单创建成功:', res.data.data);
+                resolve(res.data.data.pay_params);
+              } else {
+                console.error('创建订单失败:', res.data.error);
+                reject(new Error(res.data.error || '创建订单失败'));
+              }
+            },
+            fail: (err) => {
+              wx.hideLoading();
+              console.error('创建订单请求失败:', err);
+              reject(err);
+            }
+          });
+        }).catch((err) => {
+          wx.hideLoading();
+          reject(err);
+        });
+      });
+    },
+
+    // 调用微信支付
+    callWeChatPay(payParams: any) {
+      return new Promise((resolve, reject) => {
+        wx.requestPayment({
+          timeStamp: payParams.timeStamp,
+          nonceStr: payParams.nonceStr,
+          package: payParams.package,
+          signType: payParams.signType,
+          paySign: payParams.paySign,
+          success: (res) => {
+            console.log('支付成功:', res);
+            resolve(res);
+          },
+          fail: (err) => {
+            console.log('支付失败:', err);
+            reject(err);
+          }
+        });
       });
     },
 
@@ -323,6 +591,11 @@ Component({
           icon: 'error'
         })
         return
+      }
+
+      // 检查用户剩余次数
+      if (!this.checkUserRemainingCount()) {
+        return;
       }
 
       this.setData({
@@ -487,15 +760,19 @@ Component({
                   enhancedImageSize: imageSize
                 })
               })
-              this.getFileSize(filePath, (fileSize: string) => {
-                this.setData({
-                  enhancedFileSize: fileSize
-                })
-              })
-              wx.showToast({
-                title: '图片增强完成',
-                icon: 'success'
-              })
+               this.getFileSize(filePath, (fileSize: string) => {
+                 this.setData({
+                   enhancedFileSize: fileSize
+                 })
+               })
+               
+               // 使用一次增强机会
+               this.useEnhanceCount();
+               
+               wx.showToast({
+                 title: '图片增强完成',
+                 icon: 'success'
+               })
             },
             fail: (error) => {
               this.setData({
