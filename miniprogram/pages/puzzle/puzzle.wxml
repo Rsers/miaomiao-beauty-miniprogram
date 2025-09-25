@@ -1,0 +1,168 @@
+<!-- 拼图协作页面 -->
+<view class="puzzle-container">
+  <!-- 渐变背景 -->
+  <view class="puzzle-background"></view>
+  
+  <!-- 背景装饰元素 -->
+  <view class="background-decorations">
+    <text class="decoration-cat decoration-1">🐱</text>
+    <text class="decoration-heart decoration-2">💖</text>
+    <text class="decoration-sparkle decoration-3">✨</text>
+  </view>
+  
+  <!-- 手机容器 -->
+  <view class="mobile-container">
+    <!-- 顶部导航 -->
+    <view class="header">
+      <button class="nav-btn" bindtap="goBack">
+        <text class="nav-icon">←</text>
+      </button>
+      <text class="header-title">喵喵拼图</text>
+      <button class="nav-btn" bindtap="onMoreTap">
+        <text class="nav-icon">⋯</text>
+      </button>
+    </view>
+    
+    <!-- 主内容区域 -->
+    <scroll-view class="main-content" scroll-y="true">
+      <!-- 拼图网格 -->
+      <view class="puzzle-grid-section">
+        <view class="puzzle-card">
+          <!-- 进度头部 -->
+          <view class="progress-header">
+            <view class="progress-title-row">
+              <text class="progress-title">拼图进度</text>
+              <text class="progress-percentage">{{puzzleProgress}}%</text>
+            </view>
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{puzzleProgress}}%"></view>
+            </view>
+          </view>
+          
+          <!-- 3x3拼图网格 -->
+          <view class="puzzle-grid">
+            <view class="puzzle-piece {{item.isCompleted ? 'completed' : ''}} {{item.isCurrentlyBeingSolved ? 'solving' : ''}}" 
+                  wx:for="{{puzzlePieces}}" wx:key="id"
+                  bindtap="onPuzzlePieceTap" data-piece="{{item}}">
+              
+              <!-- 已完成拼图 -->
+              <view wx:if="{{item.isCompleted}}" class="completed-piece">
+                <image class="piece-image" src="{{item.image}}" mode="aspectFill"></image>
+                <view class="sparkle-overlay"></view>
+                <view class="solved-by-indicator" wx:if="{{item.solvedBy}}">
+                  <text class="solved-by-text">{{item.solvedBy}}</text>
+                </view>
+              </view>
+              
+              <!-- 正在拼图中 -->
+              <view wx:elif="{{item.isCurrentlyBeingSolved}}" class="solving-piece">
+                <text class="puzzle-icon">🧩</text>
+              </view>
+              
+              <!-- 未完成拼图 -->
+              <view wx:else class="uncompleted-piece">
+                <text class="cat-icon">🐱</text>
+              </view>
+            </view>
+          </view>
+          
+          <!-- 完成庆祝效果 -->
+          <view class="celebration-effect" wx:if="{{puzzleProgress === 100}}">
+            <text class="celebration-emoji">🎉</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 团队成员列表 -->
+      <view class="team-members-section">
+        <view class="team-card">
+          <view class="team-header">
+            <text class="team-icon">👭</text>
+            <text class="team-title">团队成员 ({{teamMembers.length}})</text>
+          </view>
+          
+          <scroll-view class="members-list" scroll-y="true">
+            <view class="member-item" 
+                  wx:for="{{teamMembers}}" wx:key="id"
+                  bindtap="onMemberTap" data-member="{{item}}">
+              <view class="member-avatar-container">
+                <image class="member-avatar" src="{{item.avatar}}" mode="aspectFill"></image>
+                <view class="status-indicator {{item.status}}"></view>
+                <view class="solving-animation" wx:if="{{item.status === 'solving'}}"></view>
+              </view>
+              
+              <view class="member-info">
+                <view class="member-name-row">
+                  <text class="member-name">{{item.name}}</text>
+                  <view class="invite-badge" wx:if="{{item.isInvited}}">
+                    <text class="invite-text">邀请中</text>
+                  </view>
+                </view>
+                <text class="member-status">{{item.statusText}} • {{item.piecesCompleted}} 块拼图</text>
+              </view>
+              
+              <view class="member-achievement" wx:if="{{item.piecesCompleted > 0}}">
+                <text class="achievement-icon">🧩</text>
+                <text class="achievement-count">{{item.piecesCompleted}}</text>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+      
+      <!-- 社交分享功能 -->
+      <view class="social-actions-section">
+        <!-- 主要邀请按钮 -->
+        <view class="invite-button-container">
+          <button class="invite-button" bindtap="onInviteFriends">
+            <text class="invite-icon">👥</text>
+            <text class="invite-text">邀请闺蜜一起拼图</text>
+            <text class="friends-emoji">👭</text>
+          </button>
+        </view>
+        
+        <!-- 次要操作按钮 -->
+        <view class="secondary-actions">
+          <button class="action-btn wechat-btn" bindtap="onShareToWeChat" disabled="{{!isCompleted}}">
+            <text class="action-icon">📤</text>
+            <text class="action-text">分享到微信</text>
+          </button>
+          <button class="action-btn export-btn" bindtap="onExportVideo" disabled="{{!isCompleted}}">
+            <text class="action-icon">💾</text>
+            <text class="action-text">导出视频</text>
+          </button>
+        </view>
+        
+        <!-- 完成庆祝 -->
+        <view class="completion-celebration" wx:if="{{isCompleted}}">
+          <view class="celebration-content">
+            <text class="celebration-title">🎉 拼图完成啦！🎉</text>
+            <text class="celebration-subtitle">和小伙伴们一起完成了这个可爱的猫咪拼图！</text>
+          </view>
+        </view>
+        
+        <!-- 提示信息 -->
+        <view class="hint-info" wx:if="{{!isCompleted}}">
+          <text class="hint-text">💡 完成拼图后即可分享到微信朋友圈和导出动画视频</text>
+        </view>
+      </view>
+      
+      <!-- 演示按钮 -->
+      <view class="demo-section" wx:if="{{puzzleProgress < 100}}">
+        <button class="demo-button" bindtap="onCompletePuzzle">
+          <text class="demo-icon">🎯</text>
+          <text class="demo-text">演示完成拼图</text>
+        </button>
+      </view>
+    </scroll-view>
+    
+    <!-- 浮动爱心动画 -->
+    <view class="floating-hearts">
+      <text class="floating-heart heart-1">💕</text>
+      <text class="floating-heart heart-2">💕</text>
+      <text class="floating-heart heart-3">💕</text>
+      <text class="floating-heart heart-4">💕</text>
+      <text class="floating-heart heart-5">💕</text>
+    </view>
+  </view>
+</view>

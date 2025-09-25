@@ -1,6 +1,6 @@
 {
-  "usingComponents": {},
-  "navigationBarTitleText": "喵喵美颜相机",
-  "navigationBarBackgroundColor": "#ff9a9e",
-  "navigationBarTextStyle": "white"
+    "usingComponents": {},
+    "navigationBarTitleText": "喵喵美颜相机",
+    "navigationBarBackgroundColor": "#ff9a9e",
+    "navigationBarTextStyle": "white"
 }

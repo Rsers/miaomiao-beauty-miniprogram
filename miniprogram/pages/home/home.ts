@@ -116,15 +116,35 @@ Page({
         });
     },
 
-  // 开始美颜
-  startBeautify() {
-    console.log('开始美颜');
+    // 开始美颜
+    startBeautify() {
+        console.log('开始美颜');
+
+        // 跳转到图片处理页面
+        wx.navigateTo({
+            url: '/pages/index/index',
+            success: () => {
+                console.log('成功跳转到图片处理页面');
+            },
+            fail: (err) => {
+                console.error('跳转失败:', err);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'error'
+                });
+            }
+        });
+    },
+
+  // 打开美颜相机
+  openBeautyCamera() {
+    console.log('打开美颜相机');
     
-    // 跳转到图片处理页面
+    // 跳转到美颜相机页面
     wx.navigateTo({
-      url: '/pages/index/index',
+      url: '/pages/camera/camera',
       success: () => {
-        console.log('成功跳转到图片处理页面');
+        console.log('成功跳转到美颜相机页面');
       },
       fail: (err) => {
         console.error('跳转失败:', err);
@@ -136,15 +156,15 @@ Page({
     });
   },
 
-  // 打开美颜相机
-  openBeautyCamera() {
-    console.log('打开美颜相机');
+  // 打开拼图协作
+  openPuzzleCollaboration() {
+    console.log('打开拼图协作');
     
-    // 跳转到美颜相机页面
+    // 跳转到拼图协作页面
     wx.navigateTo({
-      url: '/pages/camera/camera',
+      url: '/pages/puzzle/puzzle',
       success: () => {
-        console.log('成功跳转到美颜相机页面');
+        console.log('成功跳转到拼图协作页面');
       },
       fail: (err) => {
         console.error('跳转失败:', err);
