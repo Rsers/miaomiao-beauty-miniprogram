@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/splash/splash",
+    "pages/home/home",
     "pages/index/index",
     "pages/logs/logs",
     "pages/terms/terms",

@@ -111,23 +111,23 @@ Page({
             console.log('返回到主页');
           },
           fail: () => {
-            wx.switchTab({
-              url: '/pages/index/index'
+            wx.redirectTo({
+              url: '/pages/home/home'
             });
           }
         });
       } else {
-        // 正常启动流程，跳转到主页
-        wx.switchTab({
-          url: '/pages/index/index',
+        // 正常启动流程，跳转到新首页
+        wx.redirectTo({
+          url: '/pages/home/home',
           success: () => {
-            console.log('成功跳转到主页');
+            console.log('成功跳转到新首页');
           },
           fail: (err) => {
             console.error('跳转失败:', err);
-            // 如果switchTab失败，尝试使用redirectTo
-            wx.redirectTo({
-              url: '/pages/index/index'
+            // 如果redirectTo失败，尝试使用navigateTo
+            wx.navigateTo({
+              url: '/pages/home/home'
             });
           }
         });
