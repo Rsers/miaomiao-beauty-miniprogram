@@ -78,12 +78,14 @@
 
 /* 手机容器 */
 .mobile-container {
+  width: 100%;
   max-width: 384px;
   margin: 0 auto;
   min-height: 100vh;
   background: transparent;
   position: relative;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 /* 顶部导航 */
@@ -126,6 +128,7 @@
 .main-content {
   padding: 16px;
   padding-bottom: 32px;
+  box-sizing: border-box;
 }
 
 /* 拼图网格区域 */
@@ -139,6 +142,8 @@
   border-radius: 24px;
   padding: 24px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 进度头部 */
@@ -184,7 +189,9 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
+  width: 100%;
   aspect-ratio: 1;
+  box-sizing: border-box;
 }
 
 .puzzle-piece {
@@ -309,6 +316,8 @@
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .team-header {
@@ -452,6 +461,8 @@
 /* 主要邀请按钮 */
 .invite-button-container {
   margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .invite-button {
@@ -468,6 +479,7 @@
   gap: 8px;
   font-size: 18px;
   transition: transform 0.2s ease;
+  box-sizing: border-box;
 }
 
 .invite-button:active {
@@ -495,6 +507,8 @@
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .action-btn {
@@ -508,6 +522,8 @@
   gap: 8px;
   font-size: 14px;
   transition: transform 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .action-btn:active {
@@ -547,6 +563,8 @@
   border-radius: 16px;
   border: 1px solid #fce7f3;
   margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .celebration-content {
@@ -572,6 +590,8 @@
   padding: 12px;
   border-radius: 12px;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .hint-text {
@@ -582,6 +602,8 @@
 /* 演示按钮 */
 .demo-section {
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .demo-button {
@@ -596,6 +618,7 @@
   justify-content: center;
   gap: 8px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .demo-icon {
