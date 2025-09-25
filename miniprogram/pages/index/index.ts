@@ -32,12 +32,18 @@ Component({
     enhancedImageSize: '', // 增强图尺寸
     originalFileSize: '', // 原图文件大小
     enhancedFileSize: '', // 增强图文件大小
+    
+    // 用户状态
+    remainingCount: 3, // 剩余次数
+    userLevel: 'free', // 用户等级：free, basic, premium, unlimited
+    userLevelText: '免费用户', // 用户等级文本
   },
 
   lifetimes: {
     attached() {
       // 组件加载时读取用户信息
       this.loadUserInfo();
+      this.loadUserStatus();
     }
   },
 
@@ -45,6 +51,7 @@ Component({
     show() {
       // 页面显示时读取用户信息
       this.loadUserInfo();
+      this.loadUserStatus();
     }
   },
 
@@ -99,6 +106,91 @@ Component({
       
       // 保存昵称到本地存储
       wx.setStorageSync('userNickname', nickName);
+    },
+
+    // 加载用户状态
+    loadUserStatus() {
+      try {
+        const savedCount = wx.getStorageSync('remainingCount');
+        const savedLevel = wx.getStorageSync('userLevel');
+        const savedLevelText = wx.getStorageSync('userLevelText');
+        
+        if (savedCount !== undefined) {
+          this.setData({
+            remainingCount: savedCount
+          });
+        }
+        
+        if (savedLevel && savedLevelText) {
+          this.setData({
+            userLevel: savedLevel,
+            userLevelText: savedLevelText
+          });
+        }
+        
+        console.log('加载用户状态:', { 
+          remainingCount: savedCount, 
+          userLevel: savedLevel,
+          userLevelText: savedLevelText 
+        });
+      } catch (error) {
+        console.error('加载用户状态失败:', error);
+      }
+    },
+
+    // 选择套餐
+    selectPackage(e: any) {
+      const { type, amount } = e.currentTarget.dataset;
+      
+      const packageInfo = {
+        basic: {
+          name: '基础包',
+          amount: 9.9,
+          count: 10,
+          features: ['10次增强机会', '高清图片输出', '快速处理']
+        },
+        premium: {
+          name: '高级包', 
+          amount: 29.9,
+          count: 100,
+          features: ['100次增强机会', '超高清输出', '批量处理', '优先处理']
+        },
+        unlimited: {
+          name: '无限包',
+          amount: 99.9,
+          count: -1, // -1表示无限
+          features: ['无限次使用', '最高质量输出', '批量处理', '专属客服']
+        }
+      };
+      
+      const info = packageInfo[type];
+      
+      // 显示套餐详情弹窗
+      wx.showModal({
+        title: `确认购买 ${info.name}`,
+        content: `价格：¥${info.amount}\n包含：${info.features.join('、')}`,
+        confirmText: '立即购买',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            this.showPaymentInfo(type, info);
+          }
+        }
+      });
+    },
+
+    // 显示支付信息（暂时只显示信息，不实际支付）
+    showPaymentInfo(type: string, info: any) {
+      wx.showModal({
+        title: '支付功能开发中',
+        content: `您选择了${info.name}，价格¥${info.amount}\n\n支付功能正在开发中，敬请期待！`,
+        showCancel: false,
+        confirmText: '知道了',
+        success: () => {
+          // 这里将来会调用实际的支付接口
+          console.log('用户选择套餐:', { type, info });
+        }
+      });
     },
 
     // 选择图片

@@ -191,10 +191,78 @@
           <text class="btn-text">分享图片</text>
         </button>
       </view>
-    </view>
-  </view>
+     </view>
+   </view>
 
-  <!-- 处理进度提示 -->
+   <!-- 付费套餐区域 -->
+   <view class="payment-section">
+     <view class="section-title">
+       <text>💎 升级到高级版</text>
+       <text class="section-subtitle">解锁更多功能，享受专业服务</text>
+     </view>
+     
+     <view class="payment-options">
+       <view class="payment-card basic-card" bindtap="selectPackage" data-type="basic" data-amount="9.9">
+         <view class="card-header">
+           <text class="package-name">基础包</text>
+           <text class="package-price">¥9.9</text>
+         </view>
+         <view class="package-features">
+           <text class="feature-item">✅ 10次增强机会</text>
+           <text class="feature-item">✅ 高清图片输出</text>
+           <text class="feature-item">✅ 快速处理</text>
+         </view>
+         <view class="package-desc">适合偶尔使用</view>
+       </view>
+       
+       <view class="payment-card premium-card" bindtap="selectPackage" data-type="premium" data-amount="29.9">
+         <view class="popular-badge">
+           <text class="badge-text">🔥 热门</text>
+         </view>
+         <view class="card-header">
+           <text class="package-name">高级包</text>
+           <text class="package-price">¥29.9</text>
+         </view>
+         <view class="package-features">
+           <text class="feature-item">✅ 100次增强机会</text>
+           <text class="feature-item">✅ 超高清输出</text>
+           <text class="feature-item">✅ 批量处理</text>
+           <text class="feature-item">✅ 优先处理</text>
+         </view>
+         <view class="package-desc">性价比最高</view>
+         <view class="savings-tag">省70%</view>
+       </view>
+       
+       <view class="payment-card unlimited-card" bindtap="selectPackage" data-type="unlimited" data-amount="99.9">
+         <view class="card-header">
+           <text class="package-name">无限包</text>
+           <text class="package-price">¥99.9</text>
+         </view>
+         <view class="package-features">
+           <text class="feature-item">✅ 无限次使用</text>
+           <text class="feature-item">✅ 最高质量输出</text>
+           <text class="feature-item">✅ 批量处理</text>
+           <text class="feature-item">✅ 专属客服</text>
+         </view>
+         <view class="package-desc">专业用户首选</view>
+         <view class="vip-tag">VIP</view>
+       </view>
+     </view>
+
+     <!-- 用户当前状态 -->
+     <view class="user-status">
+       <view class="status-item">
+         <text class="status-label">剩余次数：</text>
+         <text class="status-value">{{remainingCount}}</text>
+       </view>
+       <view class="status-item">
+         <text class="status-label">会员等级：</text>
+         <text class="status-value {{userLevel}}">{{userLevelText}}</text>
+       </view>
+     </view>
+   </view>
+  
+   <!-- 处理进度提示 -->
   <view wx:if="{{isProcessing}}" class="processing-overlay">
     <view class="processing-content">
       <view class="loading-spinner"></view>
