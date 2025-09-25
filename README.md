@@ -20,22 +20,219 @@
 - **结果下载**: `/api/v1/download/{task_id}`
 
 ### 页面结构
-- **首页**: 原生小程序页面，展示版本选择功能
+- **启动页**: 精美的启动动画页面，展示品牌Logo和动画效果
+- **首页**: 全新的首页设计，包含多个功能入口和装饰动画
+- **美颜相机页**: 完整的相机界面，支持AI换脸和滤镜功能
+- **拼图协作页**: 多人协作拼图游戏界面，支持实时进度和社交功能
+- **推荐奖励页**: 完整的推荐系统界面，包含邀请码和奖励等级
 - **Webview页面**: 加载完整版网站 `https://www.gongjuxiang.work`
 
 ## 🎯 功能特点
 
-### 首页功能
-- ✅ **版本选择**: 小程序版 vs 完整版
-- ✅ **图片处理**: 单张图片增强功能
-- ✅ **完整版入口**: 跳转到webview页面
-- ✅ **用户头像**: 微信头像选择功能
-- ✅ **用户昵称**: 微信昵称输入功能
+### 启动页 (splash)
+- ✅ **品牌展示**: 喵喵美颜Logo和品牌名称
+- ✅ **动画效果**: 
+  - 猫咪Logo旋转和缩放动画
+  - 浮动爪印装饰动画
+  - 渐变背景动画
+  - 加载进度条动画
+- ✅ **自动跳转**: 3秒后自动跳转到首页
+- ✅ **交互体验**: 点击跳过动画直接进入首页
+
+### 首页 (home)
+- ✅ **功能入口**: 多个主要功能按钮
+- ✅ **装饰动画**:
+  - 浮动爪印装饰
+  - 猫咪头像动画
+  - 背景渐变效果
+  - 按钮悬停动画
+- ✅ **导航功能**: 跳转到各个功能页面
+- ✅ **用户信息**: 显示用户头像和昵称
+- ✅ **调试入口**: 图片处理页面调试按钮
+
+### 美颜相机页 (camera)
+- ✅ **相机预览**: 实时相机画面预览
+- ✅ **AI换脸**: 双图片上传和AI换脸功能
+- ✅ **滤镜系统**: 多种滤镜选择和强度调节
+- ✅ **猫咪滤镜**: 专属猫咪主题滤镜
+- ✅ **购买系统**: VIP会员购买界面
+- ✅ **社交功能**: 邀请好友和分享功能
+- ✅ **动画效果**:
+  - 滤镜切换动画
+  - 按钮点击反馈
+  - 进度条动画
+  - 卡片悬停效果
+
+### 拼图协作页 (puzzle)
+- ✅ **拼图网格**: 3x3拼图网格显示
+- ✅ **进度跟踪**: 实时拼图完成进度
+- ✅ **团队协作**: 多人协作拼图功能
+- ✅ **成员管理**: 团队成员列表和状态
+- ✅ **社交分享**: 邀请好友和分享功能
+- ✅ **动画效果**:
+  - 拼图块完成动画
+  - 浮动爱心动画
+  - 进度条动画
+  - 庆祝完成动画
+  - 成员状态指示器动画
+- ✅ **交互功能**:
+  - 拼图块点击交互
+  - 成员头像点击
+  - 一键完成演示功能
+
+### 推荐奖励页 (referral)
+- ✅ **邀请码系统**: 专属邀请码生成和分享
+- ✅ **收益统计**: 累计收益和统计数据
+- ✅ **奖励等级**: 多级奖励系统
+- ✅ **VIP礼品卡**: 礼品卡展示和转赠
+- ✅ **用户好评**: 用户评价和成就展示
+- ✅ **动画效果**:
+  - 浮动爱心装饰动画
+  - 进度条动画
+  - 按钮点击反馈
+  - 卡片悬停效果
+- ✅ **交互功能**:
+  - 邀请码一键复制
+  - 分享功能
+  - 礼品卡转赠
+  - 奖励详情查看
 
 ### Webview功能
 - ✅ **网站加载**: 直接访问完整版网站
 - ✅ **加载状态**: 优雅的加载动画
 - ✅ **错误处理**: 网络错误重试机制
+
+## 🎨 动画效果与交互设计
+
+### 动画系统架构
+所有页面都采用统一的动画设计语言，确保用户体验的一致性：
+
+#### 动画类型分类
+1. **装饰动画**: 浮动元素、背景动画
+2. **交互动画**: 按钮反馈、卡片悬停
+3. **状态动画**: 加载、进度、完成状态
+4. **过渡动画**: 页面切换、元素出现
+
+### 启动页动画效果
+```css
+/* 猫咪Logo动画 */
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* 爪印装饰动画 */
+@keyframes pawFloat {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+  50% { transform: translateY(-20px) translateX(10px); opacity: 0.7; }
+}
+
+/* 进度条动画 */
+@keyframes progressFill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+```
+
+### 首页交互设计
+- **按钮悬停效果**: `transform: scale(1.05)`
+- **装饰元素动画**: 浮动爪印，随机位置和延迟
+- **背景渐变**: 动态渐变色彩变化
+- **猫咪头像**: 呼吸动画效果
+
+### 美颜相机页动画
+```css
+/* 滤镜切换动画 */
+.filter-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 按钮点击反馈 */
+.button-feedback:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
+}
+
+/* AI换脸箭头动画 */
+@keyframes arrowPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+```
+
+### 拼图协作页动画系统
+```css
+/* 拼图块完成动画 */
+@keyframes puzzleComplete {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 浮动爱心动画 */
+@keyframes heartFloat {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+  25% { transform: translateY(-20px) rotate(5deg); opacity: 0.6; }
+  50% { transform: translateY(-10px) rotate(-3deg); opacity: 0.4; }
+  75% { transform: translateY(-30px) rotate(8deg); opacity: 0.7; }
+  100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+}
+
+/* 进度条动画 */
+@keyframes progressGrow {
+  0% { width: 0%; }
+  100% { width: var(--progress-width); }
+}
+
+/* 庆祝完成动画 */
+@keyframes celebrationBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+  75% { transform: translateY(-10px) rotate(-5deg); }
+}
+```
+
+### 推荐奖励页动画
+```css
+/* 浮动爱心装饰 */
+@keyframes floatHeart {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.3; }
+  25% { transform: translateY(-20px) translateX(10px) rotate(5deg); opacity: 0.6; }
+  50% { transform: translateY(-10px) translateX(-5px) rotate(-3deg); opacity: 0.4; }
+  75% { transform: translateY(-30px) translateX(15px) rotate(8deg); opacity: 0.7; }
+}
+
+/* 卡片悬停效果 */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+```
+
+### 交互设计原则
+
+#### 1. 响应式反馈
+- **按钮点击**: 所有按钮都有点击缩放反馈
+- **卡片悬停**: 卡片有悬停上浮效果
+- **表单输入**: 输入框有焦点状态变化
+
+#### 2. 状态指示
+- **加载状态**: 旋转动画、进度条
+- **完成状态**: 成功图标、庆祝动画
+- **错误状态**: 错误提示、重试按钮
+
+#### 3. 视觉层次
+- **动画优先级**: 装饰动画 < 状态动画 < 交互动画
+- **动画时长**: 装饰动画(3-6s) > 状态动画(0.5-2s) > 交互动画(0.1-0.3s)
+- **缓动函数**: 使用cubic-bezier实现自然动画
+
+#### 4. 性能优化
+- **GPU加速**: 使用transform和opacity属性
+- **动画控制**: 提供跳过动画选项
+- **内存管理**: 页面隐藏时停止装饰动画
 
 ## 📱 用户体验
 
@@ -49,6 +246,112 @@
 - 批量图片处理
 - 更多增强选项
 - 高级功能
+
+## 🏗️ 页面架构与导航
+
+### 页面导航流程
+```
+启动页 (splash) → 首页 (home) → 功能页面
+    ↓              ↓
+   3秒自动跳转   用户选择功能
+                ↓
+        ┌─────────────────┐
+        │  美颜相机 (camera) │
+        │  拼图协作 (puzzle) │
+        │  推荐奖励 (referral)│
+        │  图片处理 (index)  │
+        └─────────────────┘
+```
+
+### 页面布局设计
+
+#### 1. 统一布局原则
+- **动态布局**: 所有页面都采用响应式动态布局
+- **容器宽度**: `width: 100%; max-width: 384px`
+- **盒模型**: 统一使用 `box-sizing: border-box`
+- **居中对齐**: `margin: 0 auto` 实现页面居中
+
+#### 2. 导航栏设计
+- **启动页**: 无导航栏，全屏动画展示
+- **首页**: 自定义顶部导航，显示用户头像和设置
+- **功能页面**: 统一的自定义导航栏，包含返回按钮和页面标题
+
+#### 3. 内容区域布局
+```css
+/* 统一的页面容器 */
+.page-container {
+  width: 100%;
+  max-width: 384px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* 主内容区域 */
+.main-content {
+  padding: 0 16px 32px;
+  box-sizing: border-box;
+}
+```
+
+#### 4. 网格系统
+- **统计数据**: 3列等宽网格 `grid-template-columns: repeat(3, 1fr)`
+- **拼图网格**: 3x3正方形网格 `aspect-ratio: 1`
+- **功能按钮**: 弹性布局 `display: flex; flex-wrap: wrap`
+
+### 交互设计模式
+
+#### 1. 按钮交互
+```css
+/* 统一按钮样式 */
+.button {
+  transition: transform 0.2s ease;
+}
+.button:active {
+  transform: scale(0.95);
+}
+
+/* 悬停效果 */
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+```
+
+#### 2. 卡片交互
+```css
+/* 卡片悬停效果 */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+```
+
+#### 3. 表单交互
+```css
+/* 输入框焦点状态 */
+.input:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+}
+```
+
+### 状态管理
+
+#### 1. 页面状态
+- **加载状态**: 显示加载动画和进度条
+- **完成状态**: 显示成功提示和庆祝动画
+- **错误状态**: 显示错误信息和重试按钮
+- **空状态**: 显示空状态插画和引导文案
+
+#### 2. 数据状态
+- **本地存储**: 用户头像、昵称、设置等
+- **页面状态**: 当前页面数据、用户操作记录
+- **缓存策略**: 图片缓存、API响应缓存
 
 ## 🔧 技术实现
 
@@ -217,6 +520,26 @@
 
 **经验总结**: 这是微信开发者工具的常见缓存问题，按上述顺序操作通常能解决。
 
+## ⚡ 性能优化
+
+### 动画性能优化
+- ✅ **GPU加速**: 使用 `transform` 和 `opacity` 属性
+- ✅ **避免重排重绘**: 避免修改 `width`、`height` 等属性
+- ✅ **动画控制**: 页面隐藏时停止装饰动画
+- ✅ **内存管理**: 及时清理动画定时器
+
+### 加载性能优化
+- ✅ **图片懒加载**: 使用 `loading="lazy"` 属性
+- ✅ **资源预加载**: 关键资源预加载
+- ✅ **代码分割**: 按页面分割代码
+- ✅ **缓存策略**: 合理的缓存配置
+
+### 渲染性能优化
+- ✅ **虚拟列表**: 长列表使用虚拟滚动
+- ✅ **防抖节流**: 输入和滚动事件防抖
+- ✅ **批量更新**: 使用 `setData` 批量更新数据
+- ✅ **条件渲染**: 使用 `wx:if` 避免不必要的渲染
+
 ## 📈 优势
 
 - ✅ **合规设计**: 符合微信小程序审核规范
@@ -224,6 +547,9 @@
 - ✅ **技术架构**: HTTPS + API网关 + 动态配置
 - ✅ **维护便利**: 服务器端IP可动态更新
 - ✅ **性能优化**: CDN加速 + 缓存策略
+- ✅ **动画系统**: 统一的动画设计语言
+- ✅ **交互体验**: 丰富的交互反馈和状态指示
+- ✅ **响应式设计**: 完全动态布局适配各种屏幕
 
 ## 🔐 安全特性
 
