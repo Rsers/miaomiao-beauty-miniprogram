@@ -199,85 +199,38 @@ Component({
         title: '获取中...'
       });
 
-      // 1. 先获取微信登录code
+      // 获取微信登录code
       wx.login({
         success: (loginRes) => {
+          wx.hideLoading();
           console.log('微信登录code:', loginRes.code);
           
-          // 2. 调用后端接口换取openid
-          wx.request({
-            url: `${API_CONFIG.BASE_URL}/api/v1/user/openid`,
-            method: 'POST',
-            data: {
-              code: loginRes.code
-            },
-            success: (res) => {
-              wx.hideLoading();
-              console.log('获取openid响应:', res);
-              
-              if (res.data && res.data.openid) {
-                const openid = res.data.openid;
-                
-                // 显示openid并支持复制
-                wx.showModal({
-                  title: '用户OpenID',
-                  content: openid,
-                  showCancel: true,
-                  cancelText: '关闭',
-                  confirmText: '复制',
-                  success: (modalRes) => {
-                    if (modalRes.confirm) {
-                      // 复制到剪贴板
-                      wx.setClipboardData({
-                        data: openid,
-                        success: () => {
-                          wx.showToast({
-                            title: '已复制到剪贴板',
-                            icon: 'success'
-                          });
-                        },
-                        fail: () => {
-                          wx.showToast({
-                            title: '复制失败',
-                            icon: 'error'
-                          });
-                        }
-                      });
-                    }
-                  }
-                });
-              } else {
-                wx.showToast({
-                  title: '获取OpenID失败',
-                  icon: 'error'
-                });
-              }
-            },
-            fail: (err) => {
-              wx.hideLoading();
-              console.error('获取openid失败:', err);
-              
-              // 如果后端接口不可用，显示code供调试
-              wx.showModal({
-                title: '调试信息',
-                content: `后端接口不可用\n\n微信登录code: ${loginRes.code}\n\n请用此code在后端换取openid`,
-                showCancel: true,
-                cancelText: '关闭',
-                confirmText: '复制Code',
-                success: (modalRes) => {
-                  if (modalRes.confirm) {
-                    wx.setClipboardData({
-                      data: loginRes.code,
-                      success: () => {
-                        wx.showToast({
-                          title: 'Code已复制',
-                          icon: 'success'
-                        });
-                      }
+          // 显示code并支持复制
+          wx.showModal({
+            title: '微信登录Code',
+            content: `Code: ${loginRes.code}\n\n请将此code发送到你的后端服务器，调用微信API换取openid`,
+            showCancel: true,
+            cancelText: '关闭',
+            confirmText: '复制Code',
+            success: (modalRes) => {
+              if (modalRes.confirm) {
+                // 复制到剪贴板
+                wx.setClipboardData({
+                  data: loginRes.code,
+                  success: () => {
+                    wx.showToast({
+                      title: 'Code已复制到剪贴板',
+                      icon: 'success'
+                    });
+                  },
+                  fail: () => {
+                    wx.showToast({
+                      title: '复制失败',
+                      icon: 'error'
                     });
                   }
-                }
-              });
+                });
+              }
             }
           });
         },
