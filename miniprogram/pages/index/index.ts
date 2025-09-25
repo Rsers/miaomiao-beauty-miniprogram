@@ -343,6 +343,23 @@ Component({
       console.log(`使用一次增强机会，剩余：${newCount}次`);
     },
 
+    // 查看启动页面（调试用）
+    viewSplashPage() {
+      wx.navigateTo({
+        url: '/pages/splash/splash?from=main',
+        success: () => {
+          console.log('成功跳转到启动页面');
+        },
+        fail: (err) => {
+          console.error('跳转到启动页面失败:', err);
+          wx.showToast({
+            title: '跳转失败',
+            icon: 'error'
+          });
+        }
+      });
+    },
+
     // 获取用户OpenID（调试用）
     getUserOpenId() {
       wx.showLoading({
