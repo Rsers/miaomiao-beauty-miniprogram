@@ -136,65 +136,65 @@ Page({
         });
     },
 
-  // 打开美颜相机
-  openBeautyCamera() {
-    console.log('打开美颜相机');
-    
-    // 跳转到美颜相机页面
-    wx.navigateTo({
-      url: '/pages/camera/camera',
-      success: () => {
-        console.log('成功跳转到美颜相机页面');
-      },
-      fail: (err) => {
-        console.error('跳转失败:', err);
-        wx.showToast({
-          title: '跳转失败',
-          icon: 'error'
-        });
-      }
-    });
-  },
+    // 打开美颜相机
+    openBeautyCamera() {
+        console.log('打开美颜相机');
 
-  // 打开拼图协作
-  openPuzzleCollaboration() {
-    console.log('打开拼图协作');
-    
-    // 跳转到拼图协作页面
-    wx.navigateTo({
-      url: '/pages/puzzle/puzzle',
-      success: () => {
-        console.log('成功跳转到拼图协作页面');
-      },
-      fail: (err) => {
-        console.error('跳转失败:', err);
-        wx.showToast({
-          title: '跳转失败',
-          icon: 'error'
+        // 跳转到美颜相机页面
+        wx.navigateTo({
+            url: '/pages/camera/camera',
+            success: () => {
+                console.log('成功跳转到美颜相机页面');
+            },
+            fail: (err) => {
+                console.error('跳转失败:', err);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'error'
+                });
+            }
         });
-      }
-    });
-  },
+    },
 
-  // 打开推荐奖励
-  openReferralRewards() {
-    console.log('打开推荐奖励');
-    
-    // 跳转到推荐奖励页面
-    wx.navigateTo({
-      url: '/pages/referral/referral',
-      success: () => {
-        console.log('成功跳转到推荐奖励页面');
-      },
-      fail: (err) => {
-        console.error('跳转失败:', err);
-        wx.showToast({
-          title: '跳转失败',
-          icon: 'error'
+    // 打开拼图协作
+    openPuzzleCollaboration() {
+        console.log('打开拼图协作');
+
+        // 跳转到拼图协作页面
+        wx.navigateTo({
+            url: '/pages/puzzle/puzzle',
+            success: () => {
+                console.log('成功跳转到拼图协作页面');
+            },
+            fail: (err) => {
+                console.error('跳转失败:', err);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'error'
+                });
+            }
         });
-      }
-    });
-  },
+    },
+
+    // 打开推荐奖励
+    openReferralRewards() {
+        console.log('打开推荐奖励');
+
+        // 跳转到推荐奖励页面
+        wx.navigateTo({
+            url: '/pages/referral/referral',
+            success: () => {
+                console.log('成功跳转到推荐奖励页面');
+            },
+            fail: (err) => {
+                console.error('跳转失败:', err);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'error'
+                });
+            }
+        });
+    },
 
     // 跳转到图片处理页面（调试用）
     goToImageProcess() {
