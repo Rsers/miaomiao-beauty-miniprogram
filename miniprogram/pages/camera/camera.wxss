@@ -96,11 +96,11 @@
 .camera-preview {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 384px;
   background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 100%);
-  border-radius: 20px;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }
 
@@ -129,9 +129,9 @@
 /* 相机控制 */
 .camera-controls {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  right: 12px;
+  top: 16px;
+  left: 16px;
+  right: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -144,13 +144,12 @@
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
-  border-radius: 16px;
-  padding: 6px 12px;
-  font-size: 11px;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
   display: flex;
   align-items: center;
-  gap: 3px;
-  max-width: 100px;
+  gap: 4px;
 }
 
 .control-icon {
@@ -243,9 +242,9 @@
 /* 滤镜选择 */
 .filter-selection {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
   z-index: 20;
   box-sizing: border-box;
 }
@@ -256,8 +255,8 @@
 
 .filter-list {
   display: flex;
-  gap: 6px;
-  padding-bottom: 6px;
+  gap: 8px;
+  padding-bottom: 8px;
   overflow-x: auto;
   white-space: nowrap;
 }
@@ -267,13 +266,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  padding: 6px 8px;
-  border-radius: 10px;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
   transition: all 0.2s ease;
-  min-width: 50px;
+  min-width: 60px;
 }
 
 .filter-item.active {
@@ -297,10 +296,10 @@
 .collaboration-section,
 .social-section {
   background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 100%);
-  border-radius: 20px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   width: 100%;
 }
@@ -345,8 +344,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 16px;
+  margin-bottom: 16px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -361,11 +360,10 @@
 
 .upload-area {
   width: 100%;
-  max-width: 80px;
   aspect-ratio: 1;
   background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
   border: 2px dashed #ec4899;
-  border-radius: 10px;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -390,17 +388,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 8px;
+  gap: 8px;
+  padding: 16px;
 }
 
 .upload-icon {
-  font-size: 16px;
+  font-size: 24px;
   color: #ec4899;
 }
 
 .upload-text {
-  font-size: 9px;
+  font-size: 12px;
   color: #be185d;
   text-align: center;
   line-height: 1.2;
@@ -424,19 +422,19 @@
 }
 
 .arrow-icon {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.3);
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.3);
 }
 
 .arrow-symbol {
   color: white;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: bold;
 }
 
