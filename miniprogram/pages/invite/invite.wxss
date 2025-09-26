@@ -1,0 +1,708 @@
+/* 邀请好友页面样式 */
+
+/* 页面容器 */
+.invite-container {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 渐变背景 */
+.invite-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 50%, #e0e7ff 100%);
+  z-index: 1;
+}
+
+/* 装饰元素 */
+.decorative-elements {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.decorative-circle {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+  border-radius: 50%;
+}
+
+.decorative-circle-1 {
+  width: 128px;
+  height: 128px;
+  top: -32px;
+  right: 32px;
+}
+
+.decorative-circle-2 {
+  width: 96px;
+  height: 96px;
+  bottom: 32px;
+  left: -32px;
+}
+
+/* 浮动爱心动画 */
+.floating-hearts {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.heart-animation {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0.3;
+  animation: float-heart 6s infinite ease-in-out;
+}
+
+.heart-0 { top: 20%; left: 10%; animation-delay: 0s; }
+.heart-1 { top: 40%; right: 15%; animation-delay: 1.2s; }
+.heart-2 { top: 60%; left: 20%; animation-delay: 2.4s; }
+.heart-3 { top: 80%; right: 25%; animation-delay: 3.6s; }
+.heart-4 { top: 30%; left: 50%; animation-delay: 4.8s; }
+
+@keyframes float-heart {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.3; }
+  25% { transform: translateY(-20px) translateX(10px) rotate(5deg); opacity: 0.6; }
+  50% { transform: translateY(-10px) translateX(-5px) rotate(-3deg); opacity: 0.4; }
+  75% { transform: translateY(-30px) translateX(15px) rotate(8deg); opacity: 0.7; }
+}
+
+/* 手机容器 */
+.mobile-container {
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(139, 92, 246, 0.1) 100%);
+  position: relative;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+/* 顶部导航 */
+.top-navigation {
+  position: relative;
+  z-index: 20;
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #7c3aed 100%);
+  padding: 48px 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-btn {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  transition: background-color 0.2s ease;
+}
+
+.nav-btn:active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.nav-icon {
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
+}
+
+.nav-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: white;
+}
+
+/* 猫咪吉祥物区域 */
+.mascot-section {
+  text-align: center;
+  color: white;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 10;
+}
+
+.cat-emoji {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.mascot-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 主内容区域 */
+.main-content {
+  padding: 0 16px 100px;
+  box-sizing: border-box;
+}
+
+/* VIP转赠卡 */
+.vip-transfer-card {
+  position: relative;
+  background: linear-gradient(135deg, #f472b6 0%, #8b5cf6 50%, #7c3aed 100%);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.card-background {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+}
+
+.sparkle-decoration {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 32px;
+  opacity: 0.3;
+  color: white;
+}
+
+.card-content {
+  position: relative;
+  z-index: 10;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.gift-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+.gift-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.card-title-section {
+  flex-grow: 1;
+  margin-left: 12px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  display: block;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  display: block;
+}
+
+.quota-section {
+  text-align: right;
+}
+
+.quota-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  display: block;
+}
+
+.quota-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  display: block;
+}
+
+.card-body {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+  text-align: center;
+}
+
+.cat-gift-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  margin: 0 auto 8px;
+  display: block;
+}
+
+.quota-text {
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.highlight {
+  color: #fbbf24;
+}
+
+.quota-note {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  display: block;
+}
+
+/* 好友列表区域 */
+.friends-list-section {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 16px;
+  color: #111827;
+  font-weight: 500;
+}
+
+.section-count {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.friend-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-wrapper {
+  position: relative;
+}
+
+.friend-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.online-indicator {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  background: #10b981;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.vip-indicator {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  background: #f59e0b;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crown-icon {
+  font-size: 12px;
+  color: white;
+}
+
+.friend-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.friend-name {
+  font-size: 16px;
+  color: #111827;
+  font-weight: 500;
+}
+
+.friend-status {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.transfer-btn {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.transfer-btn.disabled {
+  background: #d1d5db;
+  color: #6b7280;
+}
+
+.transfer-btn:active {
+  transform: scale(0.95);
+}
+
+/* 奖励阶梯区域 */
+.reward-ladder-section {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.progress-container {
+  margin-bottom: 16px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.reward-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.reward-item.completed {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: #10b981;
+}
+
+.reward-item.current {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  border-color: #ec4899;
+}
+
+.reward-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d1d5db;
+}
+
+.reward-icon-wrapper.completed {
+  background: #10b981;
+}
+
+.reward-icon-wrapper.current {
+  background: #ec4899;
+}
+
+.reward-icon {
+  font-size: 20px;
+  color: white;
+}
+
+.reward-info {
+  flex-grow: 1;
+}
+
+.reward-title {
+  font-size: 16px;
+  color: #111827;
+  font-weight: 500;
+  display: block;
+}
+
+.reward-title.completed {
+  color: #059669;
+}
+
+.reward-description {
+  font-size: 14px;
+  color: #6b7280;
+  display: block;
+}
+
+.reward-description.completed {
+  color: #047857;
+}
+
+.completed-icon {
+  font-size: 20px;
+  color: #f59e0b;
+}
+
+/* 社交分享区域 */
+.social-sharing-section {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.share-icon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.invite-content {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid #f3e8ff;
+}
+
+.invite-text {
+  font-size: 14px;
+  color: #374151;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.invite-code {
+  font-size: 14px;
+  color: #8b5cf6;
+  font-weight: 500;
+  display: block;
+}
+
+.social-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.social-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+.social-btn:active {
+  transform: scale(0.95);
+}
+
+.wechat-btn {
+  background: #10b981;
+}
+
+.moments-btn {
+  background: #3b82f6;
+}
+
+.copy-btn {
+  background: #6b7280;
+}
+
+.social-icon {
+  font-size: 24px;
+}
+
+.social-text {
+  font-size: 12px;
+}
+
+/* 成就徽章区域 */
+.achievement-section {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.badge-icon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.achievement-item {
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.achievement-item.unlocked {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  border-color: #8b5cf6;
+}
+
+.achievement-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d1d5db;
+  margin-bottom: 8px;
+}
+
+.achievement-icon-wrapper.unlocked {
+  background: #8b5cf6;
+}
+
+.achievement-icon {
+  font-size: 20px;
+  color: white;
+}
+
+.achievement-title {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.achievement-title.unlocked {
+  color: #7c3aed;
+}
+
+.achievement-description {
+  font-size: 12px;
+  color: #6b7280;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.achievement-progress {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  display: block;
+}
+
+.achievement-progress.unlocked {
+  color: #7c3aed;
+}
+
+/* 底部CTA按钮 */
+.bottom-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 375px;
+  margin: 0 auto;
+  background: white;
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  z-index: 30;
+}
+
+.invite-btn {
+  width: 100%;
+  height: 48px;
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #7c3aed 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: transform 0.2s ease;
+}
+
+.invite-btn:active {
+  transform: scale(0.98);
+}
+
+.invite-btn-text {
+  color: white;
+}

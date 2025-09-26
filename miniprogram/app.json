@@ -5,6 +5,7 @@
     "pages/camera/camera",
     "pages/puzzle/puzzle",
     "pages/referral/referral",
+    "pages/invite/invite",
     "pages/index/index",
     "pages/logs/logs",
     "pages/terms/terms",
