@@ -306,6 +306,13 @@
   box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
 }
 
+/* 积分商城按钮 */
+.mall-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  margin-top: 12px;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
 /* 装饰爪印 */
 .decorative-paw {
   position: absolute;

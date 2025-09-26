@@ -84,6 +84,12 @@
               <text class="camera-icon">👥</text>
               <text class="button-text">邀请好友</text>
             </button>
+            
+            <!-- 积分商城按钮 -->
+            <button class="cta-button mall-button" bindtap="openPointsMall">
+              <text class="camera-icon">🛍️</text>
+              <text class="button-text">积分商城</text>
+            </button>
       
       <!-- 装饰爪印 -->
       <view class="decorative-paw decorative-paw-1">🐾</view>

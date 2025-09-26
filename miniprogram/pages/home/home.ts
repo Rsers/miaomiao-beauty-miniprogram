@@ -176,15 +176,35 @@ Page({
         });
     },
 
-  // 打开推荐奖励
-  openReferralRewards() {
-    console.log('打开推荐奖励');
+    // 打开推荐奖励
+    openReferralRewards() {
+        console.log('打开推荐奖励');
+
+        // 跳转到推荐奖励页面
+        wx.navigateTo({
+            url: '/pages/referral/referral',
+            success: () => {
+                console.log('成功跳转到推荐奖励页面');
+            },
+            fail: (err) => {
+                console.error('跳转失败:', err);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'error'
+                });
+            }
+        });
+    },
+
+  // 打开邀请好友
+  openInviteFriends() {
+    console.log('打开邀请好友');
     
-    // 跳转到推荐奖励页面
+    // 跳转到邀请好友页面
     wx.navigateTo({
-      url: '/pages/referral/referral',
+      url: '/pages/invite/invite',
       success: () => {
-        console.log('成功跳转到推荐奖励页面');
+        console.log('成功跳转到邀请好友页面');
       },
       fail: (err) => {
         console.error('跳转失败:', err);
@@ -196,15 +216,15 @@ Page({
     });
   },
 
-  // 打开邀请好友
-  openInviteFriends() {
-    console.log('打开邀请好友');
+  // 打开积分商城
+  openPointsMall() {
+    console.log('打开积分商城');
     
-    // 跳转到邀请好友页面
+    // 跳转到积分商城页面
     wx.navigateTo({
-      url: '/pages/invite/invite',
+      url: '/pages/mall/mall',
       success: () => {
-        console.log('成功跳转到邀请好友页面');
+        console.log('成功跳转到积分商城页面');
       },
       fail: (err) => {
         console.error('跳转失败:', err);
