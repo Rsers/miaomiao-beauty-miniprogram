@@ -35,7 +35,7 @@
       </view>
       
       <!-- 用户头像 -->
-      <view class="user-avatar-btn">
+      <view class="user-avatar-btn" bindtap="goToProfile">
         <text class="user-icon">👤</text>
       </view>
     </view>
@@ -89,6 +89,18 @@
             <button class="cta-button mall-button" bindtap="openPointsMall">
               <text class="camera-icon">🛍️</text>
               <text class="button-text">积分商城</text>
+            </button>
+            
+            <!-- 个人资料按钮 -->
+            <button class="cta-button profile-button" bindtap="goToProfile">
+              <text class="camera-icon">👤</text>
+              <text class="button-text">个人资料</text>
+            </button>
+            
+            <!-- 用户流程图按钮 -->
+            <button class="cta-button userflow-button" bindtap="goToUserFlow">
+              <text class="camera-icon">📊</text>
+              <text class="button-text">用户流程图</text>
             </button>
       
       <!-- 装饰爪印 -->

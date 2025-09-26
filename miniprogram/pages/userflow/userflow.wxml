@@ -1,0 +1,201 @@
+<!-- 用户流程图页面 -->
+<view class="userflow-container">
+  <!-- 渐变背景 -->
+  <view class="userflow-background"></view>
+  
+  <!-- 背景装饰元素 -->
+  <view class="decorative-elements">
+    <view class="decorative-circle decorative-circle-1"></view>
+    <view class="decorative-circle decorative-circle-2"></view>
+    <view class="floating-hearts">
+      <block wx:for="{{[0,1,2,3,4]}}" wx:key="*this">
+        <view class="heart-animation heart-{{index}}">💖</view>
+      </block>
+    </view>
+  </view>
+  
+  <!-- 手机容器 -->
+  <view class="mobile-container">
+    <!-- 顶部导航 -->
+    <view class="top-navigation">
+      <button class="nav-btn" bindtap="navigateBack">
+        <text class="nav-icon">←</text>
+      </button>
+      
+      <view class="nav-center">
+        <text class="nav-title">用户流程图</text>
+        <text class="nav-subtitle">社交裂变机制</text>
+      </view>
+      
+      <view class="nav-actions">
+        <button class="action-btn" bindtap="shareFlow">
+          <text class="action-icon">📤</text>
+        </button>
+      </view>
+    </view>
+    
+    <!-- 滚动内容 -->
+    <scroll-view scroll-y class="scroll-content">
+      <view class="content-container">
+        <!-- 页面标题 -->
+        <view class="page-header">
+          <view class="header-icon">
+            <text class="heart-icon">💖</text>
+          </view>
+          <text class="page-title">喵喵美颜 - 社交裂变机制</text>
+          <text class="page-subtitle">通过朋友邀请、协作拼图、分享传播的社交病毒式增长流程</text>
+        </view>
+        
+        <!-- 病毒式增长指标 -->
+        <view class="metrics-grid">
+          <block wx:for="{{viralIndicators}}" wx:key="id">
+            <view class="metric-card">
+              <view class="metric-icon">
+                <text class="metric-emoji">{{item.emoji}}</text>
+              </view>
+              <view class="metric-content">
+                <text class="metric-count">{{item.count}}</text>
+                <text class="metric-label">{{item.label}}</text>
+              </view>
+            </view>
+          </block>
+        </view>
+        
+        <!-- 主要流程图 -->
+        <view class="flow-diagram">
+          <block wx:for="{{flowSteps}}" wx:key="id">
+            <view class="flow-step">
+              <!-- 步骤卡片 -->
+              <view class="step-card">
+                <!-- 步骤编号和图标 -->
+                <view class="step-icon-section">
+                  <view class="step-icon {{item.colorClass}}">
+                    <text class="step-emoji">{{item.emoji}}</text>
+                  </view>
+                  <view class="step-badge">
+                    <text class="badge-text">步骤 {{item.id}}</text>
+                  </view>
+                </view>
+                
+                <!-- 内容 -->
+                <view class="step-content">
+                  <view class="step-header">
+                    <view class="step-info">
+                      <text class="step-title">{{item.title}}</text>
+                      <text class="step-subtitle">{{item.subtitle}}</text>
+                      <text class="step-description">{{item.description}}</text>
+                      
+                      <!-- 社交指标 -->
+                      <view class="step-badges">
+                        <block wx:if="{{item.id <= 3}}">
+                          <view class="step-badge-item social-badge">
+                            <text class="badge-emoji">💬</text>
+                            <text class="badge-text">社交互动</text>
+                          </view>
+                          <view class="step-badge-item viral-badge">
+                            <text class="badge-emoji">⚡</text>
+                            <text class="badge-text">病毒传播</text>
+                          </view>
+                        </block>
+                        <block wx:if="{{item.id >= 4}}">
+                          <view class="step-badge-item reward-badge">
+                            <text class="badge-emoji">🎁</text>
+                            <text class="badge-text">奖励激励</text>
+                          </view>
+                          <view class="step-badge-item retention-badge">
+                            <text class="badge-emoji">⭐</text>
+                            <text class="badge-text">用户留存</text>
+                          </view>
+                        </block>
+                      </view>
+                    </view>
+                    
+                    <!-- 手机屏幕模拟 -->
+                    <block wx:if="{{item.mobile}}">
+                      <view class="mobile-mockup">
+                        <view class="mockup-screen">
+                          <view class="mockup-content">
+                            <text class="mockup-icon">📱</text>
+                            <text class="mockup-text">{{item.title}}</text>
+                          </view>
+                        </view>
+                      </view>
+                    </block>
+                  </view>
+                </view>
+              </view>
+              
+              <!-- 箭头到下一步 -->
+              <block wx:if="{{index < flowSteps.length - 1}}">
+                <view class="flow-arrow">
+                  <view class="arrow-icon">
+                    <text class="arrow-emoji">⬇️</text>
+                  </view>
+                </view>
+              </block>
+            </view>
+          </block>
+        </view>
+        
+        <!-- 病毒式增长可视化 -->
+        <view class="viral-growth-section">
+          <text class="section-title">病毒式增长效果</text>
+          
+          <view class="growth-visualization">
+            <!-- 用户增长环 -->
+            <view class="growth-rings">
+              <view class="ring ring-outer">
+                <view class="ring ring-middle">
+                  <view class="ring ring-inner">
+                    <text class="ring-icon">👥</text>
+                  </view>
+                </view>
+              </view>
+              <view class="growth-plus">
+                <text class="plus-text">+</text>
+              </view>
+            </view>
+            
+            <view class="growth-arrow">
+              <text class="arrow-emoji">➡️</text>
+            </view>
+            
+            <!-- 增长指标 -->
+            <view class="growth-metric">
+              <text class="metric-value">3.2倍</text>
+              <text class="metric-label">增长倍数</text>
+            </view>
+            
+            <view class="growth-arrow">
+              <text class="arrow-emoji">➡️</text>
+            </view>
+            
+            <!-- 最终结果 -->
+            <view class="final-result">
+              <text class="result-value">50K+</text>
+              <text class="result-label">月活用户</text>
+              <view class="rating-stars">
+                <block wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+                  <text class="star-icon">⭐</text>
+                </block>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 操作按钮 -->
+        <view class="action-buttons">
+          <button class="action-btn primary-btn" bindtap="startFlow">
+            <text class="btn-icon">🚀</text>
+            <text class="btn-text">开始体验流程</text>
+          </button>
+          
+          <button class="action-btn secondary-btn" bindtap="learnMore">
+            <text class="btn-icon">📚</text>
+            <text class="btn-text">了解更多</text>
+          </button>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

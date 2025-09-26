@@ -47,7 +47,7 @@
           <text class="points-icon">👑</text>
         </view>
         <view class="points-details">
-          <text class="points-label">我的积分</text>
+          <text class="points-label">分</text>
           <text class="points-amount">{{userPoints}}</text>
         </view>
       </view>

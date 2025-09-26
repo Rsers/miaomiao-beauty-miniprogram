@@ -196,45 +196,45 @@ Page({
         });
     },
 
-  // 打开邀请好友
-  openInviteFriends() {
-    console.log('打开邀请好友');
-    
-    // 跳转到邀请好友页面
-    wx.navigateTo({
-      url: '/pages/invite/invite',
-      success: () => {
-        console.log('成功跳转到邀请好友页面');
-      },
-      fail: (err) => {
-        console.error('跳转失败:', err);
-        wx.showToast({
-          title: '跳转失败',
-          icon: 'error'
-        });
-      }
-    });
-  },
+    // 打开邀请好友
+    openInviteFriends() {
+        console.log('打开邀请好友');
 
-  // 打开积分商城
-  openPointsMall() {
-    console.log('打开积分商城');
-    
-    // 跳转到积分商城页面
-    wx.navigateTo({
-      url: '/pages/mall/mall',
-      success: () => {
-        console.log('成功跳转到积分商城页面');
-      },
-      fail: (err) => {
-        console.error('跳转失败:', err);
-        wx.showToast({
-          title: '跳转失败',
-          icon: 'error'
+        // 跳转到邀请好友页面
+        wx.navigateTo({
+            url: '/pages/invite/invite',
+            success: () => {
+                console.log('成功跳转到邀请好友页面');
+            },
+            fail: (err) => {
+                console.error('跳转失败:', err);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'error'
+                });
+            }
         });
-      }
-    });
-  },
+    },
+
+    // 打开积分商城
+    openPointsMall() {
+        console.log('打开积分商城');
+
+        // 跳转到积分商城页面
+        wx.navigateTo({
+            url: '/pages/mall/mall',
+            success: () => {
+                console.log('成功跳转到积分商城页面');
+            },
+            fail: (err) => {
+                console.error('跳转失败:', err);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'error'
+                });
+            }
+        });
+    },
 
     // 跳转到图片处理页面（调试用）
     goToImageProcess() {
@@ -386,6 +386,42 @@ Page({
         });
     },
 
+    // 跳转到个人资料页面
+    goToProfile() {
+        console.log('跳转到个人资料页面');
+        wx.navigateTo({
+            url: '/pages/profile/profile',
+            success: () => {
+                console.log('成功跳转到个人资料页面');
+            },
+            fail: (err) => {
+                console.error('跳转失败:', err);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'error'
+                });
+            }
+        });
+    },
+
+    // 跳转到用户流程图页面
+    goToUserFlow() {
+        console.log('跳转到用户流程图页面');
+        wx.navigateTo({
+            url: '/pages/userflow/userflow',
+            success: () => {
+                console.log('成功跳转到用户流程图页面');
+            },
+            fail: (err) => {
+                console.error('跳转失败:', err);
+                wx.showToast({
+                    title: '跳转失败',
+                    icon: 'error'
+                });
+            }
+        });
+    },
+
     // 用户头像点击
     onUserAvatarTap() {
         console.log('用户头像');
@@ -394,10 +430,7 @@ Page({
             success: (res) => {
                 switch (res.tapIndex) {
                     case 0:
-                        wx.showToast({
-                            title: '个人资料功能开发中',
-                            icon: 'none'
-                        });
+                        this.goToProfile();
                         break;
                     case 1:
                         wx.showToast({

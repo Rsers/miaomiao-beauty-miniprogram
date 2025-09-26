@@ -7,6 +7,8 @@
     "pages/referral/referral",
     "pages/invite/invite",
     "pages/mall/mall",
+    "pages/profile/profile",
+    "pages/userflow/userflow",
     "pages/index/index",
     "pages/logs/logs",
     "pages/terms/terms",

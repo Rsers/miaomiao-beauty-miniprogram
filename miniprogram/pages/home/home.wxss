@@ -313,6 +313,20 @@
   box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 
+/* 个人资料按钮 */
+.profile-button {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%) !important;
+  margin-top: 12px;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+}
+
+/* 用户流程图按钮 */
+.userflow-button {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%) !important;
+  margin-top: 12px;
+  box-shadow: 0 4px 16px rgba(6, 182, 212, 0.3);
+}
+
 /* 装饰爪印 */
 .decorative-paw {
   position: absolute;
