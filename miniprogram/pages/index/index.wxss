@@ -598,3 +598,11 @@ button {
   opacity: 0.9;
   line-height: 1.5;
 }
+
+/* 核心特点文本强制换行 */
+.feature-item text {
+  display: block;
+  width: 100%;
+  white-space: normal;
+  word-break: keep-all;
+}
