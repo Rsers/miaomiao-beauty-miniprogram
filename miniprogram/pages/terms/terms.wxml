@@ -12,7 +12,7 @@
     <view class="section">
       <text class="section-title">1. 服务说明</text>
       <text class="section-content">
-        喵喵美颜是一款AI图片增强工具，为用户提供智能图片处理服务。我们致力于通过先进的AI技术，帮助用户提升图片质量，让每一张照片都变得更加清晰。
+        喵喵美颜是一款图片修复工具，为用户提供图片处理服务。我们致力于帮助用户修复模糊照片，让每一张照片都变得更加清晰。
       </text>
     </view>
 
@@ -20,7 +20,7 @@
     <view class="section">
       <text class="section-title">2. 服务内容</text>
       <text class="section-content">
-        2.1 图片增强处理：使用AI算法对用户上传的图片进行智能优化<br/>
+        2.1 图片修复处理：对用户上传的图片进行智能优化<br/>
         2.2 图片预览：提供原图与处理后图片的对比预览<br/>
         2.3 图片保存：支持将处理后的图片保存到用户设备<br/>
         2.4 分享功能：支持将处理结果分享给其他用户
@@ -32,9 +32,8 @@
       <text class="section-title">3. 用户责任</text>
       <text class="section-content">
         3.1 用户应确保上传的图片内容合法合规，不得包含违法违规内容<br/>
-        3.2 用户应保护个人账号安全，不得将账号借给他人使用<br/>
-        3.3 用户应遵守相关法律法规，不得利用本服务从事违法活动<br/>
-        3.4 用户应尊重他人权益，不得上传侵犯他人版权的图片
+        3.2 用户应遵守相关法律法规，不得利用本服务从事违法活动<br/>
+        3.3 用户应尊重他人权益，不得上传侵犯他人版权的图片
       </text>
     </view>
 
@@ -54,9 +53,10 @@
       <text class="section-title">5. 隐私保护</text>
       <text class="section-content">
         5.1 我们重视用户隐私，详细政策请查看《隐私政策》<br/>
-        5.2 用户上传的图片仅用于处理，不会用于其他用途<br/>
-        5.3 我们不会收集用户的个人敏感信息<br/>
-        5.4 用户可随时删除已上传的图片
+        5.2 <strong>我们不保存用户的任何图片</strong><br/>
+        5.3 用户上传的图片仅用于处理，<strong>处理完成后立即删除</strong><br/>
+        5.4 我们不会收集用户的个人敏感信息<br/>
+        5.5 我们不会将用户图片用于其他任何用途
       </text>
     </view>
 
@@ -82,22 +82,11 @@
       </text>
     </view>
 
-    <!-- 8. 联系方式 -->
+    <!-- 8. 生效时间 -->
     <view class="section">
-      <text class="section-title">8. 联系我们</text>
+      <text class="section-title">8. 生效时间</text>
       <text class="section-content">
-        如有疑问或建议，请通过以下方式联系我们：<br/>
-        邮箱：support@gongjuxiang.work<br/>
-        微信：通过小程序内反馈功能<br/>
-        我们将在24小时内回复您的咨询
-      </text>
-    </view>
-
-    <!-- 9. 生效时间 -->
-    <view class="section">
-      <text class="section-title">9. 生效时间</text>
-      <text class="section-content">
-        本服务条款自2024年1月1日起生效，如有更新将及时通知用户。
+        本服务条款自2025年10月1日起生效，如有更新将及时通知用户。
       </text>
     </view>
   </view>
@@ -105,6 +94,6 @@
   <!-- 底部按钮 -->
   <view class="footer">
     <button class="agree-btn" bindtap="agreeTerms">我已阅读并同意</button>
-    <button class="disagree-btn" bindtap="disagreeTerms">不同意</button>
+    <button class="back-btn" bindtap="goBack">返回</button>
   </view>
 </view>

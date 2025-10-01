@@ -104,34 +104,20 @@ Page({
 
     // 延迟跳转，让用户看到"准备就绪！"
     setTimeout(() => {
-      // 如果是从主页跳转过来的，直接返回
-      if (this.isFromMainPage) {
-        wx.navigateBack({
-          success: () => {
-            console.log('返回到主页');
-          },
-          fail: () => {
-            wx.redirectTo({
-              url: '/pages/home/home'
-            });
-          }
-        });
-      } else {
-        // 正常启动流程，跳转到新首页
-        wx.redirectTo({
-          url: '/pages/home/home',
-          success: () => {
-            console.log('成功跳转到新首页');
-          },
-          fail: (err) => {
-            console.error('跳转失败:', err);
-            // 如果redirectTo失败，尝试使用navigateTo
-            wx.navigateTo({
-              url: '/pages/home/home'
-            });
-          }
-        });
-      }
+      // 跳转到图片修复页
+      wx.redirectTo({
+        url: '/pages/index/index',
+        success: () => {
+          console.log('成功跳转到图片修复页');
+        },
+        fail: (err) => {
+          console.error('跳转失败:', err);
+          // 如果redirectTo失败，尝试使用navigateTo
+          wx.navigateTo({
+            url: '/pages/index/index'
+          });
+        }
+      });
     }, 1000);
   },
 

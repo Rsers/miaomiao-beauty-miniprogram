@@ -30,18 +30,9 @@ Component({
             })
         },
 
-        // 不同意服务条款
-        disagreeTerms() {
-            wx.showModal({
-                title: '提示',
-                content: '不同意服务条款将无法使用本服务，确定要退出吗？',
-                success: (res) => {
-                    if (res.confirm) {
-                        // 返回上一页
-                        wx.navigateBack()
-                    }
-                }
-            })
+        // 返回
+        goBack() {
+            wx.navigateBack()
         }
     },
 

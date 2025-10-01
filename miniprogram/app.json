@@ -1,16 +1,7 @@
 {
   "pages": [
     "pages/splash/splash",
-    "pages/home/home",
-    "pages/camera/camera",
-    "pages/puzzle/puzzle",
-    "pages/referral/referral",
-    "pages/invite/invite",
-    "pages/mall/mall",
-    "pages/profile/profile",
-    "pages/userflow/userflow",
     "pages/index/index",
-    "pages/logs/logs",
     "pages/terms/terms",
     "pages/privacy/privacy"
   ],
