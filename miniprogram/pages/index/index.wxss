@@ -580,3 +580,21 @@ button {
     opacity: 1;
   }
 }
+
+/* 隐私卡片文本样式修复 */
+.privacy-title {
+  display: block;
+  font-size: 28rpx;
+  color: #ffffff;
+  margin-bottom: 8rpx;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.privacy-desc {
+  display: block;
+  font-size: 24rpx;
+  color: #ffffff;
+  opacity: 0.9;
+  line-height: 1.5;
+}

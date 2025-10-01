@@ -298,10 +298,10 @@
           <view class="privacy-icon">🔒</view>
           <!-- text-white flex-1 -->
           <view class="text-white flex-1">
-            <!-- text-sm mb-1 -->
-            <text class="text-sm mb-1">隐私承诺</text>
-            <!-- text-xs opacity-90 -->
-            <text class="text-xs opacity-90">本地处理，不保存照片</text>
+            <!-- privacy-title -->
+            <text class="privacy-title">隐私承诺</text>
+            <!-- privacy-desc -->
+            <text class="privacy-desc">本地处理，不保存照片</text>
           </view>
           <!-- w-6 h-6 bg-green-400 bg-opacity-80 rounded-full flex items-center justify-center -->
           <view class="privacy-check">
