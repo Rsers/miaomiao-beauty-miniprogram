@@ -12,7 +12,7 @@ const API_CONFIG = {
 
 Component({
   data: {
-    sliderPosition: 50,  // 滑块初始位置50%
+    sliderPosition: 50,
     selectedFile: null as any,
     isProcessing: false,
     progress: 0,
@@ -64,7 +64,6 @@ Component({
       })
     },
 
-    // Start processing with real API call + progress animation
     handleStartProcessing() {
       if (!this.data.selectedFile) return
 
@@ -75,10 +74,8 @@ Component({
         progress: 0
       })
 
-      // Start visual progress animation
       this.startProgressAnimation()
 
-      // Call real backend API
       wx.uploadFile({
         url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ENHANCE}`,
         filePath: this.data.selectedFile.preview,
@@ -87,10 +84,8 @@ Component({
           try {
             const data = JSON.parse(res.data)
             if (data.task_id) {
-              // Async processing
               this.pollTaskStatus(data.task_id, startTime)
             } else if (data.success && data.enhanced_image_url) {
-              // Sync processing complete
               this.handleComplete(data.enhanced_image_url, startTime)
             } else {
               throw new Error(data.message || '处理失败')
@@ -100,13 +95,10 @@ Component({
             this.handleError()
           }
         },
-        fail: () => {
-          this.handleError()
-        }
+        fail: () => this.handleError()
       })
     },
 
-    // Visual progress animation (like Figma demo)
     startProgressAnimation() {
       if (this.progressTimer) {
         clearInterval(this.progressTimer)
@@ -121,7 +113,6 @@ Component({
 
         const newProgress = this.data.progress + Math.random() * 3 + 1
 
-        // Stop at 90% and wait for real API
         if (newProgress >= 90) {
           clearInterval(this.progressTimer)
           this.progressTimer = null
@@ -277,14 +268,41 @@ Component({
         progress: 0,
         isProcessing: false,
         comparisonImages: [],
-        processTime: 0
+        processTime: 0,
+        sliderPosition: 50
       })
 
       wx.pageScrollTo({ scrollTop: 0, duration: 300 })
     },
 
     setCompareMode(e: any) {
-      this.setData({ compareMode: e.currentTarget.dataset.mode })
+      this.setData({ 
+        compareMode: e.currentTarget.dataset.mode,
+        sliderPosition: 50  // 重置滑块位置
+      })
+    },
+
+    // 滑动对比功能
+    handleSliderMove(e: any) {
+      if (!this.data.selectedFile) return
+
+      const touch = e.touches[0]
+      const query = wx.createSelectorQuery().in(this)
+      
+      query.select('.slider-container').boundingClientRect((rect: any) => {
+        if (!rect) return
+        
+        const x = touch.clientX - rect.left
+        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
+        
+        this.setData({
+          sliderPosition: percentage
+        })
+      }).exec()
+    },
+
+    handleSliderEnd() {
+      // 可选：滑动结束后的处理
     },
 
     openTerms() {
@@ -316,26 +334,3 @@ Component({
     }
   }
 })
-
-    // 滑动对比功能
-    handleSliderMove(e: any) {
-      if (!this.data.selectedFile) return
-
-      const touch = e.touches[0]
-      const query = wx.createSelectorQuery().in(this)
-      
-      query.select('.slider-container').boundingClientRect((rect: any) => {
-        if (!rect) return
-        
-        const x = touch.clientX - rect.left
-        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
-        
-        this.setData({
-          sliderPosition: percentage
-        })
-      }).exec()
-    },
-
-    handleSliderEnd() {
-      // 可选：滑动结束后的处理
-    },
