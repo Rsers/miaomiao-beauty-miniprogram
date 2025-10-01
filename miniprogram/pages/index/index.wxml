@@ -1,134 +1,82 @@
-<!--index.wxml - Precise conversion from Figma Make App.tsx-->
+<!--index.wxml - Figma Make Design with Slider-->
 <wxs module="utils">
   var round = function(num) {
     return Math.round(num);
   };
-  module.exports = {
-    round: round
-  };
+  module.exports = { round: round };
 </wxs>
 
-<!-- Outer: min-h-screen bg-gray-50 -->
 <view class="min-h-screen bg-gray-50">
-  <!-- Inner: max-w-sm mx-auto bg-white min-h-screen flex flex-col -->
   <view class="max-w-sm mx-auto bg-white min-h-screen flex-col">
     
-    <!-- Header Section: bg-gradient-to-br from-pink-400 via-pink-300 to-rose-300 p-8 text-center relative overflow-hidden -->
+    <!-- Header -->
     <view class="header-section">
-      <!-- Cat decorations: absolute inset-0 -->
       <view class="absolute inset-0">
-        <!-- top-3 right-3 text-3xl opacity-30 rotate-12 -->
         <view class="absolute top-3 right-3 text-3xl opacity-30 rotate-12">🐱</view>
-        <!-- top-8 right-12 text-lg opacity-25 -->
         <view class="absolute top-8 right-12 text-lg opacity-25">😸</view>
-        <!-- top-1/3 right-6 text-sm opacity-20 -rotate-12 -->
         <view class="absolute top-1-3 right-6 text-sm opacity-20 rotate-minus-12">🐾</view>
-        <!-- bottom-6 left-4 text-2xl opacity-30 -rotate-6 -->
         <view class="absolute bottom-6 left-4 text-2xl opacity-30 rotate-minus-6">😻</view>
-        <!-- bottom-12 left-8 text-xs opacity-25 -->
         <view class="absolute bottom-12 left-8 text-xs opacity-25">🐾</view>
-        <!-- top-1/2 left-4 text-sm opacity-20 rotate-6 -->
         <view class="absolute top-1-2 left-4 text-sm opacity-20 rotate-6">😴</view>
-        <!-- top-6 right-20 text-xs opacity-30 -->
         <view class="absolute top-6 right-20 text-xs opacity-30">✨</view>
-        <!-- bottom-16 left-16 text-xs opacity-25 -->
         <view class="absolute bottom-16 left-16 text-xs opacity-25">✨</view>
-        <!-- top-20 left-6 text-xs opacity-20 -->
-        <view class="absolute top-20 left-6 text-xs opacity-20">🐈</view>
-        <!-- bottom-20 right-8 text-xs opacity-25 rotate-12 -->
-        <view class="absolute bottom-20 right-8 text-xs opacity-25 rotate-12">💖</view>
       </view>
       
-      <!-- relative z-10 -->
       <view class="relative z-10">
-        <!-- mb-6 -->
         <view class="mb-6">
-          <!-- text-3xl text-white mb-3 tracking-wide drop-shadow-md -->
           <view class="text-3xl text-white mb-3 tracking-wide drop-shadow-md">
-            <!-- block text-2xl opacity-95 mb-1 -->
             <text class="block text-2xl opacity-95 mb-1">图片修复</text>
-            <!-- block text-4xl bg-gradient-to-r from-white to-pink-100 bg-clip-text text-transparent -->
             <text class="block text-4xl gradient-text">喵喵美颜</text>
           </view>
-          <!-- w-16 h-1 bg-white bg-opacity-60 rounded-full mx-auto mb-4 -->
           <view class="w-16 h-1 bg-white opacity-60 rounded-full mx-auto mb-4"></view>
-          <!-- text-lg text-white text-opacity-95 leading-relaxed tracking-wide -->
           <text class="text-lg text-white opacity-95 leading-relaxed tracking-wide">让模糊照片变清晰\n恢复珍贵记忆</text>
         </view>
       </view>
     </view>
 
-    <!-- Content Area: px-6 space-y-6 flex-1 -->
     <view class="px-6 space-y-6 flex-1">
-      <!-- Upload Section: mt-4 -->
+      
+      <!-- Upload Section -->
       <view class="mt-4">
-        <!-- text-2xl text-gray-800 mb-6 text-center -->
-        <view class="text-2xl text-gray-800 mb-6 text-center">开始修复</view>
+        <view class="section-title-center">开始修复</view>
         
-        <!-- Upload Area or Preview -->
-        <view wx:if="{{!selectedFile}}">
-          <!-- bg-gradient-to-r from-orange-200 to-orange-300 border-3 border-dashed border-pink-400 rounded-2xl p-8 text-center -->
-          <view class="upload-area" bindtap="chooseImage">
-            <!-- text-6xl mb-4 -->
-            <view class="text-6xl mb-4">📷</view>
-            <!-- text-lg text-gray-700 mb-2 -->
-            <text class="text-lg text-gray-700 mb-2">点击选择图片</text>
-            <!-- text-sm text-gray-600 -->
-            <text class="text-sm text-gray-600">支持 JPG、PNG、AVIF 格式</text>
-          </view>
+        <view wx:if="{{!selectedFile}}" class="upload-area" bindtap="chooseImage">
+          <view class="text-6xl mb-4">📷</view>
+          <text class="text-lg text-gray-700 mb-2">点击选择图片</text>
+          <text class="text-sm text-gray-600">支持 JPG、PNG、AVIF 格式</text>
         </view>
         
-        <!-- Selected File Preview: space-y-4 -->
         <view wx:else class="space-y-4">
-          <!-- relative -->
           <view class="relative">
-            <!-- w-full max-h-96 object-cover rounded-2xl -->
             <image src="{{selectedFile.preview}}" mode="aspectFit" class="w-full max-h-96 rounded-2xl"></image>
             
-            <!-- Processing Overlay -->
             <view wx:if="{{isProcessing}}" class="processing-overlay">
-              <!-- text-center text-white p-6 -->
               <view class="text-center text-white p-6">
-                <!-- text-4xl mb-3 animate-pulse -->
                 <view class="text-4xl mb-3 animate-pulse">✨😸✨</view>
-                <!-- text-lg mb-4 -->
                 <text class="text-lg mb-4">正在修复您的图片...</text>
                 
-                <!-- Progress Circle: relative w-20 h-20 mx-auto mb-4 -->
                 <view class="progress-circle-wrapper">
-                  <!-- SVG Progress (simplified for miniprogram) -->
                   <view class="progress-svg">
                     <view class="progress-bg-circle"></view>
                     <view class="progress-fill-circle" style="stroke-dashoffset: {{251.2 * (1 - progress / 100)}};"></view>
                   </view>
-                  <!-- absolute inset-0 flex items-center justify-center -->
                   <view class="progress-text-overlay">
-                    <!-- text-xl -->
                     <text class="text-xl">{{utils.round(progress)}}%</text>
                   </view>
                 </view>
                 
-                <!-- text-sm opacity-80 -->
                 <text class="text-sm opacity-80">喵喵正在努力修复中...</text>
               </view>
             </view>
           </view>
           
-          <!-- text-center -->
           <view class="text-center">
-            <!-- text-sm text-gray-600 -->
             <text class="text-sm text-gray-600">{{selectedFile.name}}</text>
-            <!-- text-xs text-gray-500 -->
             <text class="text-xs text-gray-500">{{selectedFile.size}}</text>
           </view>
 
-          <!-- flex gap-3 -->
           <view class="flex gap-3">
-            <!-- flex-1 bg-orange-400 text-white py-3 px-6 rounded-full -->
-            <button bindtap="chooseImage" disabled="{{isProcessing}}" class="btn-reselect">
-              重新选择
-            </button>
-            <!-- flex-1 bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 px-6 rounded-full -->
+            <button bindtap="chooseImage" disabled="{{isProcessing}}" class="btn-reselect">重新选择</button>
             <button bindtap="handleStartProcessing" disabled="{{isProcessing}}" class="btn-start">
               {{isProcessing ? '修复中...' : '开始修复'}}
             </button>
@@ -138,22 +86,14 @@
 
       <!-- Result Section -->
       <view wx:if="{{showResult && selectedFile}}" class="result-section">
-        <!-- flex items-center justify-between mb-4 -->
         <view class="flex items-center justify-between mb-4">
-          <!-- text-2xl text-gray-800 -->
           <text class="text-2xl text-gray-800">修复结果</text>
-          <!-- bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-sm -->
-          <button bindtap="handleTryAgain" class="btn-retry">
-            🔄 再试一次
-          </button>
+          <button bindtap="handleTryAgain" class="btn-retry">🔄 再试一次</button>
         </view>
         
-        <!-- text-sm text-gray-600 mb-4 text-center -->
         <text class="text-sm text-gray-600 mb-4 text-center">点击图片放大查看细节差异</text>
 
-        <!-- Compare Mode Toggle: flex justify-center mb-6 -->
         <view class="flex justify-center mb-6">
-          <!-- bg-gray-100 rounded-full p-1 flex -->
           <view class="toggle-container">
             <button bindtap="setCompareMode" data-mode="side-by-side" 
                     class="toggle-btn {{compareMode === 'side-by-side' ? 'active' : ''}}">
@@ -166,50 +106,17 @@
           </view>
         </view>
 
-        <!-- Side by Side Mode: grid grid-cols-2 gap-4 mb-6 -->
-        <!-- Slider Mode: mb-6 -->
-        <view wx:else class="mb-6">
-          <!-- relative h-80 rounded-xl overflow-hidden border-2 border-gray-200 -->
-          <view class="slider-container" bindtouchmove="handleSliderMove" bindtouchend="handleSliderEnd">
-            <!-- absolute inset-0 w-full h-full object-cover -->
-            <image src="{{selectedFile.preview}}" mode="aspectFill" class="slider-image-base"></image>
-            <!-- absolute inset-0 w-full h-full object-cover (with filter and clip-path) -->
-            <view class="slider-top-wrapper" style="width: {{sliderPosition}}%;">
-              <image src="{{comparisonImages[1].src}}" mode="aspectFill" class="slider-image-enhanced"></image>
-            </view>
-            <!-- absolute left-1/2 top-0 bottom-0 w-1 bg-white shadow-lg -->
-            <view class="slider-divider" style="left: {{sliderPosition}}%;">
-              <!-- absolute top-1/2 left-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center -->
-              <view class="slider-handle" catchtouchmove="handleSliderMove">
-                <text class="text-gray-600">↔</text>
-              </view>
-            </view>
-            <!-- absolute bottom-4 left-4 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm -->
-            <view class="slider-label-left">原图</view>
-            <!-- absolute bottom-4 right-4 -->
-            <view class="slider-label-right">修复后</view>
-          </view>
-          <!-- text-center text-xs text-gray-500 mt-2 -->
-          <text class="text-center text-xs text-gray-500 mt-2">滑动中间的分割线查看对比效果</text>
-        </view>
         <view wx:if="{{compareMode === 'side-by-side'}}" class="grid grid-cols-2 gap-4 mb-6">
           <view wx:for="{{comparisonImages}}" wx:key="index">
-            <!-- flex items-center justify-between mb-2 -->
             <view class="flex items-center justify-between mb-2">
-              <!-- text-sm text-gray-700 -->
               <text class="text-sm text-gray-700">{{item.label}}</text>
-              <!-- text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full -->
               <text class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{{item.desc}}</text>
             </view>
-            <!-- relative cursor-pointer group -->
             <view class="image-container" bindtap="openFullscreen" data-src="{{item.src}}" data-title="{{item.label}}">
-              <!-- w-full h-64 object-cover rounded-xl border-2 border-gray-200 -->
               <image src="{{item.src}}" mode="aspectFill" 
                      class="w-full h-64 rounded-xl border-2 border-gray-200"
                      style="{{item.enhanced ? 'filter: contrast(1.1) brightness(1.05) saturate(1.1);' : ''}}"></image>
-              <!-- absolute inset-0 -->
               <view class="image-overlay">
-                <!-- absolute top-2 right-2 bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center -->
                 <view class="zoom-icon">
                   <text class="text-white text-sm">🔍</text>
                 </view>
@@ -218,38 +125,40 @@
           </view>
         </view>
 
+        <view wx:else class="mb-6">
+          <view class="slider-container" bindtouchmove="handleSliderMove">
+            <image src="{{selectedFile.preview}}" mode="aspectFill" class="slider-image-base"></image>
+            <view class="slider-top-wrapper" style="width: {{sliderPosition}}%;">
+              <image src="{{comparisonImages[1].src}}" mode="aspectFill" class="slider-image-enhanced"></image>
+            </view>
+            <view class="slider-divider" style="left: {{sliderPosition}}%;">
+              <view class="slider-handle">
+                <text class="text-gray-600">↔</text>
+              </view>
+            </view>
+            <view class="slider-label-left">原图</view>
+            <view class="slider-label-right">修复后</view>
+          </view>
           <text class="text-center text-xs text-gray-500 mt-2">滑动中间的分割线查看对比效果</text>
         </view>
 
-        <!-- Action Buttons: space-y-3 -->
         <view class="space-y-3">
-          <!-- w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 px-6 rounded-2xl flex items-center justify-center gap-2 -->
           <button bindtap="handleSaveImage" class="btn-download">
             <text class="text-xl">💾</text>
             <text>下载修复后的图片</text>
           </button>
           
-          <!-- flex gap-3 -->
           <view class="flex gap-3">
-            <!-- flex-1 bg-gray-100 text-gray-700 py-3 px-6 rounded-2xl -->
-            <button bindtap="handleTryAgain" class="btn-secondary">
-              🔄 重新修复
-            </button>
-            <!-- flex-1 bg-gradient-to-r from-pink-500 to-pink-600 text-white py-3 px-6 rounded-2xl -->
-            <button bindtap="handleShare" class="btn-share">
-              📤 分享
-            </button>
+            <button bindtap="handleTryAgain" class="btn-secondary">🔄 重新修复</button>
+            <button bindtap="handleShare" class="btn-share">📤 分享</button>
           </view>
         </view>
 
-        <!-- Quality Stats: mt-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 -->
         <view class="stats-card">
-          <!-- text-sm text-gray-700 mb-2 flex items-center gap-2 -->
           <view class="stats-header">
             <text>📊</text>
             <text>修复效果分析</text>
           </view>
-          <!-- grid grid-cols-2 gap-4 text-xs -->
           <view class="stats-grid">
             <view class="stat-item">
               <text class="text-gray-600">清晰度提升</text>
@@ -265,49 +174,36 @@
             </view>
             <view class="stat-item">
               <text class="text-gray-600">处理时间</text>
-              <text class="text-blue-600">{{utils.round(progress/10)}}秒</text>
+              <text class="text-blue-600">{{processTime}}秒</text>
             </view>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- Core Features: px-6 mb-6 -->
+    <!-- Features -->
     <view class="px-6 mb-6">
-      <!-- bg-white rounded-2xl shadow-lg p-5 border border-gray-100 -->
       <view class="features-card">
-        <!-- text-center mb-4 text-gray-700 text-sm -->
         <text class="text-center mb-4 text-gray-700 text-sm">核心特点</text>
-        <!-- grid grid-cols-3 gap-3 -->
         <view class="grid grid-cols-3 gap-3">
           <view wx:for="{{features}}" wx:key="index" class="feature-item">
-            <!-- w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-500 rounded-lg flex items-center justify-center -->
             <view class="feature-icon">{{item.icon}}</view>
-            <!-- text-xs text-gray-800 mb-1 -->
             <text class="text-xs text-gray-800 mb-1">{{item.title}}</text>
-            <!-- text-xs text-gray-600 -->
             <text class="text-xs text-gray-600">{{item.desc}}</text>
           </view>
         </view>
       </view>
     </view>
 
-    <!-- Privacy Card: px-6 mb-6 -->
+    <!-- Privacy -->
     <view class="px-6 mb-6">
-      <!-- bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 rounded-2xl p-4 -->
       <view class="privacy-card">
-        <!-- flex items-center gap-3 -->
         <view class="flex items-center gap-3">
-          <!-- w-10 h-10 bg-white bg-opacity-20 rounded-xl flex items-center justify-center -->
           <view class="privacy-icon">🔒</view>
-          <!-- text-white flex-1 -->
           <view class="text-white flex-1">
-            <!-- privacy-title -->
             <text class="privacy-title">隐私承诺</text>
-            <!-- privacy-desc -->
             <text class="privacy-desc">本地处理，不保存照片</text>
           </view>
-          <!-- w-6 h-6 bg-green-400 bg-opacity-80 rounded-full flex items-center justify-center -->
           <view class="privacy-check">
             <text class="text-white text-xs">✓</text>
           </view>
@@ -315,15 +211,13 @@
       </view>
     </view>
 
-    <!-- Footer: p-6 text-center text-gray-500 -->
+    <!-- Footer -->
     <view class="p-6 text-center text-gray-500">
-      <!-- text-sm mb-2 -->
       <view class="text-sm mb-2">
         <text bindtap="openTerms" class="text-gray-500">服务条款</text>
         <text> | </text>
         <text bindtap="openPrivacy" class="text-gray-500">隐私政策</text>
       </view>
-      <!-- text-xs -->
       <text class="text-xs">使用本服务即表示您同意相关条款</text>
     </view>
     
