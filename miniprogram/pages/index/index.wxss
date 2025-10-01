@@ -606,3 +606,22 @@ button {
   white-space: normal;
   word-break: keep-all;
 }
+
+/* 上传区域文本样式强化 */
+.upload-area text {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.upload-area .text-lg {
+  font-size: 36rpx !important;
+  font-weight: 500;
+  color: #374151 !important;
+  margin-bottom: 16rpx !important;
+}
+
+.upload-area .text-sm {
+  font-size: 28rpx !important;
+  color: #6b7280 !important;
+}
