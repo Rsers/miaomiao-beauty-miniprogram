@@ -12,6 +12,7 @@ const API_CONFIG = {
 
 Component({
   data: {
+    sliderPosition: 50,  // 滑块初始位置50%
     selectedFile: null as any,
     isProcessing: false,
     progress: 0,
@@ -315,3 +316,26 @@ Component({
     }
   }
 })
+
+    // 滑动对比功能
+    handleSliderMove(e: any) {
+      if (!this.data.selectedFile) return
+
+      const touch = e.touches[0]
+      const query = wx.createSelectorQuery().in(this)
+      
+      query.select('.slider-container').boundingClientRect((rect: any) => {
+        if (!rect) return
+        
+        const x = touch.clientX - rect.left
+        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
+        
+        this.setData({
+          sliderPosition: percentage
+        })
+      }).exec()
+    },
+
+    handleSliderEnd() {
+      // 可选：滑动结束后的处理
+    },

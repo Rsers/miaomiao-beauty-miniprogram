@@ -625,3 +625,17 @@ button {
   font-size: 28rpx !important;
   color: #6b7280 !important;
 }
+
+/* 滑动对比容器修复 */
+.slider-top-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.slider-top-wrapper .slider-image-enhanced {
+  width: 100vw;
+  height: 100%;
+}
