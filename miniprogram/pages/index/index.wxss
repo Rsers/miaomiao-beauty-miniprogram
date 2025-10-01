@@ -374,14 +374,6 @@ button {
   justify-content: center;
 }
 
-  position: absolute;
-  bottom: 32rpx;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: #ffffff;
-  padding: 8rpx 24rpx;
-  border-radius: 9999rpx;
-  font-size: 28rpx;
-}
 
 .slider-label-left {
   left: 32rpx;
@@ -646,6 +638,25 @@ button {
   align-items: center;
   justify-content: center;
   transform: translate(-50%, -50%);
+}
+
+.slider-label-left,
+.slider-label-right {
+  position: absolute;
+  bottom: 32rpx;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  padding: 8rpx 24rpx;
+  border-radius: 9999rpx;
+  font-size: 28rpx;
+}
+
+.slider-label-left {
+  left: 32rpx;
+}
+
+.slider-label-right {
+  right: 32rpx;
 }
 
 .slider-label-left,
