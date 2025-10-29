@@ -219,6 +219,13 @@
         <text bindtap="openPrivacy" class="text-gray-500">隐私政策</text>
       </view>
       <text class="text-xs">使用本服务即表示您同意相关条款</text>
+      
+      <!-- 调试按钮 -->
+      <view class="mt-4">
+        <button bindtap="testApiConnection" class="btn-debug">
+          🔧 测试连接
+        </button>
+      </view>
     </view>
     
   </view>
