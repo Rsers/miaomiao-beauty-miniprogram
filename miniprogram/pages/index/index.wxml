@@ -130,14 +130,14 @@
 
         <view wx:else class="mb-6">
           <view class="slider-container" bindtouchmove="handleSliderMove">
-            <!-- 原图：保持比例，允许裁剪 -->
+            <!-- 原图：强制拉伸到和修复后图片相同的尺寸（scaleToFill） -->
             <image src="{{selectedFile.preview}}" 
-                   mode="aspectFill" 
+                   mode="scaleToFill" 
                    class="slider-image-base"></image>
-            <!-- 修复后图片：使用相同的尺寸和位置，通过wrapper的宽度控制显示范围 -->
+            <!-- 修复后图片：使用相同的尺寸和位置，通过wrapper的宽度裁剪显示范围 -->
             <view class="slider-top-wrapper" style="width: {{sliderPosition}}%;">
               <image src="{{comparisonImages[1].src}}" 
-                     mode="aspectFill" 
+                     mode="scaleToFill" 
                      class="slider-image-enhanced"></image>
             </view>
             <view class="slider-divider" style="left: {{sliderPosition}}%;">
@@ -145,8 +145,8 @@
                 <text class="slider-handle-icon">↔</text>
               </view>
             </view>
-            <view class="slider-label slider-label-left">原图</view>
-            <view class="slider-label slider-label-right">修复后</view>
+            <view class="slider-label slider-label-left">修复后</view>
+            <view class="slider-label slider-label-right">原图</view>
           </view>
         </view>
 

@@ -683,7 +683,7 @@ button {
   color: #4b5563;
   font-weight: bold;
 }
-/* ===== Slider Comparison - 保持图片比例不变形 ===== */
+/* ===== Slider Comparison - 像素级完美对齐 ===== */
 .slider-container {
   position: relative;
   width: 100%;
@@ -694,35 +694,38 @@ button {
   background-color: #f3f4f6;
 }
 
-/* 原图 - 底层完整显示，保持比例，允许裁剪 */
+/* 原图 - 强制拉伸到容器大小，和修复后图片分辨率一致 */
 .slider-image-base {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  /* aspectFill模式：保持图片比例，覆盖整个容器，超出部分裁剪 */
+  /* scaleToFill模式：强制拉伸图片到容器大小
+     这样原图A会被拉伸到和修复后图B相同的显示尺寸 */
 }
 
-/* 修复后图片的包裹容器 - 通过宽度控制显示范围 */
+/* 修复后图片的包裹容器 - 通过宽度裁剪显示范围 */
 .slider-top-wrapper {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  overflow: hidden; /* 裁剪超出部分 */
+  overflow: hidden; /* 裁剪超出wrapper宽度的部分 */
 }
 
-/* 修复后图片 - 和原图完全相同的尺寸和位置，保持比例 */
+/* 修复后图片 - 和原图完全相同的尺寸和位置 */
 .slider-top-wrapper .slider-image-enhanced {
   position: absolute;
   top: 0;
   left: 0;
-  /* 关键：宽度和高度相对于容器（slider-container），而不是wrapper */
-  width: calc(100vw - 32rpx); /* 减去左右padding */
+  /* 关键：宽度必须固定为 slider-container 的实际宽度
+     使用 vw 单位确保和容器（100% - 32rpx padding）一致
+     这样图片尺寸固定，只是被 wrapper 裁剪显示范围 */
+  width: calc(100vw - 32rpx);
   max-width: 750rpx;
   height: 640rpx;
-  /* aspectFill模式：保持图片比例，和原图完全一致的显示效果 */
+  /* scaleToFill模式：强制拉伸到固定尺寸，不随 wrapper 宽度变化 */
   filter: contrast(1.1) brightness(1.05) saturate(1.1);
 }
 
