@@ -29,7 +29,10 @@
             <text class="block text-4xl gradient-text">喵喵美颜</text>
           </view>
           <view class="w-16 h-1 bg-white opacity-60 rounded-full mx-auto mb-4"></view>
-          <text class="text-lg text-white opacity-95 leading-relaxed tracking-wide">让模糊照片变清晰\n恢复珍贵记忆</text>
+          <view class="text-lg text-white opacity-95 leading-relaxed tracking-wide">
+            <text class="block">让模糊照片变清晰</text>
+            <text class="block">恢复珍贵记忆</text>
+          </view>
         </view>
       </view>
     </view>

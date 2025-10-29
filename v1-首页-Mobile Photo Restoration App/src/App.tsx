@@ -77,7 +77,7 @@ export default function App() {
 
   const handleSaveImage = () => {
     if (!selectedFile) return;
-    
+
     // Create download link
     const link = document.createElement('a');
     link.href = selectedFile.preview;
@@ -93,7 +93,7 @@ export default function App() {
         const response = await fetch(selectedFile.preview);
         const blob = await response.blob();
         const file = new File([blob], `restored_${selectedFile.name}`, { type: blob.type });
-        
+
         await navigator.share({
           title: '图片修复结果',
           text: '看看我用喵喵美颜修复的照片！',
@@ -129,7 +129,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-sm mx-auto bg-white min-h-screen flex flex-col">
         {/* Header Section */}
-        <motion.div 
+        <motion.div
           className="bg-gradient-to-br from-pink-400 via-pink-300 to-rose-300 p-8 text-center relative overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -141,51 +141,51 @@ export default function App() {
             <div className="absolute top-3 right-3 text-3xl opacity-30 transform rotate-12">
               🐱
             </div>
-            
+
             {/* Small cat in top right corner */}
             <div className="absolute top-8 right-12 text-lg opacity-25">
               😸
             </div>
-            
+
             {/* Cat paw prints */}
             <div className="absolute top-1/3 right-6 text-sm opacity-20 transform -rotate-12">
               🐾
             </div>
-            
+
             {/* Heart eyes cat in bottom left */}
             <div className="absolute bottom-6 left-4 text-2xl opacity-30 transform -rotate-6">
               😻
             </div>
-            
+
             {/* Small paw in bottom left */}
             <div className="absolute bottom-12 left-8 text-xs opacity-25">
               🐾
             </div>
-            
+
             {/* Sleeping cat in middle left */}
             <div className="absolute top-1/2 left-4 text-sm opacity-20 transform rotate-6">
               😴
             </div>
-            
+
             {/* Sparkles around cats */}
             <div className="absolute top-6 right-20 text-xs opacity-30">
               ✨
             </div>
-            
+
             <div className="absolute bottom-16 left-16 text-xs opacity-25">
               ✨
             </div>
-            
+
             {/* Additional small cat elements */}
             <div className="absolute top-20 left-6 text-xs opacity-20">
               🐈
             </div>
-            
+
             <div className="absolute bottom-20 right-8 text-xs opacity-25 transform rotate-12">
               💖
             </div>
           </div>
-          
+
           <div className="relative z-10">
             <div className="mb-6">
               <h1 className="text-3xl text-white mb-3 tracking-wide drop-shadow-md">
@@ -206,7 +206,7 @@ export default function App() {
           {/* Upload Section - Core Feature */}
           <div className="mt-4">
             <h2 className="text-2xl text-gray-800 mb-6 text-center">开始修复</h2>
-            
+
             {!selectedFile ? (
               <motion.div
                 className="bg-gradient-to-r from-orange-200 to-orange-300 border-3 border-dashed border-pink-400 rounded-2xl p-8 text-center cursor-pointer active:scale-95"
@@ -220,12 +220,12 @@ export default function App() {
             ) : (
               <div className="space-y-4">
                 <div className="relative">
-                  <img 
-                    src={selectedFile.preview} 
-                    alt="Preview" 
+                  <img
+                    src={selectedFile.preview}
+                    alt="Preview"
                     className="w-full max-h-96 object-cover rounded-2xl"
                   />
-                  
+
                   {/* Processing overlay on image */}
                   {isProcessing && (
                     <div className="absolute inset-0 bg-black bg-opacity-60 rounded-2xl flex items-center justify-center backdrop-blur-sm">
@@ -234,9 +234,9 @@ export default function App() {
                         <div className="text-4xl mb-3 animate-pulse">
                           ✨😸✨
                         </div>
-                        
+
                         <div className="text-lg mb-4">正在修复您的图片...</div>
-                        
+
                         {/* Progress circle */}
                         <div className="relative w-20 h-20 mx-auto mb-4">
                           <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 100 100">
@@ -265,13 +265,13 @@ export default function App() {
                             <span className="text-xl">{Math.round(progress)}%</span>
                           </div>
                         </div>
-                        
+
                         <div className="text-sm opacity-80">喵喵正在努力修复中...</div>
                       </div>
                     </div>
                   )}
                 </div>
-                
+
                 <div className="text-center">
                   <p className="text-sm text-gray-600">{selectedFile.name}</p>
                   <p className="text-xs text-gray-500">{selectedFile.size}</p>
@@ -285,7 +285,7 @@ export default function App() {
                   >
                     重新选择
                   </button>
-                  
+
                   <button
                     onClick={handleStartProcessing}
                     disabled={isProcessing}
@@ -323,7 +323,7 @@ export default function App() {
                     🔄 再试一次
                   </button>
                 </div>
-                
+
                 <p className="text-sm text-gray-600 mb-4 text-center">点击图片放大查看细节差异</p>
 
                 {/* Compare Mode Toggle */}
@@ -331,21 +331,19 @@ export default function App() {
                   <div className="bg-gray-100 rounded-full p-1 flex">
                     <button
                       onClick={() => setCompareMode('side-by-side')}
-                      className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${
-                        compareMode === 'side-by-side' 
-                          ? 'bg-white text-gray-800 shadow-sm' 
+                      className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${compareMode === 'side-by-side'
+                          ? 'bg-white text-gray-800 shadow-sm'
                           : 'text-gray-600'
-                      }`}
+                        }`}
                     >
                       对比查看
                     </button>
                     <button
                       onClick={() => setCompareMode('slider')}
-                      className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${
-                        compareMode === 'slider' 
-                          ? 'bg-white text-gray-800 shadow-sm' 
+                      className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${compareMode === 'slider'
+                          ? 'bg-white text-gray-800 shadow-sm'
                           : 'text-gray-600'
-                      }`}
+                        }`}
                     >
                       滑动对比
                     </button>
@@ -363,12 +361,12 @@ export default function App() {
                           <p className="text-sm text-gray-700">{item.label}</p>
                           <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{item.desc}</span>
                         </div>
-                        <div 
+                        <div
                           className="relative cursor-pointer group"
                           onClick={() => openFullscreen(item.src, item.label)}
                         >
-                          <img 
-                            src={item.src} 
+                          <img
+                            src={item.src}
                             alt={item.label}
                             className="w-full h-64 object-cover rounded-xl border-2 border-gray-200"
                             style={index === 1 ? { filter: 'contrast(1.1) brightness(1.05) saturate(1.1)' } : {}}
@@ -385,16 +383,16 @@ export default function App() {
                 ) : (
                   <div className="mb-6">
                     <div className="relative h-80 rounded-xl overflow-hidden border-2 border-gray-200">
-                      <img 
-                        src={selectedFile.preview} 
+                      <img
+                        src={selectedFile.preview}
                         alt="原图"
                         className="absolute inset-0 w-full h-full object-cover"
                       />
-                      <img 
-                        src={selectedFile.preview} 
+                      <img
+                        src={selectedFile.preview}
                         alt="修复后"
                         className="absolute inset-0 w-full h-full object-cover"
-                        style={{ 
+                        style={{
                           filter: 'contrast(1.1) brightness(1.05) saturate(1.1)',
                           clipPath: 'inset(0 50% 0 0)'
                         }}
@@ -425,7 +423,7 @@ export default function App() {
                     <span className="text-xl">💾</span>
                     <span>下载修复后的图片</span>
                   </motion.button>
-                  
+
                   <div className="flex gap-3">
                     <motion.button
                       onClick={handleTryAgain}
@@ -434,7 +432,7 @@ export default function App() {
                     >
                       🔄 重新修复
                     </motion.button>
-                    
+
                     <motion.button
                       onClick={handleShare}
                       className="flex-1 bg-gradient-to-r from-pink-500 to-pink-600 text-white py-3 px-6 rounded-2xl transition-all duration-300 shadow-lg"
@@ -466,7 +464,7 @@ export default function App() {
                     </div>
                     <div>
                       <div className="text-gray-600">处理时间</div>
-                      <div className="text-blue-600">{Math.round(progress/10)}秒</div>
+                      <div className="text-blue-600">{Math.round(progress / 10)}秒</div>
                     </div>
                   </div>
                 </div>
@@ -540,13 +538,13 @@ export default function App() {
                 exit={{ scale: 0.8, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <img 
-                  src={fullscreenImage.src} 
+                <img
+                  src={fullscreenImage.src}
                   alt={fullscreenImage.title}
                   className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
                   style={fullscreenImage.title === '修复后' ? { filter: 'contrast(1.1) brightness(1.05) saturate(1.1)' } : {}}
                 />
-                
+
                 {/* Control bar */}
                 <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
                   <div className="bg-black bg-opacity-70 text-white px-4 py-2 rounded-full text-sm backdrop-blur-sm">
