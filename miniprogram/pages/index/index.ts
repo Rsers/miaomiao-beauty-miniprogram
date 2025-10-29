@@ -249,6 +249,13 @@ Component({
     // 使用新的API流程处理图片
     async startProcessingWithNewAPI() {
       const startTime = Date.now()
+      let globalTimeoutId: any = null
+
+      // 确保清理之前的超时器
+      if (this.progressTimer) {
+        clearInterval(this.progressTimer)
+        this.progressTimer = null
+      }
 
       this.setData({
         isProcessing: true,
@@ -256,6 +263,19 @@ Component({
       })
 
       this.startProgressAnimation()
+
+      // 设置全局超时保护（30秒后强制停止）
+      globalTimeoutId = setTimeout(() => {
+        console.warn('全局超时保护触发：30秒内未完成处理')
+        this.cleanupProcessing()
+        wx.hideLoading()
+        wx.showModal({
+          title: '处理超时',
+          content: '处理时间超过30秒，请检查网络连接或稍后重试',
+          showCancel: false,
+          confirmText: '确定'
+        })
+      }, 30000)
 
       try {
         // 显示处理进度
@@ -265,6 +285,12 @@ Component({
         })
 
         const result = await enhanceImageSimple(this.data.selectedFile.preview)
+
+        // 清除超时保护
+        if (globalTimeoutId) {
+          clearTimeout(globalTimeoutId)
+          globalTimeoutId = null
+        }
 
         // 处理成功
         this.handleComplete(result.cdn_url, startTime)
@@ -277,23 +303,46 @@ Component({
 
         console.log('处理结果:', result)
 
-      } catch (error) {
-        console.error('新API处理失败，尝试备用方法:', error)
+      } catch (error: any) {
+        // 清除超时保护
+        if (globalTimeoutId) {
+          clearTimeout(globalTimeoutId)
+          globalTimeoutId = null
+        }
 
-        // 如果新API失败，尝试使用原有的直接上传方法
-        if (error.errMsg && error.errMsg.indexOf('url not in domain list') !== -1) {
-          console.log('域名配置问题，使用备用上传方法')
-          this.startProcessing() // 使用原有的上传方法
+        console.error('新API处理失败:', error)
+
+        // 清理处理状态
+        this.cleanupProcessing()
+        wx.hideLoading()
+
+        // 检查是否是COS域名配置问题
+        if (error && (
+          (error.message && error.message.indexOf('COS域名配置问题') !== -1) ||
+          (error.message && error.message.indexOf('url not in domain list') !== -1)
+        )) {
+          console.log('COS域名配置问题，尝试使用备用上传方法')
+          // 尝试使用备用的直接上传方法
+          // 注意：如果服务器接口不支持，可能会继续失败
+          this.startProcessing()
         } else {
-          wx.hideLoading()
+          // 显示错误提示
           handleApiError(error)
-
-          this.setData({
-            isProcessing: false,
-            progress: 0
-          })
         }
       }
+    },
+
+    // 清理处理状态
+    cleanupProcessing() {
+      if (this.progressTimer) {
+        clearInterval(this.progressTimer)
+        this.progressTimer = null
+      }
+
+      this.setData({
+        isProcessing: false,
+        progress: 0
+      })
     },
 
     startProcessing() {

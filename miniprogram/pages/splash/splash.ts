@@ -12,6 +12,11 @@ Page({
     currentTextIndex: 0
   },
 
+  // TypeScript 类型声明
+  isFromMainPage: false,
+  loadingTextInterval: null as any,
+  loadingStepInterval: null as any,
+
   onLoad(options: any) {
     console.log('启动页面加载', options);
 
@@ -61,33 +66,11 @@ Page({
 
   // 模拟加载过程
   simulateLoading() {
-    // 模拟不同的加载阶段
-    const loadingSteps = [
-      { delay: 1000, text: '正在启动美颜魔法...' },
-      { delay: 2000, text: '准备喵喵变身...' },
-      { delay: 3000, text: '加载美颜滤镜...' },
-      { delay: 4000, text: '初始化AI引擎...' },
-      { delay: 5000, text: '准备就绪！' }
-    ];
-
-    let currentStep = 0;
-
-    const stepInterval = setInterval(() => {
-      if (currentStep < loadingSteps.length) {
-        const step = loadingSteps[currentStep];
-        this.setData({
-          loadingText: step.text
-        });
-        currentStep++;
-      } else {
-        clearInterval(stepInterval);
-        // 加载完成，跳转到主页
-        this.navigateToMain();
-      }
-    }, 1000);
-
-    // 存储定时器ID
-    this.loadingStepInterval = stepInterval;
+    // 1秒后直接跳转
+    this.loadingStepInterval = setTimeout(() => {
+      // 加载完成，跳转到主页
+      this.navigateToMain();
+    }, 2500);
   },
 
   // 跳转到主页
@@ -99,26 +82,24 @@ Page({
       clearInterval(this.loadingTextInterval);
     }
     if (this.loadingStepInterval) {
-      clearInterval(this.loadingStepInterval);
+      clearTimeout(this.loadingStepInterval);
     }
 
-    // 延迟跳转，让用户看到"准备就绪！"
-    setTimeout(() => {
-      // 跳转到图片修复页
-      wx.redirectTo({
-        url: '/pages/index/index',
-        success: () => {
-          console.log('成功跳转到图片修复页');
-        },
-        fail: (err) => {
-          console.error('跳转失败:', err);
-          // 如果redirectTo失败，尝试使用navigateTo
-          wx.navigateTo({
-            url: '/pages/index/index'
-          });
-        }
-      });
-    }, 1000);
+    // 直接跳转，不再延迟
+    // 跳转到图片修复页
+    wx.redirectTo({
+      url: '/pages/index/index',
+      success: () => {
+        console.log('成功跳转到图片修复页');
+      },
+      fail: (err) => {
+        console.error('跳转失败:', err);
+        // 如果redirectTo失败，尝试使用navigateTo
+        wx.navigateTo({
+          url: '/pages/index/index'
+        });
+      }
+    });
   },
 
   // 页面卸载时清理定时器
@@ -128,7 +109,7 @@ Page({
       clearInterval(this.loadingTextInterval);
     }
     if (this.loadingStepInterval) {
-      clearInterval(this.loadingStepInterval);
+      clearTimeout(this.loadingStepInterval);
     }
   },
 
@@ -139,7 +120,7 @@ Page({
       clearInterval(this.loadingTextInterval);
     }
     if (this.loadingStepInterval) {
-      clearInterval(this.loadingStepInterval);
+      clearTimeout(this.loadingStepInterval);
     }
   },
 
