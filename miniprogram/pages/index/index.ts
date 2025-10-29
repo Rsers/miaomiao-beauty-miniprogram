@@ -32,7 +32,8 @@ Component({
     retryCount: 0,
     maxRetries: 3,
     statusBarHeight: 88, // 默认状态栏高度(约44px = 88rpx)
-    safeAreaTop: 116 // 默认安全区域高度
+    safeAreaTop: 116, // 默认安全区域高度
+    sliderContainerWidth: 0 // 滑动对比容器的实际宽度（px）
   },
 
   lifetimes: {
@@ -704,8 +705,20 @@ Component({
 
       wx.showToast({ title: '修复完成', icon: 'success' })
 
+      // 获取滑动对比容器的实际宽度
       setTimeout(() => {
         wx.pageScrollTo({ selector: '.result-section', duration: 300 })
+        
+        // 获取容器宽度用于固定B图尺寸
+        const query = wx.createSelectorQuery().in(this)
+        query.select('.slider-container').boundingClientRect((rect: any) => {
+          if (rect && rect.width) {
+            this.setData({
+              sliderContainerWidth: rect.width
+            })
+            console.log('滑动对比容器宽度:', rect.width, 'px')
+          }
+        }).exec()
       }, 300)
     },
 
@@ -791,9 +804,46 @@ Component({
 
     openFullscreen(e: any) {
       const { src } = e.currentTarget.dataset
+      
+      // 确保所有图片路径都是有效的
+      const urls = this.data.comparisonImages.map((img: any) => {
+        // 清理路径，确保本地路径和网络URL都正确
+        let imgSrc = img.src
+        if (imgSrc && !imgSrc.startsWith('http://') && !imgSrc.startsWith('https://')) {
+          // 本地路径，确保路径有效
+          imgSrc = imgSrc.replace(/^@/, '')
+        } else if (imgSrc) {
+          // 网络URL，清理可能的@前缀
+          imgSrc = this.cleanUrl(imgSrc)
+        }
+        return imgSrc
+      }).filter(url => url && url.trim()) // 过滤空路径
+
+      // 清理当前图片路径
+      let currentSrc = src
+      if (currentSrc && !currentSrc.startsWith('http://') && !currentSrc.startsWith('https://')) {
+        currentSrc = currentSrc.replace(/^@/, '')
+      } else if (currentSrc) {
+        currentSrc = this.cleanUrl(currentSrc)
+      }
+
+      if (!currentSrc || !urls.length) {
+        wx.showToast({ title: '图片加载失败', icon: 'none' })
+        return
+      }
+
+      // 确保current在urls中
+      if (urls.indexOf(currentSrc) === -1) {
+        urls.unshift(currentSrc)
+      }
+
       wx.previewImage({
-        urls: this.data.comparisonImages.map((img: any) => img.src),
-        current: src
+        urls: urls,
+        current: currentSrc,
+        fail: (err) => {
+          console.error('预览图片失败:', err)
+          wx.showToast({ title: '预览失败，请重试', icon: 'none' })
+        }
       })
     },
 
@@ -837,6 +887,7 @@ Component({
         const x = touch.clientX - rect.left
         const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
 
+        // 只更新滑块位置，图片本身尺寸不改变，只是通过wrapper的宽度裁剪显示范围
         this.setData({
           sliderPosition: percentage
         })

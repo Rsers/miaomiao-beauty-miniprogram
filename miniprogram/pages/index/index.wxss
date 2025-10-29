@@ -617,19 +617,7 @@ button {
   color: #6b7280 !important;
 }
 
-/* 滑动对比容器修复 */
-.slider-top-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  overflow: hidden;
-}
-
-.slider-top-wrapper .slider-image-enhanced {
-  width: 100vw;
-  height: 100%;
-}
+/* 滑动对比容器修复 - 已合并到下方统一定义 */
 
 .slider-divider {
   position: absolute;
@@ -639,6 +627,7 @@ button {
   background-color: #ffffff;
   box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
   transform: translateX(-50%);
+  z-index: 10; /* 确保在图片上层 */
 }
 
 .slider-handle {
@@ -654,6 +643,7 @@ button {
   align-items: center;
   justify-content: center;
   transform: translate(-50%, -50%);
+  z-index: 11; /* 确保在分隔线上层 */
 }
 
 /* 滑动对比标签 */
@@ -683,7 +673,7 @@ button {
   color: #4b5563;
   font-weight: bold;
 }
-/* ===== Slider Comparison - 像素级完美对齐 ===== */
+/* ===== Slider Comparison - 重叠居中展示 ===== */
 .slider-container {
   position: relative;
   width: 100%;
@@ -692,19 +682,20 @@ button {
   overflow: hidden;
   border: 4rpx solid #e5e7eb;
   background-color: #f3f4f6;
+  /* 不使用flex，避免影响图片定位 */
 }
 
-/* 原图 - 强制拉伸到和修复后图片完全相同的固定尺寸 */
+/* 原图：底层，完整显示，固定大小和位置，永远不变 */
 .slider-image-base {
   position: absolute;
   top: 0;
   left: 0;
-  /* 关键：必须和修复后图使用完全相同的尺寸（calc(100vw - 32rpx) x 640rpx）
-     这样A图会被拉伸到和B图完全相同的分辨率，实现像素级对齐 */
-  width: calc(100vw - 32rpx);
-  max-width: 750rpx;
-  height: 640rpx;
-  /* scaleToFill模式：强制拉伸到固定尺寸，和修复后图B分辨率一致 */
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* 确保在底层，但不影响定位 */
+  /* mode="aspectFit"已在WXML中设置，保持图片原始比例，完整显示 */
+  /* 关键：绝对定位，固定大小100%x100%，不受任何布局影响 */
+  /* 注意：图片大小和位置完全固定，不会因为wrapper变化而移动 */
 }
 
 /* 修复后图片的包裹容器 - 通过宽度裁剪显示范围 */
@@ -713,21 +704,23 @@ button {
   top: 0;
   left: 0;
   height: 100%;
+  z-index: 2; /* 在上层 */
   overflow: hidden; /* 裁剪超出wrapper宽度的部分 */
+  /* 关键：只控制显示范围（宽度），不影响图片本身位置和大小 */
+  /* 注意：wrapper的宽度变化只影响裁剪范围，不会影响内部图片的位置和大小 */
 }
 
-/* 修复后图片 - 和原图完全相同的尺寸和位置 */
+/* 修复后图片：上层，和原图完全重叠，固定像素宽度，和A图一致 */
 .slider-top-wrapper .slider-image-enhanced {
   position: absolute;
   top: 0;
   left: 0;
-  /* 关键：宽度必须固定为 slider-container 的实际宽度
-     使用 vw 单位确保和容器（100% - 32rpx padding）一致
-     这样图片尺寸固定，只是被 wrapper 裁剪显示范围 */
-  width: calc(100vw - 32rpx);
-  max-width: 750rpx;
-  height: 640rpx;
-  /* scaleToFill模式：强制拉伸到固定尺寸，不随 wrapper 宽度变化 */
+  /* width通过内联样式动态设置为容器的实际像素宽度（例如375px） */
+  /* 不使用百分比，避免相对于wrapper导致尺寸变化 */
+  height: 100%;
+  /* mode="aspectFit"已在WXML中设置，保持图片原始比例，完整显示 */
+  /* 关键：宽度固定为容器的实际像素值，不随wrapper宽度变化而变化 */
+  /* 图片本身位置和大小永远不变，只通过wrapper的overflow:hidden和宽度变化来裁剪显示范围 */
   filter: contrast(1.1) brightness(1.05) saturate(1.1);
 }
 
