@@ -10,7 +10,7 @@
   <view class="max-w-sm mx-auto bg-white min-h-screen flex-col">
     
     <!-- Header -->
-    <view class="header-section">
+    <view class="header-section" style="padding-top: {{64 + safeAreaTop}}rpx;">
       <view class="absolute inset-0">
         <view class="absolute top-3 right-3 text-3xl opacity-30 rotate-12">🐱</view>
         <view class="absolute top-8 right-12 text-lg opacity-25">😸</view>

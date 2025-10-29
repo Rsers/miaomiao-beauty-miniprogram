@@ -152,9 +152,14 @@
 .header-section {
   background: linear-gradient(135deg, #f472b6 0%, #f9a8d4 50%, #fecdd3 100%);
   padding: 64rpx;
+  padding-bottom: 64rpx;
+  padding-left: 64rpx;
+  padding-right: 64rpx;
+  /* padding-top 通过内联样式动态设置: 64rpx + safeAreaTop */
   text-align: center;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* Gradient Text (bg-clip-text not supported in miniprogram) */

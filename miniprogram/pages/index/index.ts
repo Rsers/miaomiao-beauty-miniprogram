@@ -30,7 +30,51 @@ Component({
     ],
     processTime: 0,
     retryCount: 0,
-    maxRetries: 3
+    maxRetries: 3,
+    statusBarHeight: 88, // 默认状态栏高度(约44px = 88rpx)
+    safeAreaTop: 116 // 默认安全区域高度
+  },
+
+  lifetimes: {
+    attached() {
+      // 获取系统信息，计算安全区域高度
+      try {
+        const systemInfo = wx.getSystemInfoSync()
+        const statusBarHeight = systemInfo.statusBarHeight || 44 // px单位
+        const safeArea = systemInfo.safeArea
+
+        // 计算安全区域顶部需要的高度（rpx单位）
+        let safeAreaTopRpx = 116 // 默认值 116rpx（约58px，适配大部分iPhone）
+
+        if (safeArea && safeArea.top > 0) {
+          // 如果有安全区域信息，使用安全区域顶部距离转换为rpx
+          // iPhone 15 Pro: safeArea.top 通常是 59px，转换为rpx = 118rpx
+          // iPhone 12: safeArea.top 通常是 47px，转换为rpx = 94rpx
+          safeAreaTopRpx = safeArea.top * 2
+        } else if (statusBarHeight) {
+          // 如果没有安全区域信息，使用状态栏高度 + 额外边距
+          // 状态栏高度转换为rpx，再加上额外安全边距
+          safeAreaTopRpx = statusBarHeight * 2 + 24 // 额外24rpx安全边距
+        }
+
+        // 确保最小高度，适配各种设备
+        safeAreaTopRpx = Math.max(safeAreaTopRpx, 116)
+
+        this.setData({
+          statusBarHeight: statusBarHeight * 2, // 转换为rpx
+          safeAreaTop: safeAreaTopRpx
+        })
+
+        console.log('安全区域适配:', {
+          statusBarHeight: `${statusBarHeight}px`,
+          safeAreaTop: `${safeAreaTopRpx}rpx`,
+          model: systemInfo.model
+        })
+      } catch (error) {
+        console.error('获取系统信息失败:', error)
+        // 使用默认值
+      }
+    }
   },
 
   progressTimer: null as any,
