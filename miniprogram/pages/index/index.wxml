@@ -131,23 +131,24 @@
         <view wx:else class="mb-6">
           <view class="slider-container" bindtouchmove="handleSliderMove">
             <!-- 原图：底层，完整显示，居中展示，不改变图片本身尺寸 -->
-            <image src="{{selectedFile.preview}}" 
+            <image src="{{comparisonImages[0].src}}" 
                    mode="aspectFit" 
                    class="slider-image-base"></image>
             <!-- 修复后图片：上层，通过wrapper的宽度裁剪显示范围，不改变图片本身尺寸 -->
             <view class="slider-top-wrapper" style="width: {{sliderPosition}}%;">
-              <image src="{{comparisonImages[1].src}}" 
+              <image wx:if="{{comparisonImages[1] && comparisonImages[1].src}}" 
+                     src="{{comparisonImages[1].src}}" 
                      mode="aspectFit" 
                      class="slider-image-enhanced"
-                     style="width: {{sliderContainerWidth}}px;"></image>
+                     style="width: {{sliderContainerWidth > 0 ? sliderContainerWidth : 375}}px;"></image>
             </view>
             <view class="slider-divider" style="left: {{sliderPosition}}%;">
               <view class="slider-handle">
                 <text class="slider-handle-icon">↔</text>
               </view>
             </view>
-            <view class="slider-label slider-label-left">修复后</view>
-            <view class="slider-label slider-label-right">原图</view>
+            <view class="slider-label slider-label-left">原图</view>
+            <view class="slider-label slider-label-right">修复后</view>
           </view>
         </view>
 

@@ -691,6 +691,15 @@ Component({
 
       // 清理URL，移除可能的@前缀
       const cleanUrl = this.cleanUrl(enhancedPath)
+      
+      // 确保原图路径正确
+      const originalImageSrc = this.data.selectedFile?.preview || ''
+      
+      // 添加调试日志，确认两张图片路径不同
+      console.log('滑动对比图片路径:')
+      console.log('原图:', originalImageSrc)
+      console.log('修复后:', cleanUrl)
+      console.log('路径是否相同:', originalImageSrc === cleanUrl)
 
       this.setData({
         isProcessing: false,
@@ -698,7 +707,7 @@ Component({
         showResult: true,
         processTime,
         comparisonImages: [
-          { label: '原图', src: this.data.selectedFile.preview, desc: '修复前', enhanced: false },
+          { label: '原图', src: originalImageSrc, desc: '修复前', enhanced: false },
           { label: '修复后', src: cleanUrl, desc: '清晰度提升', enhanced: true }
         ]
       })
@@ -717,6 +726,18 @@ Component({
               sliderContainerWidth: rect.width
             })
             console.log('滑动对比容器宽度:', rect.width, 'px')
+            console.log('对比图片路径验证:')
+            console.log('comparisonImages[0]:', this.data.comparisonImages[0]?.src)
+            console.log('comparisonImages[1]:', this.data.comparisonImages[1]?.src)
+            console.log('两张图片是否相同:', this.data.comparisonImages[0]?.src === this.data.comparisonImages[1]?.src)
+          } else {
+            // 如果获取失败，使用默认值（iPhone 约375px）
+            const systemInfo = wx.getSystemInfoSync()
+            const defaultWidth = systemInfo.windowWidth || 375
+            this.setData({
+              sliderContainerWidth: defaultWidth
+            })
+            console.warn('无法获取容器宽度，使用默认值:', defaultWidth, 'px')
           }
         }).exec()
       }, 300)
