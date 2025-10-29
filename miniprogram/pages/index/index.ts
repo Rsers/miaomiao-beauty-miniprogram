@@ -278,12 +278,7 @@ Component({
       }, 30000)
 
       try {
-        // 显示处理进度
-        wx.showLoading({
-          title: '正在处理图片...',
-          mask: true
-        })
-
+        // 不显示 wx.showLoading，页面内已有进度显示（processing-overlay）
         const result = await enhanceImageSimple(this.data.selectedFile.preview)
 
         // 清除超时保护
@@ -295,7 +290,6 @@ Component({
         // 处理成功
         this.handleComplete(result.cdn_url, startTime)
 
-        wx.hideLoading()
         wx.showToast({
           title: '处理成功！',
           icon: 'success'
@@ -314,7 +308,6 @@ Component({
 
         // 清理处理状态
         this.cleanupProcessing()
-        wx.hideLoading()
 
         // 检查是否是COS域名配置问题
         if (error && (

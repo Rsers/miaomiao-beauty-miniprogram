@@ -72,11 +72,6 @@
               </view>
             </view>
           </view>
-          
-          <view class="text-center">
-            <text class="text-sm text-gray-600">{{selectedFile.name}}</text>
-            <text class="text-xs text-gray-500">{{selectedFile.size}}</text>
-          </view>
 
           <view class="flex gap-3">
             <button bindtap="chooseImage" disabled="{{isProcessing}}" class="btn-reselect">重新选择</button>
@@ -89,12 +84,17 @@
 
       <!-- Result Section -->
       <view wx:if="{{showResult && selectedFile}}" class="result-section">
-        <view class="flex items-center justify-between mb-4">
-          <text class="text-2xl text-gray-800">修复结果</text>
+        <view class="result-header">
+          <view class="result-title-section">
+            <text class="result-title-icon">✨</text>
+            <text class="result-title-text">修复结果</text>
+          </view>
           <button bindtap="handleTryAgain" class="btn-retry">🔄 再试一次</button>
         </view>
         
-        <text class="text-sm text-gray-600 mb-4 text-center">点击图片放大查看细节差异</text>
+        <view class="result-hint">
+          <text class="result-hint-text">滑动分割线查看修复前后的对比效果</text>
+        </view>
 
         <view class="flex justify-center mb-6">
           <view class="toggle-container">
@@ -130,19 +130,24 @@
 
         <view wx:else class="mb-6">
           <view class="slider-container" bindtouchmove="handleSliderMove">
-            <image src="{{selectedFile.preview}}" mode="aspectFill" class="slider-image-base"></image>
+            <!-- 原图：保持比例，允许裁剪 -->
+            <image src="{{selectedFile.preview}}" 
+                   mode="aspectFill" 
+                   class="slider-image-base"></image>
+            <!-- 修复后图片：使用相同的尺寸和位置，通过wrapper的宽度控制显示范围 -->
             <view class="slider-top-wrapper" style="width: {{sliderPosition}}%;">
-              <image src="{{comparisonImages[1].src}}" mode="aspectFill" class="slider-image-enhanced"></image>
+              <image src="{{comparisonImages[1].src}}" 
+                     mode="aspectFill" 
+                     class="slider-image-enhanced"></image>
             </view>
             <view class="slider-divider" style="left: {{sliderPosition}}%;">
               <view class="slider-handle">
-                <text class="text-gray-600">↔</text>
+                <text class="slider-handle-icon">↔</text>
               </view>
             </view>
-            <view class="slider-label-left">原图</view>
-            <view class="slider-label-right">修复后</view>
+            <view class="slider-label slider-label-left">原图</view>
+            <view class="slider-label slider-label-right">修复后</view>
           </view>
-          <text class="text-center text-xs text-gray-500 mt-2">滑动中间的分割线查看对比效果</text>
         </view>
 
         <view class="space-y-4">
