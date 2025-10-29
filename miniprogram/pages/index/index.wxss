@@ -694,15 +694,17 @@ button {
   background-color: #f3f4f6;
 }
 
-/* 原图 - 强制拉伸到容器大小，和修复后图片分辨率一致 */
+/* 原图 - 强制拉伸到和修复后图片完全相同的固定尺寸 */
 .slider-image-base {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  /* scaleToFill模式：强制拉伸图片到容器大小
-     这样原图A会被拉伸到和修复后图B相同的显示尺寸 */
+  /* 关键：必须和修复后图使用完全相同的尺寸（calc(100vw - 32rpx) x 640rpx）
+     这样A图会被拉伸到和B图完全相同的分辨率，实现像素级对齐 */
+  width: calc(100vw - 32rpx);
+  max-width: 750rpx;
+  height: 640rpx;
+  /* scaleToFill模式：强制拉伸到固定尺寸，和修复后图B分辨率一致 */
 }
 
 /* 修复后图片的包裹容器 - 通过宽度裁剪显示范围 */
