@@ -145,13 +145,13 @@
           <text class="text-center text-xs text-gray-500 mt-2">滑动中间的分割线查看对比效果</text>
         </view>
 
-        <view class="space-y-3">
+        <view class="space-y-4">
           <button bindtap="handleSaveImage" class="btn-download">
             <text class="text-xl">💾</text>
             <text>下载修复后的图片</text>
           </button>
           
-          <view class="flex gap-3">
+          <view class="flex gap-4">
             <button bindtap="handleTryAgain" class="btn-secondary">🔄 重新修复</button>
             <button bindtap="handleShare" class="btn-share">📤 分享</button>
           </view>
