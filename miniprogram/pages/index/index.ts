@@ -754,23 +754,85 @@ Component({
     handleSaveImage() {
       if (!this.data.comparisonImages[1]) return
 
-      wx.saveImageToPhotosAlbum({
-        filePath: this.data.comparisonImages[1].src,
-        success: () => wx.showToast({ title: '保存成功', icon: 'success' }),
-        fail: (err) => {
-          if (err.errMsg.indexOf('auth deny') !== -1) {
-            wx.showModal({
-              title: '需要相册权限',
-              content: '请在设置中允许访问相册',
-              success: (res) => {
-                if (res.confirm) wx.openSetting()
-              }
-            })
-          } else {
-            wx.showToast({ title: '保存失败', icon: 'error' })
+      const imageSrc = this.data.comparisonImages[1].src
+      
+      // 检查是否是网络图片
+      const isNetworkImage = imageSrc.startsWith('http://') || imageSrc.startsWith('https://')
+      
+      if (isNetworkImage) {
+        // 网络图片：先下载再保存
+        wx.showLoading({ title: '下载中...' })
+        
+        wx.downloadFile({
+          url: imageSrc,
+          success: (res) => {
+            if (res.statusCode === 200) {
+              // 下载成功，保存到相册
+              wx.saveImageToPhotosAlbum({
+                filePath: res.tempFilePath,
+                success: () => {
+                  wx.hideLoading()
+                  wx.showToast({ title: '保存成功', icon: 'success' })
+                },
+                fail: (err) => {
+                  wx.hideLoading()
+                  if (err.errMsg.indexOf('auth deny') !== -1) {
+                    wx.showModal({
+                      title: '需要相册权限',
+                      content: '请在设置中允许访问相册',
+                      success: (modalRes) => {
+                        if (modalRes.confirm) wx.openSetting()
+                      }
+                    })
+                  } else {
+                    console.error('保存到相册失败:', err)
+                    wx.showToast({ title: '保存失败', icon: 'error' })
+                  }
+                }
+              })
+            } else {
+              wx.hideLoading()
+              wx.showToast({ title: '下载失败', icon: 'error' })
+            }
+          },
+          fail: (err) => {
+            wx.hideLoading()
+            console.error('下载图片失败:', err)
+            console.error('图片URL:', imageSrc)
+            
+            // 检查是否是域名配置问题
+            if (err.errMsg && err.errMsg.indexOf('downloadFile:fail') !== -1) {
+              wx.showModal({
+                title: '下载失败',
+                content: '图片下载失败，可能需要在小程序后台配置下载域名白名单',
+                showCancel: false
+              })
+            } else {
+              wx.showToast({ title: '下载失败，请重试', icon: 'error' })
+            }
           }
-        }
-      })
+        })
+      } else {
+        // 本地图片：直接保存
+        wx.saveImageToPhotosAlbum({
+          filePath: imageSrc,
+          success: () => wx.showToast({ title: '保存成功', icon: 'success' }),
+          fail: (err) => {
+            if (err.errMsg.indexOf('auth deny') !== -1) {
+              wx.showModal({
+                title: '需要相册权限',
+                content: '请在设置中允许访问相册',
+                success: (res) => {
+                  if (res.confirm) wx.openSetting()
+                }
+              })
+            } else {
+              console.error('保存失败:', err)
+              wx.showToast({ title: '保存失败', icon: 'error' })
+            }
+          }
+        })
+      }
     },
 
     handleShare() {
