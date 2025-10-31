@@ -824,27 +824,47 @@ Component({
         })
       }
       
-      // 优化2：获取原图的标准化路径（关键优化！）
-      // 通过 wx.getImageInfo 获取可靠的路径，解决 http://tmp/ 格式导致的预览问题
+      // 优化2：复制原图到新的临时文件（关键优化！）
+      // 让原图享受和修复后图片一样的"下载"待遇，解决预览加载问题
       if (originalImageSrc) {
-        console.log('获取原图标准化路径，解决预览加载问题...')
-        console.log('原始路径格式:', originalImageSrc)
-        wx.getImageInfo({
-          src: originalImageSrc,
-          success: (info) => {
-            console.log('✅ 获取原图标准化路径成功:', {
-              原始路径: originalImageSrc,
-              标准化路径: info.path,
-              width: info.width,
-              height: info.height
-            })
-            // 保存标准化后的路径，用于预览
-            this.setData({
-              localOriginalImagePath: info.path
+        console.log('复制原图到新临时文件，解决预览加载问题...')
+        console.log('原始路径:', originalImageSrc)
+        
+        const fs = wx.getFileSystemManager()
+        const newTempPath = `${wx.env.USER_DATA_PATH}/original_preview_${Date.now()}.jpg`
+        
+        // 使用文件系统复制，模拟"下载"过程
+        fs.copyFile({
+          srcPath: originalImageSrc,
+          destPath: newTempPath,
+          success: () => {
+            console.log('✅ 原图复制成功，新路径:', newTempPath)
+            // 预热缓存
+            wx.getImageInfo({
+              src: newTempPath,
+              success: (info) => {
+                console.log('✅ 原图缓存预热成功:', {
+                  复制后路径: newTempPath,
+                  标准化路径: info.path,
+                  width: info.width,
+                  height: info.height
+                })
+                // 保存复制后的路径，用于预览（享受和修复后图片一样的待遇）
+                this.setData({
+                  localOriginalImagePath: info.path || newTempPath
+                })
+              },
+              fail: (err) => {
+                console.warn('原图缓存预热失败（不影响功能）:', err)
+                // 降级：使用复制后的路径
+                this.setData({
+                  localOriginalImagePath: newTempPath
+                })
+              }
             })
           },
           fail: (err) => {
-            console.error('❌ 获取原图标准化路径失败:', err)
+            console.error('❌ 原图复制失败:', err)
             console.warn('降级：预览时将使用原始路径')
             // 降级：使用原始路径
             this.setData({
