@@ -361,7 +361,7 @@
           <view class="privacy-icon">🔒</view>
           <view class="text-white flex-1">
             <text class="privacy-title">隐私承诺</text>
-            <text class="privacy-desc">临时处理，用后即删</text>
+            <text class="privacy-desc">安全处理，不留底片</text>
           </view>
           <view class="privacy-check">
             <text class="text-white text-xs">✓</text>
