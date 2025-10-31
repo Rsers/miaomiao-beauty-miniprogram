@@ -137,6 +137,15 @@
         <view class="result-hint">
           <text class="result-hint-text">查看修复前后的对比效果</text>
         </view>
+        
+        <!-- 放大查看引导 -->
+        <view class="zoom-guide">
+          <view class="zoom-guide-icon">🔍</view>
+          <view class="zoom-guide-text">
+            <text class="zoom-guide-main">点击图片放大查看</text>
+            <text class="zoom-guide-sub">分辨率提升{{resolutionMultiple}}x，细节惊艳呈现</text>
+          </view>
+        </view>
 
         <!-- 滑动对比功能暂时隐藏 -->
         <!-- <view class="flex justify-center mb-6">
