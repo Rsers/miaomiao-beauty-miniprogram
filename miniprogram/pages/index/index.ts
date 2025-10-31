@@ -1025,39 +1025,63 @@ Component({
     openFullscreen(e: any) {
       const { src } = e.currentTarget.dataset
       
-      // 优化：对于修复后的图片，优先使用已下载的本地路径
+      console.log('=== 全屏预览调试信息 ===')
+      console.log('点击的图片路径:', src)
+      console.log('原图路径（selectedFile.preview）:', this.data.selectedFile?.preview)
+      console.log('修复后网络URL（comparisonImages[1].src）:', this.data.comparisonImages[1]?.src)
+      console.log('修复后本地缓存（localEnhancedImagePath）:', this.data.localEnhancedImagePath)
+      
+      // 优化：原图和修复后的图片都使用最优路径
       const urls = this.data.comparisonImages.map((img: any, index: number) => {
-        // 如果是修复后的图片（索引1）且本地路径存在，使用本地路径
+        // 原图（索引0）：直接使用 selectedFile.preview，避免路径传递问题
+        if (index === 0 && this.data.selectedFile?.preview) {
+          console.log('✅ 原图使用直接路径（避免传递问题）:', this.data.selectedFile.preview)
+          return this.data.selectedFile.preview
+        }
+        
+        // 修复后的图片（索引1）：优先使用本地缓存
         if (index === 1 && this.data.localEnhancedImagePath) {
-          console.log('✅ 全屏预览使用本地缓存图片（无需加载）:', this.data.localEnhancedImagePath)
+          console.log('✅ 修复后图片使用本地缓存（无需加载）:', this.data.localEnhancedImagePath)
           return this.data.localEnhancedImagePath
         }
         
-        // 其他图片：清理路径
+        // 降级处理：使用 img.src
         let imgSrc = img.src
         if (imgSrc && !imgSrc.startsWith('http://') && !imgSrc.startsWith('https://')) {
           imgSrc = imgSrc.replace(/^@/, '')
         } else if (imgSrc) {
           imgSrc = this.cleanUrl(imgSrc)
         }
+        console.log(`⚠️ 图片${index}使用降级路径:`, imgSrc)
         return imgSrc
       }).filter(url => url && url.trim())
 
-      // 清理当前点击的图片路径
+      // 确定当前点击的图片路径
       let currentSrc = src
       
-      // 如果点击的是修复后的图片，优先使用本地缓存
-      if (src === this.data.comparisonImages[1]?.src && this.data.localEnhancedImagePath) {
+      // 原图：直接使用 selectedFile.preview
+      if (src === this.data.comparisonImages[0]?.src && this.data.selectedFile?.preview) {
+        currentSrc = this.data.selectedFile.preview
+        console.log('✅ 当前预览原图使用直接路径')
+      }
+      // 修复后的图片：优先使用本地缓存
+      else if (src === this.data.comparisonImages[1]?.src && this.data.localEnhancedImagePath) {
         currentSrc = this.data.localEnhancedImagePath
-        console.log('✅ 当前预览图片使用本地缓存（无需加载）')
-      } else {
-        // 清理路径
+        console.log('✅ 当前预览修复后图片使用本地缓存')
+      }
+      // 降级处理：清理路径
+      else {
         if (currentSrc && !currentSrc.startsWith('http://') && !currentSrc.startsWith('https://')) {
           currentSrc = currentSrc.replace(/^@/, '')
         } else if (currentSrc) {
           currentSrc = this.cleanUrl(currentSrc)
         }
+        console.log('⚠️ 当前预览使用降级路径:', currentSrc)
       }
+
+      console.log('最终预览路径列表:', urls)
+      console.log('当前预览路径:', currentSrc)
+      console.log('======================')
 
       if (!currentSrc || !urls.length) {
         wx.showToast({ title: '图片加载失败', icon: 'none' })
