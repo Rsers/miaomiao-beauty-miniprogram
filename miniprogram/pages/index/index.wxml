@@ -215,7 +215,7 @@
 
         <view class="grid grid-cols-2 gap-4 mb-6">
           <view wx:for="{{comparisonImages}}" wx:key="index">
-            <view class="flex items-end justify-between mb-2" style="min-height: 60rpx;">
+            <view class="comparison-label-row">
               <text class="text-sm text-gray-700">{{item.label}}</text>
               <text class="{{item.enhanced ? 'desc-tag-enhanced' : 'desc-tag-normal'}}">{{item.desc}}</text>
             </view>

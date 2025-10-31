@@ -2055,6 +2055,7 @@ button {
   padding: 24rpx 48rpx;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 16rpx;
   box-shadow: 0 4rpx 12rpx rgba(236, 72, 153, 0.1);
   transition: all 0.3s ease;
@@ -2073,4 +2074,13 @@ button {
   font-size: 28rpx;
   color: #ec4899;
   font-weight: 500;
+}
+
+/* ===== 对比图片标签行（确保对齐） ===== */
+.comparison-label-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 64rpx;
+  margin-bottom: 16rpx;
 }
