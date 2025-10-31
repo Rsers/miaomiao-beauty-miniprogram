@@ -1925,3 +1925,88 @@ button {
   animation-delay: 3s, 0.8s;
   font-size: 38rpx;
 }
+
+/* ===== 额度显示卡片 ===== */
+.quota-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fef3f8 100%);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-top: -32rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 154, 158, 0.15);
+  border: 2rpx solid rgba(255, 154, 158, 0.2);
+  animation: quotaCardFadeIn 0.5s ease-out;
+}
+
+@keyframes quotaCardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quota-main {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.quota-icon {
+  font-size: 56rpx;
+  animation: quotaIconPulse 2s ease-in-out infinite;
+}
+
+@keyframes quotaIconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.quota-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  flex: 1;
+}
+
+.quota-title {
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.quota-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c77dff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'SF Mono', 'Menlo', monospace;
+  letter-spacing: 2rpx;
+}
+
+.quota-hint {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid rgba(255, 154, 158, 0.2);
+}
+
+.quota-bonus-text {
+  font-size: 24rpx;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+}
+
+.quota-warning-text {
+  font-size: 24rpx;
+  color: #f59e0b;
+  line-height: 1.6;
+}

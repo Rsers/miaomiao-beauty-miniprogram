@@ -52,6 +52,23 @@
 
     <view class="px-6 space-y-6 flex-1">
       
+      <!-- 额度显示卡片 -->
+      <view class="quota-card">
+        <view class="quota-main">
+          <view class="quota-icon">💎</view>
+          <view class="quota-info">
+            <text class="quota-title">今日剩余额度</text>
+            <text class="quota-value">{{quotaRemaining}}/{{quotaTotal}} 次</text>
+          </view>
+        </view>
+        <view class="quota-hint" wx:if="{{quotaBonus > 0}}">
+          <text class="quota-bonus-text">🎁 已获得 {{quotaBonus}} 次额外额度</text>
+        </view>
+        <view class="quota-hint" wx:if="{{quotaRemaining <= 5 && quotaBonus === 0}}">
+          <text class="quota-warning-text">⚠️ 额度即将用完，分享可得 10 次额外额度</text>
+        </view>
+      </view>
+      
       <!-- 快速测试区域 -->
       <view class="mt-4">
         <view class="section-title-enhanced">

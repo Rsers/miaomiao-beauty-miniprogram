@@ -2,6 +2,7 @@
 const app = getApp<IAppOption>()
 const { enhanceImageSimple } = require('../../utils/api')
 const { handleApiError, checkNetworkStatus } = require('../../utils/errorHandler')
+import QuotaManager from '../../utils/quota'
 
 const API_CONFIG = {
   BASE_URL: 'https://www.gongjuxiang.work',
@@ -51,7 +52,12 @@ Component({
       { id: 3, name: '测试3', path: '/assets/quick-test/123.jpg' },
       { id: 4, name: '测试4', path: '/assets/quick-test/124.jpg' },
       { id: 5, name: '测试5', path: '/assets/quick-test/125.jpg' }
-    ]
+    ],
+    // 额度相关数据
+    quotaRemaining: 20,   // 剩余额度
+    quotaUsed: 0,         // 已使用次数
+    quotaTotal: 20,       // 总额度
+    quotaBonus: 0         // 额外获得额度
   },
 
   lifetimes: {
@@ -93,12 +99,95 @@ Component({
         console.error('获取系统信息失败:', error)
         // 使用默认值
       }
+      
+      // 初始化额度显示
+      this.updateQuotaDisplay()
+      
+      // 检查是否通过分享进入
+      this.checkShareInvite()
     }
   },
 
   progressTimer: null as any,
 
   methods: {
+    /**
+     * 更新额度显示
+     */
+    updateQuotaDisplay() {
+      const remaining = QuotaManager.getRemaining()
+      const used = QuotaManager.getUsed()
+      const total = QuotaManager.getTotal()
+      const bonus = QuotaManager.getBonus()
+      
+      this.setData({
+        quotaRemaining: remaining,
+        quotaUsed: used,
+        quotaTotal: total,
+        quotaBonus: bonus
+      })
+      
+      console.log('额度更新:', { remaining, used, total, bonus })
+    },
+
+    /**
+     * 检查是否通过分享进入
+     */
+    checkShareInvite() {
+      // 从页面参数中获取
+      const pages = getCurrentPages()
+      const currentPage = pages[pages.length - 1]
+      const options = currentPage.options || {}
+      
+      if (options.from) {
+        const fromDeviceId = options.from
+        const myDeviceId = this.getDeviceId()
+        
+        console.log('检测到分享参数:', { from: fromDeviceId, my: myDeviceId })
+        
+        // 不能是自己邀请自己
+        if (fromDeviceId !== myDeviceId) {
+          // 检查今天是否已经领取过这个分享
+          const claimKey = `claimed_${fromDeviceId}_${new Date().toDateString()}`
+          const alreadyClaimed = wx.getStorageSync(claimKey)
+          
+          if (!alreadyClaimed) {
+            // 给被分享者 +20 次
+            QuotaManager.inviteReward()
+            
+            // 记录已领取
+            wx.setStorageSync(claimKey, true)
+            
+            // 更新显示
+            this.updateQuotaDisplay()
+            
+            // 提示
+            wx.showModal({
+              title: '🎉 欢迎使用超清魔法！',
+              content: '好友分享的礼物：\n✨ 已获得 20 次免费额度\n\n快来体验变美之旅吧！',
+              showCancel: false,
+              confirmText: '立即体验'
+            })
+          } else {
+            console.log('今天已经领取过这个分享了')
+          }
+        }
+      }
+    },
+
+    /**
+     * 获取设备ID
+     */
+    getDeviceId(): string {
+      let deviceId = wx.getStorageSync('device_uuid')
+      if (!deviceId) {
+        // 生成唯一设备ID
+        deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+        wx.setStorageSync('device_uuid', deviceId)
+      }
+      return deviceId
+    },
+    
     // 快速测试相关方法
     toggleQuickTest() {
       this.setData({
@@ -439,6 +528,52 @@ Component({
     handleStartProcessing() {
       if (!this.data.selectedFile) return
 
+      // 1. 检查额度
+      const canUse = QuotaManager.useQuota()
+      
+      // 2. 如果刚好用完基础额度，显示友好提示
+      if (!canUse) {
+        const remaining = QuotaManager.getRemaining()
+        
+        wx.showModal({
+          title: '💎 温馨提示',
+          content: `今日基础额度已使用完毕${remaining > 0 ? '\n\n当前剩余：' + remaining + ' 次（分享获得）' : '\n\n🎁 分享给好友，你们各得额外 10 次\n或者明天 0 点后再来'}`,
+          confirmText: remaining > 0 ? '继续使用' : '立即分享',
+          cancelText: '知道了',
+          success: (res) => {
+            if (res.confirm) {
+              if (remaining > 0) {
+                // 继续使用额外额度
+                this.proceedToProcess()
+              } else {
+                // 引导分享
+                // 微信小程序无法直接触发分享，只能提示用户
+                wx.showToast({
+                  title: '请点击右上角分享',
+                  icon: 'none',
+                  duration: 2000
+                })
+              }
+            }
+          }
+        })
+        
+        // 更新显示
+        this.updateQuotaDisplay()
+        return
+      }
+      
+      // 3. 更新显示
+      this.updateQuotaDisplay()
+      
+      // 4. 继续处理
+      this.proceedToProcess()
+    },
+    
+    /**
+     * 继续处理图片
+     */
+    proceedToProcess() {
       // 检查网络状态
       checkNetworkStatus()
         .then((networkType) => {
@@ -1058,6 +1193,11 @@ Component({
         isProcessing: false,
         progress: 0
       })
+      
+      // 处理失败，退还额度
+      QuotaManager.refundQuota()
+      this.updateQuotaDisplay()
+      console.log('处理失败，已退还额度')
 
       // 根据错误类型显示不同的对话框
       const isServerError = msg.indexOf('服务器') !== -1 || msg.indexOf('500') !== -1 || msg.indexOf('503') !== -1
@@ -1415,16 +1555,30 @@ Component({
     },
 
     onShareAppMessage() {
+      // 分享奖励：给分享者 +10 次
+      QuotaManager.shareReward()
+      this.updateQuotaDisplay()
+      
+      // 提示
+      wx.showToast({
+        title: '🎁 分享成功，+10 次额度',
+        icon: 'success',
+        duration: 2000
+      })
+      
+      // 获取设备ID，携带在分享链接中
+      const deviceId = this.getDeviceId()
+      
       // 分享给朋友
       const shareData: any = {
-        title: '哇！我的照片美颜效果太惊艳了，你也来试试吧！',
-        path: '/pages/index/index'
+        title: '超清魔法 - 喵喵美颜\n我刚把照片变超清了，你也来试试！',
+        path: `/pages/index/index?from=${deviceId}`
       }
       
       // 使用已下载的本地图片作为分享封面
       if (this.data.localEnhancedImagePath) {
         shareData.imageUrl = this.data.localEnhancedImagePath
-        console.log('分享封面使用修复后的图片:', this.data.localEnhancedImagePath)
+        console.log('分享封面使用美化后的图片:', this.data.localEnhancedImagePath)
       } else {
         console.log('未找到本地图片，使用默认分享卡片')
       }
