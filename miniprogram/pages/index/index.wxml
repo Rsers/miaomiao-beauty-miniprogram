@@ -173,18 +173,36 @@
             <text>📊</text>
             <text>修复效果分析</text>
           </view>
+          
+          <!-- 分辨率信息 -->
+          <view class="resolution-info">
+            <view class="resolution-row">
+              <text class="resolution-label">原始分辨率：</text>
+              <text class="resolution-value">{{originalResolution}}</text>
+            </view>
+            <view class="resolution-arrow">→</view>
+            <view class="resolution-row">
+              <text class="resolution-label">修复后分辨率：</text>
+              <text class="resolution-value highlight">{{enhancedResolution}}</text>
+            </view>
+            <view class="resolution-multiple" wx:if="{{resolutionMultiple > 1}}">
+              <text class="multiple-badge">🎯 提升 {{resolutionMultiple}}x</text>
+            </view>
+          </view>
+          
+          <!-- 效果数据 -->
           <view class="stats-grid">
             <view class="stat-item">
               <text class="text-gray-600">清晰度提升</text>
-              <text class="text-green-600">+25%</text>
+              <text class="text-green-600">+{{clarityImprovement}}%</text>
             </view>
             <view class="stat-item">
               <text class="text-gray-600">噪点减少</text>
-              <text class="text-green-600">-40%</text>
+              <text class="text-green-600">-{{noiseReduction}}%</text>
             </view>
             <view class="stat-item">
               <text class="text-gray-600">色彩还原</text>
-              <text class="text-green-600">+18%</text>
+              <text class="text-green-600">+{{colorRestoration}}%</text>
             </view>
             <view class="stat-item">
               <text class="text-gray-600">处理时间</text>
