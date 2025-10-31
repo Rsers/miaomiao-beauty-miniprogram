@@ -6,8 +6,8 @@
   module.exports = { round: round };
 </wxs>
 
-<view class="min-h-screen bg-gray-50">
-  <view class="max-w-sm mx-auto bg-white min-h-screen flex-col">
+<view class="min-h-screen page-background">
+  <view class="max-w-sm mx-auto content-background min-h-screen flex-col">
     
     <!-- Header -->
     <view class="header-section" style="padding-top: {{64 + safeAreaTop}}rpx;">

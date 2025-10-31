@@ -1,5 +1,26 @@
 /**index.wxss - Precise Tailwind to WXSS conversion from Figma Make**/
 
+/* === 页面背景优化（符合年轻女性审美）=== */
+.page-background {
+  background: linear-gradient(180deg, 
+    #fdf2f8 0%,      /* 淡粉色 */
+    #fce7f3 20%,     /* 粉色 */
+    #fbcfe8 40%,     /* 粉紫色 */
+    #f5d0fe 60%,     /* 淡紫色 */
+    #e9d5ff 80%,     /* 紫色 */
+    #ddd6fe 100%     /* 深紫色 */
+  );
+}
+
+.content-background {
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.90) 50%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  backdrop-filter: blur(10px);
+}
+
 /* === Base Utilities === */
 .min-h-screen { min-height: 100vh; }
 .bg-gray-50 { background-color: #f9fafb; }
