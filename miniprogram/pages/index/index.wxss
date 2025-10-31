@@ -421,6 +421,86 @@ button {
   flex-direction: column;
 }
 
+/* ===== 分辨率信息样式 ===== */
+.resolution-info {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  font-size: 26rpx;
+}
+
+.resolution-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.resolution-label {
+  color: #6b7280;
+  margin-right: 8rpx;
+}
+
+.resolution-value {
+  color: #374151;
+  font-weight: 500;
+  font-family: 'SF Mono', 'Menlo', monospace;
+}
+
+.resolution-value.highlight {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.resolution-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  margin: 16rpx 0;
+  padding: 12rpx 0;
+}
+
+.arrow-icon {
+  font-size: 32rpx;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.arrow-text {
+  color: #6366f1;
+  font-size: 24rpx;
+  font-weight: 600;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding: 0 8rpx;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4rpx);
+  }
+}
+
+.resolution-multiple {
+  margin-top: 16rpx;
+  text-align: center;
+}
+
+.multiple-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  padding: 8rpx 24rpx;
+  border-radius: 32rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+}
+
 /* ===== Features Card ===== */
 .features-card {
   background-color: #ffffff;
@@ -730,4 +810,156 @@ button {
   padding: 16rpx 0;
   margin-top: 8rpx;
   opacity: 0.8;
+}
+/* ===== 快速测试区域样式 ===== */
+.quick-test-section {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  border: 2rpx solid #fbbf24;
+  box-shadow: 0 4rpx 12rpx rgba(251, 191, 36, 0.15);
+}
+
+.quick-test-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+  cursor: pointer;
+  user-select: none;
+}
+
+.quick-test-title {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.quick-test-icon {
+  font-size: 32rpx;
+  animation: lightning 2s ease-in-out infinite;
+}
+
+@keyframes lightning {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.quick-test-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.quick-test-arrow {
+  transition: transform 0.3s ease;
+  font-size: 24rpx;
+  color: #92400e;
+}
+
+.quick-test-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.quick-test-hint {
+  font-size: 26rpx;
+  color: #b45309;
+  margin-bottom: 20rpx;
+  opacity: 0.9;
+}
+
+.quick-test-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.quick-test-content.expanded {
+  max-height: 240rpx;
+}
+
+.quick-test-grid {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.quick-test-images {
+  display: inline-flex;
+  gap: 20rpx;
+  padding: 8rpx 0;
+}
+
+.quick-test-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 160rpx;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.quick-test-item:active {
+  transform: scale(0.95);
+}
+
+.quick-test-image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 16rpx;
+  border: 3rpx solid #fbbf24;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.quick-test-item:active .quick-test-image {
+  border-color: #f59e0b;
+  box-shadow: 0 6rpx 20rpx rgba(245, 158, 11, 0.3);
+}
+
+.quick-test-name {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #92400e;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* 快速测试分隔线 */
+.quick-test-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 32rpx 0;
+  gap: 20rpx;
+}
+
+.divider-line {
+  flex: 1;
+  height: 2rpx;
+  background: linear-gradient(90deg, transparent 0%, #d1d5db 50%, transparent 100%);
+}
+
+.divider-text {
+  font-size: 28rpx;
+  color: #9ca3af;
+  font-weight: 500;
+  padding: 0 20rpx;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 375px) {
+  .quick-test-item {
+    width: 140rpx;
+  }
+  
+  .quick-test-image {
+    width: 140rpx;
+    height: 140rpx;
+  }
 }
