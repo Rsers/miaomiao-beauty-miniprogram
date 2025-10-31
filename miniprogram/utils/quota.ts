@@ -56,12 +56,18 @@ class QuotaManager {
    */
   useQuota(): boolean {
     const data = this.getTodayData();
+    const remainingBefore = this.getRemaining(); // 使用前的剩余额度
 
     // 记录使用次数
     data.used++;
     wx.setStorageSync(this.STORAGE_KEY, data);
 
-    // 如果刚好用完基础额度（used 刚好等于 20），返回 false（触发提示）
+    // 如果使用前剩余额度 <= 10，每次都提示（提醒用户分享）
+    if (remainingBefore <= 10) {
+      return false;
+    }
+
+    // 如果刚好用完基础额度（used 刚好等于 20），也提示
     if (data.used === this.BASE_QUOTA) {
       return false;
     }
