@@ -1019,3 +1019,49 @@ button {
   color: #0369a1;
   opacity: 0.85;
 }
+
+/* ===== 增强版标题样式 ===== */
+.section-title-enhanced {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin: 32rpx 0 24rpx;
+  padding: 24rpx 0;
+  position: relative;
+}
+
+.section-title-enhanced::before,
+.section-title-enhanced::after {
+  content: '';
+  flex: 1;
+  height: 2rpx;
+  background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+}
+
+.title-icon {
+  font-size: 32rpx;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.title-text {
+  font-size: 36rpx;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2rpx;
+  text-shadow: 0 2rpx 8rpx rgba(102, 126, 234, 0.2);
+}

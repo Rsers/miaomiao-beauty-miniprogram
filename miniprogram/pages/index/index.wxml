@@ -41,7 +41,11 @@
       
       <!-- 快速测试区域 -->
       <view class="mt-4">
-        <view class="section-title-center">开始修复</view>
+        <view class="section-title-enhanced">
+          <view class="title-icon">✨</view>
+          <text class="title-text">开始你的变美之旅</text>
+          <view class="title-icon">✨</view>
+        </view>
         
         <!-- 快速测试折叠区域 -->
         <view class="quick-test-section">
@@ -215,7 +219,7 @@
           </view>
           
           <view class="share-hint">
-            <text class="text-xs text-gray-600">💡 分享到微信，让更多人发现这个好用的小程序</text>
+            <text class="text-xs text-gray-600">💡 分享给闺蜜好友，一起变美变自信</text>
           </view>
         </view>
 
