@@ -142,8 +142,8 @@
         <view class="zoom-guide">
           <view class="zoom-guide-icon">🔍</view>
           <view class="zoom-guide-text">
-            <text class="zoom-guide-main">点击图片放大查看</text>
-            <text class="zoom-guide-sub">分辨率提升{{resolutionMultiple}}x，细节惊艳呈现</text>
+            <text class="zoom-guide-main">点击图片放大查看细节</text>
+            <text class="zoom-guide-sub">发丝清晰可见 · 眼睛更清澈 · 肤色更白皙 · 背景更清晰</text>
           </view>
         </view>
 
