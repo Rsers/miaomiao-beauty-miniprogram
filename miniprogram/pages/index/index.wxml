@@ -177,12 +177,16 @@
           <!-- 分辨率信息 -->
           <view class="resolution-info">
             <view class="resolution-row">
-              <text class="resolution-label">原始分辨率：</text>
+              <text class="resolution-label">📷 原始分辨率：</text>
               <text class="resolution-value">{{originalResolution}}</text>
             </view>
-            <view class="resolution-arrow">→</view>
+            <view class="resolution-arrow">
+              <text class="arrow-icon">⬇️</text>
+              <text class="arrow-text">AI修复</text>
+              <text class="arrow-icon">⬇️</text>
+            </view>
             <view class="resolution-row">
-              <text class="resolution-label">修复后分辨率：</text>
+              <text class="resolution-label">✨ 修复后分辨率：</text>
               <text class="resolution-value highlight">{{enhancedResolution}}</text>
             </view>
             <view class="resolution-multiple" wx:if="{{resolutionMultiple > 1}}">
@@ -193,19 +197,19 @@
           <!-- 效果数据 -->
           <view class="stats-grid">
             <view class="stat-item">
-              <text class="text-gray-600">清晰度提升</text>
+              <text class="text-gray-600">✨ 清晰度提升</text>
               <text class="text-green-600">+{{clarityImprovement}}%</text>
             </view>
             <view class="stat-item">
-              <text class="text-gray-600">噪点减少</text>
+              <text class="text-gray-600">🔇 噪点减少</text>
               <text class="text-green-600">-{{noiseReduction}}%</text>
             </view>
             <view class="stat-item">
-              <text class="text-gray-600">色彩还原</text>
+              <text class="text-gray-600">🎨 色彩还原</text>
               <text class="text-green-600">+{{colorRestoration}}%</text>
             </view>
             <view class="stat-item">
-              <text class="text-gray-600">处理时间</text>
+              <text class="text-gray-600">⚡ 处理时间</text>
               <text class="text-blue-600">{{processTime}}秒</text>
             </view>
           </view>
