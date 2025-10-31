@@ -256,6 +256,11 @@ button {
   outline: none;
 }
 
+/* 按钮组间距 */
+.button-group-spacing {
+  margin-bottom: 80rpx;
+}
+
 .btn-reselect {
   flex: 1;
   background-color: #fb923c;

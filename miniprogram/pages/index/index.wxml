@@ -119,7 +119,7 @@
             </view>
           </view>
 
-          <view class="flex gap-3">
+          <view class="flex gap-3 button-group-spacing">
             <button bindtap="chooseImage" disabled="{{isProcessing}}" class="btn-reselect">重新选择</button>
             <button bindtap="handleStartProcessing" disabled="{{isProcessing}}" class="btn-start">
               {{isProcessing ? '修复中...' : '开始修复'}}
