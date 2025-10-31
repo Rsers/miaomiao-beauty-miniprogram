@@ -34,6 +34,7 @@ Component({
     statusBarHeight: 88, // 默认状态栏高度(约44px = 88rpx)
     safeAreaTop: 116, // 默认安全区域高度
     sliderContainerWidth: 0, // 滑动对比容器的实际宽度（px）
+    localOriginalImagePath: '', // 本地标准化的原图路径（用于预览）
     localEnhancedImagePath: '', // 本地下载的修复后图片路径（用于分享）
     // 智能计算的效果数据
     clarityImprovement: 0, // 清晰度提升百分比
@@ -823,22 +824,32 @@ Component({
         })
       }
       
-      // 优化2：预热原图缓存（关键优化！）
-      // 通过 wx.getImageInfo 触发原图的完整解码和缓存
-      // 这样预览时就能和修复后图片一样快
+      // 优化2：获取原图的标准化路径（关键优化！）
+      // 通过 wx.getImageInfo 获取可靠的路径，解决 http://tmp/ 格式导致的预览问题
       if (originalImageSrc) {
-        console.log('预热原图缓存，确保预览时瞬间打开...')
+        console.log('获取原图标准化路径，解决预览加载问题...')
+        console.log('原始路径格式:', originalImageSrc)
         wx.getImageInfo({
           src: originalImageSrc,
           success: (info) => {
-            console.log('✅ 原图缓存预热成功:', {
+            console.log('✅ 获取原图标准化路径成功:', {
+              原始路径: originalImageSrc,
+              标准化路径: info.path,
               width: info.width,
-              height: info.height,
-              path: info.path
+              height: info.height
+            })
+            // 保存标准化后的路径，用于预览
+            this.setData({
+              localOriginalImagePath: info.path
             })
           },
           fail: (err) => {
-            console.warn('原图缓存预热失败（不影响功能）:', err)
+            console.error('❌ 获取原图标准化路径失败:', err)
+            console.warn('降级：预览时将使用原始路径')
+            // 降级：使用原始路径
+            this.setData({
+              localOriginalImagePath: originalImageSrc
+            })
           }
         })
       }
@@ -1054,16 +1065,22 @@ Component({
       
       console.log('=== 全屏预览调试信息 ===')
       console.log('点击的图片路径:', src)
-      console.log('原图路径（selectedFile.preview）:', this.data.selectedFile?.preview)
+      console.log('原图原始路径（selectedFile.preview）:', this.data.selectedFile?.preview)
+      console.log('原图标准化路径（localOriginalImagePath）:', this.data.localOriginalImagePath)
       console.log('修复后网络URL（comparisonImages[1].src）:', this.data.comparisonImages[1]?.src)
       console.log('修复后本地缓存（localEnhancedImagePath）:', this.data.localEnhancedImagePath)
       
-      // 优化：原图和修复后的图片都使用最优路径
+      // 优化：原图和修复后的图片都使用标准化的本地路径
       const urls = this.data.comparisonImages.map((img: any, index: number) => {
-        // 原图（索引0）：直接使用 selectedFile.preview，避免路径传递问题
-        if (index === 0 && this.data.selectedFile?.preview) {
-          console.log('✅ 原图使用直接路径（避免传递问题）:', this.data.selectedFile.preview)
-          return this.data.selectedFile.preview
+        // 原图（索引0）：优先使用标准化路径，解决 http://tmp/ 格式问题
+        if (index === 0) {
+          if (this.data.localOriginalImagePath) {
+            console.log('✅ 原图使用标准化路径（可靠）:', this.data.localOriginalImagePath)
+            return this.data.localOriginalImagePath
+          } else if (this.data.selectedFile?.preview) {
+            console.log('⚠️ 原图使用原始路径（降级）:', this.data.selectedFile.preview)
+            return this.data.selectedFile.preview
+          }
         }
         
         // 修复后的图片（索引1）：优先使用本地缓存
@@ -1086,10 +1103,15 @@ Component({
       // 确定当前点击的图片路径
       let currentSrc = src
       
-      // 原图：直接使用 selectedFile.preview
-      if (src === this.data.comparisonImages[0]?.src && this.data.selectedFile?.preview) {
-        currentSrc = this.data.selectedFile.preview
-        console.log('✅ 当前预览原图使用直接路径')
+      // 原图：优先使用标准化路径
+      if (src === this.data.comparisonImages[0]?.src) {
+        if (this.data.localOriginalImagePath) {
+          currentSrc = this.data.localOriginalImagePath
+          console.log('✅ 当前预览原图使用标准化路径（可靠）')
+        } else if (this.data.selectedFile?.preview) {
+          currentSrc = this.data.selectedFile.preview
+          console.log('⚠️ 当前预览原图使用原始路径（降级）')
+        }
       }
       // 修复后的图片：优先使用本地缓存
       else if (src === this.data.comparisonImages[1]?.src && this.data.localEnhancedImagePath) {
@@ -1145,6 +1167,7 @@ Component({
         processTime: 0,
         sliderPosition: 50,
         retryCount: 0, // 重置重试计数
+        localOriginalImagePath: '', // 清除原图标准化路径
         localEnhancedImagePath: '', // 清除本地图片路径
         // 重置智能计算的效果数据
         clarityImprovement: 0,
