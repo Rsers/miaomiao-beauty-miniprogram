@@ -723,3 +723,11 @@ button {
   /* 图片本身位置和大小永远不变，只通过wrapper的overflow:hidden和宽度变化来裁剪显示范围 */
   filter: contrast(1.1) brightness(1.05) saturate(1.1);
 }
+
+/* ===== 分享提示样式 ===== */
+.share-hint {
+  text-align: center;
+  padding: 16rpx 0;
+  margin-top: 8rpx;
+  opacity: 0.8;
+}

@@ -160,7 +160,11 @@
           
           <view class="flex gap-4">
             <button bindtap="handleTryAgain" class="btn-secondary">🔄 重新修复</button>
-            <button bindtap="handleShare" class="btn-share">📤 分享</button>
+            <button open-type="share" class="btn-share">📤 分享小程序</button>
+          </view>
+          
+          <view class="share-hint">
+            <text class="text-xs text-gray-600">💡 朋友看到修复效果后，可直接点击进入小程序</text>
           </view>
         </view>
 

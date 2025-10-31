@@ -33,7 +33,8 @@ Component({
     maxRetries: 3,
     statusBarHeight: 88, // 默认状态栏高度(约44px = 88rpx)
     safeAreaTop: 116, // 默认安全区域高度
-    sliderContainerWidth: 0 // 滑动对比容器的实际宽度（px）
+    sliderContainerWidth: 0, // 滑动对比容器的实际宽度（px）
+    localEnhancedImagePath: '' // 本地下载的修复后图片路径（用于分享）
   },
 
   lifetimes: {
@@ -669,6 +670,30 @@ Component({
 
       wx.showToast({ title: '修复完成', icon: 'success' })
 
+      // 如果是网络图片，自动下载到本地（用于分享）
+      if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+        console.log('自动下载网络图片到本地，用于分享功能')
+        wx.downloadFile({
+          url: cleanUrl,
+          success: (res) => {
+            if (res.statusCode === 200) {
+              console.log('图片下载成功，本地路径:', res.tempFilePath)
+              this.setData({
+                localEnhancedImagePath: res.tempFilePath
+              })
+            }
+          },
+          fail: (err) => {
+            console.warn('自动下载图片失败（不影响功能）:', err)
+          }
+        })
+      } else {
+        // 本地图片直接使用
+        this.setData({
+          localEnhancedImagePath: cleanUrl
+        })
+      }
+
       // 滚动到结果区域
       setTimeout(() => {
         wx.pageScrollTo({ selector: '.result-section', duration: 300 })
@@ -835,16 +860,17 @@ Component({
       }
     },
 
-    handleShare() {
-      wx.showModal({
-        title: '分享图片',
-        content: '请先保存图片到相册，然后使用微信分享',
-        confirmText: '保存图片',
-        success: (res) => {
-          if (res.confirm) this.handleSaveImage()
-        }
-      })
-    },
+    // 分享功能已改为使用 open-type="share"，此方法已废弃
+    // handleShare() {
+    //   wx.showModal({
+    //     title: '分享图片',
+    //     content: '请先保存图片到相册，然后使用微信分享',
+    //     confirmText: '保存图片',
+    //     success: (res) => {
+    //       if (res.confirm) this.handleSaveImage()
+    //     }
+    //   })
+    // },
 
     openFullscreen(e: any) {
       const { src } = e.currentTarget.dataset
@@ -905,7 +931,8 @@ Component({
         comparisonImages: [],
         processTime: 0,
         sliderPosition: 50,
-        retryCount: 0 // 重置重试计数
+        retryCount: 0, // 重置重试计数
+        localEnhancedImagePath: '' // 清除本地图片路径
       })
 
       wx.pageScrollTo({ scrollTop: 0, duration: 300 })
@@ -951,15 +978,28 @@ Component({
     },
 
     onShareAppMessage() {
-      return {
-        title: '喵喵美颜 - 让模糊照片变清晰',
+      // 分享给朋友
+      const shareData: any = {
+        title: '哇！我的照片修复效果太惊艳了，你也来试试吧！',
         path: '/pages/index/index'
       }
+      
+      // 使用已下载的本地图片作为分享封面
+      if (this.data.localEnhancedImagePath) {
+        shareData.imageUrl = this.data.localEnhancedImagePath
+        console.log('分享封面使用修复后的图片:', this.data.localEnhancedImagePath)
+      } else {
+        console.log('未找到本地图片，使用默认分享卡片')
+      }
+      
+      return shareData
     },
 
     onShareTimeline() {
+      // 分享到朋友圈（通过右上角"..."菜单触发）
       return {
-        title: '喵喵美颜 - 让模糊照片变清晰'
+        title: '喵喵美颜 - 一键修复模糊照片'
+        // 注意：朋友圈分享不支持 imageUrl 参数，会自动截取页面
       }
     }
   },
