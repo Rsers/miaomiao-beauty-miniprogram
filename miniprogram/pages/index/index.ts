@@ -922,12 +922,12 @@ Component({
         showResult: true,
         processTime,
         comparisonImages: [
-          { label: '原图', src: originalImageSrc, desc: '修复前', enhanced: false },
-          { label: '修复后', src: cleanUrl, desc: '✨ 权威出片', enhanced: true }
+          { label: '原图', src: originalImageSrc, desc: '美化前', enhanced: false },
+          { label: '美化后', src: cleanUrl, desc: '✨ 权威出片', enhanced: true }
         ]
       })
 
-      wx.showToast({ title: '修复完成', icon: 'success' })
+      wx.showToast({ title: '美化完成', icon: 'success' })
 
       // 异步计算分辨率和效果数据
       this.calculateResolutionAndStats(originalImageSrc, cleanUrl, processTime)
@@ -1417,7 +1417,7 @@ Component({
     onShareAppMessage() {
       // 分享给朋友
       const shareData: any = {
-        title: '哇！我的照片修复效果太惊艳了，你也来试试吧！',
+        title: '哇！我的照片美颜效果太惊艳了，你也来试试吧！',
         path: '/pages/index/index'
       }
       
@@ -1435,7 +1435,7 @@ Component({
     onShareTimeline() {
       // 分享到朋友圈（通过右上角"..."菜单触发）
       return {
-        title: '喵喵美颜 - 一键修复模糊照片'
+        title: '喵喵美颜 - 一键美化照片'
         // 注意：朋友圈分享不支持 imageUrl 参数，会自动截取页面
       }
     }

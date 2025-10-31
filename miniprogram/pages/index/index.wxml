@@ -6,20 +6,33 @@
   module.exports = { round: round };
 </wxs>
 
-<view class="min-h-screen bg-gray-50">
-  <view class="max-w-sm mx-auto bg-white min-h-screen flex-col">
+<view class="min-h-screen page-background">
+  <view class="max-w-sm mx-auto content-background min-h-screen flex-col">
     
     <!-- Header -->
     <view class="header-section" style="padding-top: {{64 + safeAreaTop}}rpx;">
-      <view class="absolute inset-0">
-        <view class="absolute top-3 right-3 text-3xl opacity-30 rotate-12">🐱</view>
-        <view class="absolute top-8 right-12 text-lg opacity-25">😸</view>
-        <view class="absolute top-1-3 right-6 text-sm opacity-20 rotate-minus-12">🐾</view>
-        <view class="absolute bottom-6 left-4 text-2xl opacity-30 rotate-minus-6">😻</view>
-        <view class="absolute bottom-12 left-8 text-xs opacity-25">🐾</view>
-        <view class="absolute top-1-2 left-4 text-sm opacity-20 rotate-6">😴</view>
-        <view class="absolute top-6 right-20 text-xs opacity-30">✨</view>
-        <view class="absolute bottom-16 left-16 text-xs opacity-25">✨</view>
+      <!-- 动态装饰元素层 -->
+      <view class="header-decorations">
+        <!-- 飘落的小猫 -->
+        <view class="falling-cat cat-1">😸</view>
+        <view class="falling-cat cat-2">🐱</view>
+        <view class="falling-cat cat-3">😻</view>
+        <view class="falling-cat cat-4">😺</view>
+        <view class="falling-cat cat-5">🐈</view>
+        <view class="falling-cat cat-6">😸</view>
+        
+        <!-- 飘落的爪印 -->
+        <view class="falling-paw paw-1">🐾</view>
+        <view class="falling-paw paw-2">🐾</view>
+        <view class="falling-paw paw-3">🐾</view>
+        <view class="falling-paw paw-4">🐾</view>
+        
+        <!-- 飘落的星星 -->
+        <view class="falling-star star-1">✨</view>
+        <view class="falling-star star-2">⭐</view>
+        <view class="falling-star star-3">💫</view>
+        <view class="falling-star star-4">✨</view>
+        <view class="falling-star star-5">⭐</view>
       </view>
       
       <view class="relative z-10">
@@ -60,7 +73,7 @@
           </view>
           
           <view class="quick-test-hint">
-            <text>选择测试图片，快速体验修复效果</text>
+            <text>选择测试图片，快速体验美颜效果</text>
           </view>
           
           <view class="quick-test-content {{quickTestExpanded ? 'expanded' : ''}}">
@@ -89,10 +102,19 @@
         </view>
         
         <!-- 上传区域 -->
-        <view wx:if="{{!selectedFile}}" class="upload-area" bindtap="chooseImage">
-          <view class="text-6xl mb-4">📷</view>
-          <text class="text-lg text-gray-700 mb-2">点击选择图片</text>
-          <text class="text-sm text-gray-600">支持 JPG、PNG、AVIF 格式</text>
+        <view wx:if="{{!selectedFile}}" class="upload-area upload-area-animated" bindtap="chooseImage">
+          <view class="upload-icon-wrapper">
+            <view class="upload-icon">📷</view>
+          </view>
+          <text class="upload-text-main">点击选择照片</text>
+          <text class="upload-text-sub">支持 JPG、PNG、AVIF 格式</text>
+          <!-- 装饰元素 -->
+          <view class="upload-decorations">
+            <view class="deco-sparkle deco-1">✨</view>
+            <view class="deco-sparkle deco-2">✨</view>
+            <view class="deco-sparkle deco-3">⭐</view>
+            <view class="deco-sparkle deco-4">💫</view>
+          </view>
         </view>
         
         <view wx:else class="space-y-4">
@@ -102,7 +124,7 @@
             <view wx:if="{{isProcessing}}" class="processing-overlay">
               <view class="text-center text-white p-6">
                 <view class="text-4xl mb-3 animate-pulse">✨😸✨</view>
-                <text class="text-lg mb-4">正在修复您的图片...</text>
+                <text class="text-lg mb-4">正在为您变美中...</text>
                 
                 <view class="progress-circle-wrapper">
                   <view class="progress-svg">
@@ -114,7 +136,7 @@
                   </view>
                 </view>
                 
-                <text class="text-sm opacity-80">喵喵正在努力修复中...</text>
+                <text class="text-sm opacity-80">喵喵正在施展魔法...</text>
               </view>
             </view>
           </view>
@@ -122,7 +144,7 @@
           <view class="flex gap-3 button-group-spacing">
             <button bindtap="chooseImage" disabled="{{isProcessing}}" class="btn-reselect">重新选择</button>
             <button bindtap="handleStartProcessing" disabled="{{isProcessing}}" class="btn-start">
-              {{isProcessing ? '修复中...' : '开始修复'}}
+              {{isProcessing ? '处理中...' : '立即变美'}}
             </button>
           </view>
         </view>
@@ -139,7 +161,7 @@
         </view>
         
         <view class="result-hint">
-          <text class="result-hint-text">查看修复前后的对比效果</text>
+          <text class="result-hint-text">查看美化前后的对比效果</text>
         </view>
         
         <!-- 放大查看引导 -->
@@ -208,64 +230,85 @@
         </view> -->
 
         <view class="space-y-4">
-          <button bindtap="handleSaveImage" class="btn-download">
-            <text class="text-xl">💾</text>
-            <text>保存图片</text>
+          <button bindtap="handleSaveImage" class="btn-download-enhanced">
+            <view class="btn-icon-wrapper">
+              <text class="btn-icon-large">💾</text>
+            </view>
+            <view class="btn-content">
+              <text class="btn-text-main">保存到相册</text>
+              <text class="btn-text-sub">长按分享给好友</text>
+            </view>
           </button>
           
           <view class="flex gap-4">
-            <button bindtap="handleTryAgain" class="btn-secondary">🔄 重新修复</button>
-            <button open-type="share" class="btn-share">📤 分享小程序</button>
+            <button bindtap="handleTryAgain" class="btn-secondary-enhanced">
+              <text class="btn-emoji">🔄</text>
+              <view class="btn-text-wrapper">
+                <text class="btn-text-primary">再来一次</text>
+                <text class="btn-text-hint">继续变美</text>
+              </view>
+            </button>
+            <button open-type="share" class="btn-share-enhanced">
+              <text class="btn-emoji">✨</text>
+              <view class="btn-text-wrapper">
+                <text class="btn-text-primary">分享好友</text>
+                <text class="btn-text-hint">一起变美</text>
+              </view>
+            </button>
           </view>
           
-          <view class="share-hint">
-            <text class="text-xs text-gray-600">💡 分享给闺蜜好友，一起变美变自信</text>
+          <view class="share-hint-enhanced">
+            <text class="share-hint-icon">💕</text>
+            <text class="share-hint-text">分享给闺蜜，让更多人发现这个宝藏小程序</text>
           </view>
         </view>
 
-        <view class="stats-card">
-          <view class="stats-header">
-            <text>📊</text>
-            <text>修复效果分析</text>
+        <view class="stats-card-enhanced">
+          <view class="stats-header-enhanced">
+            <text class="stats-emoji">✨</text>
+            <text class="stats-title">惊艳蜕变数据</text>
+            <text class="stats-emoji">✨</text>
           </view>
           
-          <!-- 分辨率信息 -->
-          <view class="resolution-info">
-            <view class="resolution-row">
-              <text class="resolution-label">📷 原始分辨率：</text>
-              <text class="resolution-value">{{originalResolution}}</text>
+          <!-- 分辨率信息 - 增强版 -->
+          <view class="resolution-info-enhanced">
+            <view class="resolution-row-compact">
+              <text class="resolution-label-small">📷 原图</text>
+              <text class="resolution-value-small">{{originalResolution}}</text>
             </view>
-            <view class="resolution-arrow">
-              <text class="arrow-icon">⬇️</text>
-              <text class="arrow-text">智能修复</text>
-              <text class="arrow-icon">⬇️</text>
+            <view class="resolution-arrow-enhanced">
+              <text class="arrow-text-enhanced">⚡ 魔法变身 ⚡</text>
             </view>
-            <view class="resolution-row">
-              <text class="resolution-label">✨ 修复后分辨率：</text>
-              <text class="resolution-value highlight">{{enhancedResolution}}</text>
+            <view class="resolution-row-highlight">
+              <text class="resolution-label-big">✨ 美化后</text>
+              <text class="resolution-value-big">{{enhancedResolution}}</text>
             </view>
-            <view class="resolution-multiple" wx:if="{{resolutionMultiple > 1}}">
-              <text class="multiple-badge">🎯 提升 {{resolutionMultiple}}x</text>
+            <view class="resolution-multiple-enhanced" wx:if="{{resolutionMultiple > 1}}">
+              <text class="multiple-badge-enhanced">🎯 画质狂飙 {{resolutionMultiple}}x 🚀</text>
             </view>
           </view>
           
-          <!-- 效果数据 -->
-          <view class="stats-grid">
-            <view class="stat-item">
-              <text class="text-gray-600">✨ 清晰度提升</text>
-              <text class="text-green-600">+{{clarityImprovement}}%</text>
+          <!-- 效果数据 - 增强版 -->
+          <view class="stats-grid-enhanced">
+            <view class="stat-item-enhanced stat-item-primary">
+              <text class="stat-label-enhanced">✨ 清晰度</text>
+              <text class="stat-value-enhanced stat-value-large">+{{clarityImprovement}}%</text>
+              <text class="stat-desc">超清呈现</text>
             </view>
-            <view class="stat-item">
-              <text class="text-gray-600">🔇 噪点减少</text>
-              <text class="text-green-600">-{{noiseReduction}}%</text>
+            <view class="stat-item-enhanced stat-item-danger">
+              <text class="stat-label-enhanced">🔇 噪点</text>
+              <text class="stat-value-enhanced stat-value-large">-{{noiseReduction}}%</text>
+              <text class="stat-desc">净化画面</text>
             </view>
-            <view class="stat-item">
-              <text class="text-gray-600">🎨 色彩还原</text>
-              <text class="text-green-600">+{{colorRestoration}}%</text>
+            <view class="stat-item-enhanced stat-item-success">
+              <text class="stat-label-enhanced">🎨 色彩</text>
+              <text class="stat-value-enhanced stat-value-large">+{{colorRestoration}}%</text>
+              <text class="stat-desc">还原真实</text>
             </view>
-            <view class="stat-item">
-              <text class="text-gray-600">⚡ 处理时间</text>
-              <text class="text-blue-600">{{processTime}}秒</text>
+            <view class="stat-item-enhanced stat-item-info">
+              <text class="stat-label-enhanced">⚡ 耗时</text>
+              <text class="stat-value-enhanced stat-value-time">{{processTime}}秒</text>
+              <text class="stat-desc">极速处理</text>
             </view>
           </view>
         </view>
