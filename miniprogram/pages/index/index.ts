@@ -1025,26 +1025,38 @@ Component({
     openFullscreen(e: any) {
       const { src } = e.currentTarget.dataset
       
-      // 确保所有图片路径都是有效的
-      const urls = this.data.comparisonImages.map((img: any) => {
-        // 清理路径，确保本地路径和网络URL都正确
+      // 优化：对于修复后的图片，优先使用已下载的本地路径
+      const urls = this.data.comparisonImages.map((img: any, index: number) => {
+        // 如果是修复后的图片（索引1）且本地路径存在，使用本地路径
+        if (index === 1 && this.data.localEnhancedImagePath) {
+          console.log('✅ 全屏预览使用本地缓存图片（无需加载）:', this.data.localEnhancedImagePath)
+          return this.data.localEnhancedImagePath
+        }
+        
+        // 其他图片：清理路径
         let imgSrc = img.src
         if (imgSrc && !imgSrc.startsWith('http://') && !imgSrc.startsWith('https://')) {
-          // 本地路径，确保路径有效
           imgSrc = imgSrc.replace(/^@/, '')
         } else if (imgSrc) {
-          // 网络URL，清理可能的@前缀
           imgSrc = this.cleanUrl(imgSrc)
         }
         return imgSrc
-      }).filter(url => url && url.trim()) // 过滤空路径
+      }).filter(url => url && url.trim())
 
-      // 清理当前图片路径
+      // 清理当前点击的图片路径
       let currentSrc = src
-      if (currentSrc && !currentSrc.startsWith('http://') && !currentSrc.startsWith('https://')) {
-        currentSrc = currentSrc.replace(/^@/, '')
-      } else if (currentSrc) {
-        currentSrc = this.cleanUrl(currentSrc)
+      
+      // 如果点击的是修复后的图片，优先使用本地缓存
+      if (src === this.data.comparisonImages[1]?.src && this.data.localEnhancedImagePath) {
+        currentSrc = this.data.localEnhancedImagePath
+        console.log('✅ 当前预览图片使用本地缓存（无需加载）')
+      } else {
+        // 清理路径
+        if (currentSrc && !currentSrc.startsWith('http://') && !currentSrc.startsWith('https://')) {
+          currentSrc = currentSrc.replace(/^@/, '')
+        } else if (currentSrc) {
+          currentSrc = this.cleanUrl(currentSrc)
+        }
       }
 
       if (!currentSrc || !urls.length) {
