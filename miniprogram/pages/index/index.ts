@@ -792,16 +792,23 @@ Component({
       // 异步计算分辨率和效果数据
       this.calculateResolutionAndStats(originalImageSrc, cleanUrl, processTime)
 
-      // 如果是网络图片，自动下载到本地（用于分享）
+      // 优化1：预热修复后的图片缓存
       if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
         console.log('自动下载网络图片到本地，用于分享功能')
         wx.downloadFile({
           url: cleanUrl,
           success: (res) => {
             if (res.statusCode === 200) {
-              console.log('图片下载成功，本地路径:', res.tempFilePath)
+              console.log('修复后图片下载成功，本地路径:', res.tempFilePath)
               this.setData({
                 localEnhancedImagePath: res.tempFilePath
+              })
+              // 预热缓存：触发图片解码
+              wx.getImageInfo({
+                src: res.tempFilePath,
+                success: () => {
+                  console.log('✅ 修复后图片缓存预热成功')
+                }
               })
             }
           },
@@ -813,6 +820,26 @@ Component({
         // 本地图片直接使用
         this.setData({
           localEnhancedImagePath: cleanUrl
+        })
+      }
+      
+      // 优化2：预热原图缓存（关键优化！）
+      // 通过 wx.getImageInfo 触发原图的完整解码和缓存
+      // 这样预览时就能和修复后图片一样快
+      if (originalImageSrc) {
+        console.log('预热原图缓存，确保预览时瞬间打开...')
+        wx.getImageInfo({
+          src: originalImageSrc,
+          success: (info) => {
+            console.log('✅ 原图缓存预热成功:', {
+              width: info.width,
+              height: info.height,
+              path: info.path
+            })
+          },
+          fail: (err) => {
+            console.warn('原图缓存预热失败（不影响功能）:', err)
+          }
         })
       }
 
