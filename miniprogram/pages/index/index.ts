@@ -901,13 +901,40 @@ Component({
     handleSaveImage() {
       if (!this.data.comparisonImages[1]) return
 
+      // 优先使用已下载的本地图片路径（避免重复下载）
+      if (this.data.localEnhancedImagePath) {
+        console.log('✅ 使用已下载的本地图片，无需重复下载:', this.data.localEnhancedImagePath)
+        wx.saveImageToPhotosAlbum({
+          filePath: this.data.localEnhancedImagePath,
+          success: () => {
+            console.log('保存成功（使用缓存的本地图片）')
+            wx.showToast({ title: '保存成功', icon: 'success' })
+          },
+          fail: (err) => {
+            if (err.errMsg.indexOf('auth deny') !== -1) {
+              wx.showModal({
+                title: '需要相册权限',
+                content: '请在设置中允许访问相册',
+                success: (res) => {
+                  if (res.confirm) wx.openSetting()
+                }
+              })
+            } else {
+              console.error('保存失败:', err)
+              wx.showToast({ title: '保存失败', icon: 'error' })
+            }
+          }
+        })
+        return
+      }
+
+      // 如果本地路径不存在，才检查是否需要下载网络图片
       const imageSrc = this.data.comparisonImages[1].src
-      
-      // 检查是否是网络图片
       const isNetworkImage = imageSrc.startsWith('http://') || imageSrc.startsWith('https://')
       
       if (isNetworkImage) {
-        // 网络图片：先下载再保存
+        // 网络图片且本地没有缓存：下载后保存（降级处理）
+        console.warn('⚠️ 本地缓存不存在，重新下载网络图片')
         wx.showLoading({ title: '下载中...' })
         
         wx.downloadFile({
@@ -961,6 +988,7 @@ Component({
         })
       } else {
         // 本地图片：直接保存
+        console.log('本地图片直接保存:', imageSrc)
         wx.saveImageToPhotosAlbum({
           filePath: imageSrc,
           success: () => wx.showToast({ title: '保存成功', icon: 'success' }),
