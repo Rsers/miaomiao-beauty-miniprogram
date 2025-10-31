@@ -1,0 +1,202 @@
+<!-- 新首页 -->
+<view class="home-container">
+  <!-- 渐变背景 -->
+  <view class="home-background"></view>
+  
+  <!-- 顶部导航 -->
+  <view class="top-navigation">
+    <!-- 小猫头像 -->
+    <view class="cat-avatar">
+      <view class="cat-face">
+        <view class="cat-ears">
+          <view class="cat-ear cat-ear-left"></view>
+          <view class="cat-ear cat-ear-right"></view>
+        </view>
+        <view class="cat-eyes">
+          <view class="cat-eye"></view>
+          <view class="cat-eye"></view>
+        </view>
+        <view class="cat-nose"></view>
+        <view class="cat-whiskers">
+          <view class="whisker"></view>
+          <view class="whisker"></view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 右侧按钮组 -->
+    <view class="nav-buttons">
+      <!-- 通知铃铛 -->
+      <view class="notification-btn">
+        <text class="notification-icon">🔔</text>
+        <view class="notification-badge">
+          <text class="badge-text">3</text>
+        </view>
+      </view>
+      
+      <!-- 用户头像 -->
+      <view class="user-avatar-btn" bindtap="goToProfile">
+        <text class="user-icon">👤</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 问候语区域 -->
+  <view class="greeting-section">
+    <text class="greeting-title">{{greeting}}</text>
+    <text class="greeting-subtitle">{{greetingSubtitle}}</text>
+  </view>
+  
+  <!-- 主要CTA按钮 -->
+  <view class="main-cta-section">
+    <view class="main-cta-card">
+      <view class="cta-header">
+        <text class="paw-icon">🐾</text>
+        <text class="cta-title">立即美颜</text>
+        <text class="paw-icon">🐾</text>
+      </view>
+      <text class="cta-description">让AI为你量身定制专属美颜方案</text>
+      <button class="cta-button" bindtap="startBeautify">
+        <text class="camera-icon">📷</text>
+        <text class="button-text">开始拍照</text>
+      </button>
+      
+      <!-- 美颜相机按钮 -->
+      <button class="cta-button camera-button" bindtap="openBeautyCamera">
+        <text class="camera-icon">🎨</text>
+        <text class="button-text">美颜相机</text>
+      </button>
+      
+            <!-- 拼图协作按钮 -->
+            <button class="cta-button puzzle-button" bindtap="openPuzzleCollaboration">
+              <text class="camera-icon">🧩</text>
+              <text class="button-text">拼图协作</text>
+            </button>
+            
+            <!-- 推荐奖励按钮 -->
+            <button class="cta-button referral-button" bindtap="openReferralRewards">
+              <text class="camera-icon">🎁</text>
+              <text class="button-text">推荐奖励</text>
+            </button>
+            
+            <!-- 邀请好友按钮 -->
+            <button class="cta-button invite-button" bindtap="openInviteFriends">
+              <text class="camera-icon">👥</text>
+              <text class="button-text">邀请好友</text>
+            </button>
+            
+            <!-- 积分商城按钮 -->
+            <button class="cta-button mall-button" bindtap="openPointsMall">
+              <text class="camera-icon">🛍️</text>
+              <text class="button-text">积分商城</text>
+            </button>
+            
+            <!-- 个人资料按钮 -->
+            <button class="cta-button profile-button" bindtap="goToProfile">
+              <text class="camera-icon">👤</text>
+              <text class="button-text">个人资料</text>
+            </button>
+            
+            <!-- 用户流程图按钮 -->
+            <button class="cta-button userflow-button" bindtap="goToUserFlow">
+              <text class="camera-icon">📊</text>
+              <text class="button-text">用户流程图</text>
+            </button>
+      
+      <!-- 装饰爪印 -->
+      <view class="decorative-paw decorative-paw-1">🐾</view>
+      <view class="decorative-paw decorative-paw-2">🐾</view>
+      
+      <!-- 调试按钮 -->
+      <view class="debug-section">
+        <button class="debug-btn" bindtap="goToImageProcess">
+          <text class="debug-icon">🔧</text>
+          <text class="debug-text">图片处理页面</text>
+        </button>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 功能网格 -->
+  <view class="function-grid-section">
+    <text class="section-title">功能大全</text>
+    <view class="function-grid">
+      <view class="function-card" wx:for="{{functionList}}" wx:key="index" bindtap="onFunctionTap" data-type="{{item.type}}">
+        <view class="function-icon" style="background: {{item.gradient}}">
+          <text class="icon-emoji">{{item.icon}}</text>
+        </view>
+        <text class="function-label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 社交互动区域 -->
+  <view class="social-section">
+    <text class="section-title">社交互动</text>
+    <view class="social-grid">
+      <!-- 拼图协作 -->
+      <view class="social-card" bindtap="onCollaborationTap">
+        <view class="social-icon collaboration-icon">
+          <text class="icon-emoji">🖼️</text>
+        </view>
+        <text class="social-title">拼图协作</text>
+        <text class="social-desc">与好友一起创作美图</text>
+        <view class="collaboration-avatars">
+          <view class="mini-avatar" wx:for="{{[1,2,3]}}" wx:key="*this">
+            <text class="mini-cat">🐱</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 邀请好友 -->
+      <view class="social-card" bindtap="onInviteTap">
+        <view class="social-icon invite-icon">
+          <text class="icon-emoji">👥</text>
+        </view>
+        <text class="social-title">邀请好友</text>
+        <text class="social-desc">分享获得专属奖励</text>
+        <view class="reward-badge">
+          <text class="reward-text">+500积分</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 每日福利区域 -->
+  <view class="daily-benefit-section">
+    <view class="benefit-card">
+      <view class="benefit-header">
+        <view class="benefit-icon">
+          <text class="gift-icon">🎁</text>
+        </view>
+        <view class="benefit-info">
+          <text class="benefit-title">每日福利</text>
+          <text class="benefit-desc">签到领取美颜道具</text>
+        </view>
+        <button class="checkin-button" bindtap="onCheckinTap">
+          <text class="calendar-icon">📅</text>
+          <text class="checkin-text">签到</text>
+        </button>
+      </view>
+      
+      <view class="checkin-progress">
+        <view class="progress-header">
+          <text class="progress-label">连续签到</text>
+          <text class="progress-days">第{{checkinDays}}天</text>
+        </view>
+        <view class="checkin-calendar">
+          <view class="calendar-day {{item >= checkinDays ? 'completed' : ''}}" wx:for="{{[1,2,3,4,5,6,7]}}" wx:key="*this">
+            <text class="day-number">{{item}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 浮动装饰元素 -->
+  <view class="floating-elements">
+    <view class="floating-paw floating-paw-1">🐾</view>
+    <view class="floating-paw floating-paw-2">🐾</view>
+    <view class="floating-paw floating-paw-3">🐾</view>
+  </view>
+</view>

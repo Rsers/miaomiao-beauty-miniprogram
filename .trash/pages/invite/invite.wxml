@@ -1,0 +1,193 @@
+<!-- 邀请好友页面 -->
+<view class="invite-container">
+  <!-- 渐变背景 -->
+  <view class="invite-background"></view>
+  
+  <!-- 背景装饰元素 -->
+  <view class="decorative-elements">
+    <view class="decorative-circle decorative-circle-1"></view>
+    <view class="decorative-circle decorative-circle-2"></view>
+    <view class="floating-hearts">
+      <block wx:for="{{[0,1,2,3,4]}}" wx:key="*this">
+        <view class="heart-animation heart-{{index}}">💖</view>
+      </block>
+    </view>
+  </view>
+  
+  <!-- 手机容器 -->
+  <view class="mobile-container">
+    <!-- 顶部导航 -->
+    <view class="top-navigation">
+      <button class="nav-btn" bindtap="navigateBack">
+        <text class="nav-icon">←</text>
+      </button>
+      <text class="nav-title">邀请好友</text>
+      <button class="nav-btn">
+        <text class="nav-icon">⚙️</text>
+      </button>
+    </view>
+    
+    <!-- 猫咪吉祥物区域 -->
+    <view class="mascot-section">
+      <text class="cat-emoji">🐱</text>
+      <text class="mascot-text">分享喵喵美颜，一起变美吧！</text>
+    </view>
+    
+    <!-- 主内容区域 -->
+    <scroll-view scroll-y class="main-content">
+      <!-- VIP转赠卡 -->
+      <view class="vip-transfer-card">
+        <view class="card-background"></view>
+        <view class="sparkle-decoration">✨</view>
+        
+        <view class="card-content">
+          <view class="card-header">
+            <view class="gift-icon-wrapper">
+              <text class="gift-icon">🎁</text>
+            </view>
+            <view class="card-title-section">
+              <text class="card-title">VIP转赠卡</text>
+              <text class="card-subtitle">专属特权分享</text>
+            </view>
+            <view class="quota-section">
+              <text class="quota-number">{{vipQuota}}</text>
+              <text class="quota-label">个名额</text>
+            </view>
+          </view>
+          
+          <view class="card-body">
+            <image src="{{catGiftImage}}" mode="aspectFill" class="cat-gift-image" />
+            <text class="quota-text">我有 <text class="highlight">{{vipQuota}}个</text> VIP名额</text>
+            <text class="quota-note">只能转赠，不能自用</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 好友列表 -->
+      <view class="friends-list-section">
+        <view class="section-header">
+          <text class="section-title">选择好友赠送VIP</text>
+          <text class="section-count">{{selectedCount}}/{{friendsList.length}}</text>
+        </view>
+        
+        <view class="friends-list">
+          <block wx:for="{{friendsList}}" wx:key="id">
+            <view class="friend-item">
+              <view class="friend-info">
+                <view class="avatar-wrapper">
+                  <image src="{{item.avatar}}" mode="aspectFill" class="friend-avatar" />
+                  <block wx:if="{{item.status === 'online'}}">
+                    <view class="online-indicator"></view>
+                  </block>
+                  <block wx:if="{{item.isVip}}">
+                    <view class="vip-indicator">
+                      <text class="crown-icon">👑</text>
+                    </view>
+                  </block>
+                </view>
+                <view class="friend-details">
+                  <text class="friend-name">{{item.name}}</text>
+                  <text class="friend-status">{{item.isVip ? 'VIP会员' : '普通用户'}}</text>
+                </view>
+              </view>
+              <button class="transfer-btn {{item.isVip ? 'disabled' : ''}}" 
+                      bindtap="transferVip" 
+                      data-friend-id="{{item.id}}"
+                      disabled="{{item.isVip}}">
+                {{item.isVip ? '已是VIP' : '转赠'}}
+              </button>
+            </view>
+          </block>
+        </view>
+      </view>
+      
+      <!-- 奖励阶梯 -->
+      <view class="reward-ladder-section">
+        <view class="section-header">
+          <text class="section-title">邀请奖励阶梯</text>
+          <text class="section-count">{{completedRewards}}/{{rewardLadder.length}}</text>
+        </view>
+        
+        <view class="progress-container">
+          <view class="progress-bar">
+            <view class="progress-fill" style="width: {{rewardProgress}}%;"></view>
+          </view>
+        </view>
+        
+        <view class="reward-list">
+          <block wx:for="{{rewardLadder}}" wx:key="id">
+            <view class="reward-item {{item.completed ? 'completed' : (item.current ? 'current' : '')}}">
+              <view class="reward-icon-wrapper {{item.completed ? 'completed' : (item.current ? 'current' : '')}}">
+                <text class="reward-icon">{{item.icon}}</text>
+              </view>
+              <view class="reward-info">
+                <text class="reward-title {{item.completed ? 'completed' : ''}}">{{item.title}}</text>
+                <text class="reward-description {{item.completed ? 'completed' : ''}}">{{item.reward}}</text>
+              </view>
+              <block wx:if="{{item.completed}}">
+                <text class="completed-icon">⭐</text>
+              </block>
+            </view>
+          </block>
+        </view>
+      </view>
+      
+      <!-- 社交分享 -->
+      <view class="social-sharing-section">
+        <view class="section-header">
+          <text class="share-icon">📤</text>
+          <text class="section-title">分享邀请链接</text>
+        </view>
+        
+        <view class="invite-content">
+          <text class="invite-text">🎁 快来加入喵喵美颜，一起变美吧！</text>
+          <text class="invite-code">邀请码：{{inviteCode}}</text>
+        </view>
+        
+        <view class="social-buttons">
+          <button class="social-btn wechat-btn" bindtap="shareToWeChat">
+            <text class="social-icon">💬</text>
+            <text class="social-text">微信好友</text>
+          </button>
+          <button class="social-btn moments-btn" bindtap="shareToMoments">
+            <text class="social-icon">👥</text>
+            <text class="social-text">朋友圈</text>
+          </button>
+          <button class="social-btn copy-btn" bindtap="copyInviteLink">
+            <text class="social-icon">📋</text>
+            <text class="social-text">复制链接</text>
+          </button>
+        </view>
+      </view>
+      
+      <!-- 成就徽章 -->
+      <view class="achievement-section">
+        <view class="section-header">
+          <text class="badge-icon">🏆</text>
+          <text class="section-title">成就徽章</text>
+          <text class="section-count">{{unlockedAchievements}}/{{achievements.length}}</text>
+        </view>
+        
+        <view class="achievement-grid">
+          <block wx:for="{{achievements}}" wx:key="id">
+            <view class="achievement-item {{item.unlocked ? 'unlocked' : ''}}">
+              <view class="achievement-icon-wrapper {{item.unlocked ? 'unlocked' : ''}}">
+                <text class="achievement-icon">{{item.icon}}</text>
+              </view>
+              <text class="achievement-title {{item.unlocked ? 'unlocked' : ''}}">{{item.title}}</text>
+              <text class="achievement-description">{{item.description}}</text>
+              <text class="achievement-progress {{item.unlocked ? 'unlocked' : ''}}">{{item.progress}}</text>
+            </view>
+          </block>
+        </view>
+      </view>
+    </scroll-view>
+    
+    <!-- 底部CTA按钮 -->
+    <view class="bottom-cta">
+      <button class="invite-btn" bindtap="inviteFriends">
+        <text class="invite-btn-text">立即邀请好友</text>
+      </button>
+    </view>
+  </view>
+</view>

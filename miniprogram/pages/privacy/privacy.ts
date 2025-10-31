@@ -30,18 +30,9 @@ Component({
             })
         },
 
-        // 不同意隐私政策
-        disagreePrivacy() {
-            wx.showModal({
-                title: '提示',
-                content: '不同意隐私政策将无法使用本服务，确定要退出吗？',
-                success: (res) => {
-                    if (res.confirm) {
-                        // 返回上一页
-                        wx.navigateBack()
-                    }
-                }
-            })
+        // 返回
+        goBack() {
+            wx.navigateBack()
         }
     },
 

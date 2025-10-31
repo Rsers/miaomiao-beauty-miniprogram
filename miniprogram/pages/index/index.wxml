@@ -1,300 +1,239 @@
-<!--index.wxml-->
-<view class="container">
-  <!-- 用户头像区域 -->
-  <view class="user-avatar-section">
-    <button class="avatar-wrapper" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-      <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
-    </button>
-    <text class="avatar-tip">点击选择头像</text>
-  </view>
+<!--index.wxml - Figma Make Design with Slider-->
+<wxs module="utils">
+  var round = function(num) {
+    return Math.round(num);
+  };
+  module.exports = { round: round };
+</wxs>
 
-  <!-- 昵称输入区域 -->
-  <view class="nickname-section">
-    <view class="nickname-label">
-      <text>昵称</text>
-    </view>
-    <input type="nickname" class="nickname-input" placeholder="请输入昵称" value="{{nickName}}" bindinput="onNicknameInput" />
-  </view>
-
-  <!-- 付费套餐区域 -->
-  <view class="payment-section">
-    <view class="section-title">
-      <text>💎 升级到高级版</text>
-      <text class="section-subtitle">解锁更多功能，享受专业服务</text>
-    </view>
+<view class="min-h-screen bg-gray-50">
+  <view class="max-w-sm mx-auto bg-white min-h-screen flex-col">
     
-    <view class="payment-options">
-      <view class="payment-card basic-card" bindtap="selectPackage" data-type="basic" data-amount="9.9">
-        <view class="card-header">
-          <text class="package-name">基础包</text>
-          <text class="package-price">¥9.9</text>
-        </view>
-        <view class="package-features">
-          <text class="feature-item">✅ 10次增强机会</text>
-          <text class="feature-item">✅ 高清图片输出</text>
-          <text class="feature-item">✅ 快速处理</text>
-        </view>
-        <view class="package-desc">适合偶尔使用</view>
+    <!-- Header -->
+    <view class="header-section" style="padding-top: {{64 + safeAreaTop}}rpx;">
+      <view class="absolute inset-0">
+        <view class="absolute top-3 right-3 text-3xl opacity-30 rotate-12">🐱</view>
+        <view class="absolute top-8 right-12 text-lg opacity-25">😸</view>
+        <view class="absolute top-1-3 right-6 text-sm opacity-20 rotate-minus-12">🐾</view>
+        <view class="absolute bottom-6 left-4 text-2xl opacity-30 rotate-minus-6">😻</view>
+        <view class="absolute bottom-12 left-8 text-xs opacity-25">🐾</view>
+        <view class="absolute top-1-2 left-4 text-sm opacity-20 rotate-6">😴</view>
+        <view class="absolute top-6 right-20 text-xs opacity-30">✨</view>
+        <view class="absolute bottom-16 left-16 text-xs opacity-25">✨</view>
       </view>
       
-      <view class="payment-card premium-card" bindtap="selectPackage" data-type="premium" data-amount="29.9">
-        <view class="popular-badge">
-          <text class="badge-text">🔥 热门</text>
-        </view>
-        <view class="card-header">
-          <text class="package-name">高级包</text>
-          <text class="package-price">¥29.9</text>
-        </view>
-        <view class="package-features">
-          <text class="feature-item">✅ 100次增强机会</text>
-          <text class="feature-item">✅ 超高清输出</text>
-          <text class="feature-item">✅ 批量处理</text>
-          <text class="feature-item">✅ 优先处理</text>
-        </view>
-        <view class="package-desc">性价比最高</view>
-        <view class="savings-tag">省70%</view>
-      </view>
-      
-      <view class="payment-card unlimited-card" bindtap="selectPackage" data-type="unlimited" data-amount="99.9">
-        <view class="card-header">
-          <text class="package-name">无限包</text>
-          <text class="package-price">¥99.9</text>
-        </view>
-        <view class="package-features">
-          <text class="feature-item">✅ 无限次使用</text>
-          <text class="feature-item">✅ 最高质量输出</text>
-          <text class="feature-item">✅ 批量处理</text>
-          <text class="feature-item">✅ 专属客服</text>
-        </view>
-        <view class="package-desc">专业用户首选</view>
-        <view class="vip-tag">VIP</view>
-      </view>
-    </view>
-
-    <!-- 用户当前状态 -->
-    <view class="user-status">
-      <view class="status-item">
-        <text class="status-label">剩余次数：</text>
-        <text class="status-value">{{remainingCount}}</text>
-      </view>
-      <view class="status-item">
-        <text class="status-label">会员等级：</text>
-        <text class="status-value {{userLevel}}">{{userLevelText}}</text>
-      </view>
-    </view>
-
-    <!-- 调试按钮区域 -->
-    <view class="debug-section">
-      <button class="debug-btn" bindtap="getUserOpenId">
-        <text class="debug-icon">🔍</text>
-        <text class="debug-text">获取OpenID</text>
-      </button>
-    </view>
-  </view>
-
-  <!-- 标题区域 -->
-  <view class="header">
-    <text class="title">AI图片增强 - 喵喵美颜</text>
-    <text class="subtitle">免费AI智能图片处理，无需下载，微信内即可使用</text>
-    <view class="highlight-badge">
-      <text class="badge-text">🔥 热门工具</text>
-      <text class="badge-text">✨ 免费使用</text>
-      <text class="badge-text">⚡ 无需下载</text>
-    </view>
-  </view>
-
-  <!-- 功能介绍区域 -->
-  <view class="features-section">
-    <view class="section-title">
-      <text>🚀 为什么选择我们？</text>
-    </view>
-    
-    <view class="features-grid">
-      <view class="feature-card highlight-card">
-        <text class="feature-icon">🤖</text>
-        <text class="feature-title">AI智能增强</text>
-        <text class="feature-desc">比醒图、美图秀秀更先进的AI算法</text>
-        <text class="feature-tag">技术领先</text>
-      </view>
-      
-      <view class="feature-card highlight-card">
-        <text class="feature-icon">💰</text>
-        <text class="feature-title">完全免费</text>
-        <text class="feature-desc">无需付费，无广告干扰，纯净体验</text>
-        <text class="feature-tag">免费使用</text>
-      </view>
-      
-      <view class="feature-card highlight-card">
-        <text class="feature-icon">📱</text>
-        <text class="feature-title">无需下载</text>
-        <text class="feature-desc">微信内直接使用，告别APP下载烦恼</text>
-        <text class="feature-tag">便捷高效</text>
-      </view>
-      
-      <view class="feature-card highlight-card">
-        <text class="feature-icon">💾</text>
-        <text class="feature-title">一键保存</text>
-        <text class="feature-desc">直接保存到手机相册</text>
-        <text class="feature-tag">操作简单</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 竞品对比区域 -->
-  <view class="comparison-section">
-    <view class="section-title">
-      <text>🏆 与其他工具对比</text>
-    </view>
-    
-    <view class="comparison-table">
-      <view class="comparison-header">
-        <text class="feature-column">功能对比</text>
-        <text class="our-tool">喵喵美颜</text>
-        <text class="competitor">醒图</text>
-        <text class="competitor">美图秀秀</text>
-      </view>
-      
-      <view class="comparison-row">
-        <text class="feature-name">免费使用</text>
-        <text class="our-value">✅ 完全免费</text>
-        <text class="comp-value">❌ 部分付费</text>
-        <text class="comp-value">❌ 部分付费</text>
-      </view>
-      
-      <view class="comparison-row">
-        <text class="feature-name">无需下载</text>
-        <text class="our-value">✅ 微信内使用</text>
-        <text class="comp-value">❌ 需要下载APP</text>
-        <text class="comp-value">❌ 需要下载APP</text>
-      </view>
-      
-      <view class="comparison-row">
-        <text class="feature-name">AI技术</text>
-        <text class="our-value">✅ 最新AI算法</text>
-        <text class="comp-value">✅ AI技术</text>
-        <text class="comp-value">⚠️ 传统算法</text>
-      </view>
-      
-      <view class="comparison-row">
-        <text class="feature-name">微信分享</text>
-        <text class="our-value">✅ 一键分享</text>
-        <text class="comp-value">⚠️ 需要保存后分享</text>
-        <text class="comp-value">⚠️ 需要保存后分享</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 图片处理功能区域 -->
-  <view class="processing-section">
-    <view class="section-title">
-      <text>开始处理</text>
-    </view>
-    
-    <!-- 图片上传区域 -->
-    <view class="upload-section">
-      <view wx:if="{{!selectedImage}}" class="upload-area" bindtap="chooseImage">
-        <view class="upload-icon">📷</view>
-        <text class="upload-text">点击选择图片</text>
-        <text class="upload-hint">支持 JPG、PNG、AVIF 格式</text>
-      </view>
-      
-      <view wx:else class="image-preview">
-        <image class="preview-image" src="{{selectedImage}}" mode="aspectFit"></image>
-        <view class="image-info">
-          <text class="file-name">{{fileName}}</text>
-          <text class="file-size">{{fileSize}}</text>
-        </view>
-        <button class="change-btn" bindtap="chooseImage">重新选择</button>
-      </view>
-    </view>
-
-    <!-- 处理按钮 -->
-    <view class="action-section" wx:if="{{selectedImage}}">
-      <button 
-        class="enhance-btn {{isProcessing ? 'processing' : ''}}" 
-        bindtap="enhanceImage"
-        disabled="{{isProcessing}}"
-      >
-        <text wx:if="{{!isProcessing}}">开始增强</text>
-        <text wx:else>处理中...</text>
-      </button>
-    </view>
-
-    <!-- 结果展示区域 -->
-    <view class="result-section" wx:if="{{enhancedImage}}">
-      <view class="result-title">
-        <text>处理结果</text>
-        <text class="preview-hint">点击图片可放大查看，支持左右滑动切换</text>
-        <text class="preview-tip">💡 建议先放大到相同倍数再滑动对比</text>
-      </view>
-      
-      <view class="comparison-container">
-        <!-- 原图 -->
-        <view class="image-container">
-          <text class="image-label">原图</text>
-          <view class="image-wrapper" bindtap="previewOriginalImage">
-            <image class="result-image" src="{{selectedImage}}" mode="aspectFit"></image>
-            <view class="preview-overlay">
-              <text class="preview-icon">🔍</text>
-            </view>
+      <view class="relative z-10">
+        <view class="mb-6">
+          <view class="text-3xl text-white mb-3 tracking-wide drop-shadow-md">
+            <text class="block text-2xl opacity-95 mb-1">图片修复</text>
+            <text class="block text-4xl gradient-text">喵喵美颜</text>
           </view>
-          <text class="image-size">{{originalImageSize}}</text>
-          <text class="file-size-info">{{originalFileSize}}</text>
+          <view class="w-16 h-1 bg-white opacity-60 rounded-full mx-auto mb-4"></view>
+          <view class="text-lg text-white opacity-95 leading-relaxed tracking-wide">
+            <text class="block">让模糊照片变清晰</text>
+            <text class="block">恢复珍贵记忆</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="px-6 space-y-6 flex-1">
+      
+      <!-- Upload Section -->
+      <view class="mt-4">
+        <view class="section-title-center">开始修复</view>
+        
+        <view wx:if="{{!selectedFile}}" class="upload-area" bindtap="chooseImage">
+          <view class="text-6xl mb-4">📷</view>
+          <text class="text-lg text-gray-700 mb-2">点击选择图片</text>
+          <text class="text-sm text-gray-600">支持 JPG、PNG、AVIF 格式</text>
         </view>
         
-        <!-- 处理后图片 -->
-        <view class="image-container">
-          <text class="image-label">增强后</text>
-          <view class="image-wrapper" bindtap="previewEnhancedImage">
-            <image class="result-image" src="{{enhancedImage}}" mode="aspectFit"></image>
-            <view class="preview-overlay">
-              <text class="preview-icon">🔍</text>
+        <view wx:else class="space-y-4">
+          <view class="relative">
+            <image src="{{selectedFile.preview}}" mode="aspectFit" class="w-full max-h-96 rounded-2xl"></image>
+            
+            <view wx:if="{{isProcessing}}" class="processing-overlay">
+              <view class="text-center text-white p-6">
+                <view class="text-4xl mb-3 animate-pulse">✨😸✨</view>
+                <text class="text-lg mb-4">正在修复您的图片...</text>
+                
+                <view class="progress-circle-wrapper">
+                  <view class="progress-svg">
+                    <view class="progress-bg-circle"></view>
+                    <view class="progress-fill-circle" style="stroke-dashoffset: {{251.2 * (1 - progress / 100)}};"></view>
+                  </view>
+                  <view class="progress-text-overlay">
+                    <text class="text-xl">{{utils.round(progress)}}%</text>
+                  </view>
+                </view>
+                
+                <text class="text-sm opacity-80">喵喵正在努力修复中...</text>
+              </view>
             </view>
           </view>
-          <text class="image-size">{{enhancedImageSize}}</text>
-          <text class="file-size-info">{{enhancedFileSize}}</text>
+
+          <view class="flex gap-3">
+            <button bindtap="chooseImage" disabled="{{isProcessing}}" class="btn-reselect">重新选择</button>
+            <button bindtap="handleStartProcessing" disabled="{{isProcessing}}" class="btn-start">
+              {{isProcessing ? '修复中...' : '开始修复'}}
+            </button>
+          </view>
         </view>
       </view>
 
-      <!-- 操作按钮区域 -->
-      <view class="action-buttons">
-        <button class="download-btn" bindtap="downloadImage">
-          <text class="btn-icon">💾</text>
-          <text class="btn-text">保存图片</text>
-        </button>
-        <button class="share-btn" bindtap="shareImage">
-          <text class="btn-icon">📤</text>
-          <text class="btn-text">分享图片</text>
-        </button>
-      </view>
-     </view>
-   </view>
-  
-   <!-- 处理进度提示 -->
-  <view wx:if="{{isProcessing}}" class="processing-overlay">
-    <view class="processing-content">
-      <view class="loading-spinner"></view>
-      <text class="processing-text">AI正在增强您的图片...</text>
-      <text class="progress-text">{{progress}}%</text>
-      
-      <!-- 进度条 -->
-      <view class="progress-bar-container">
-        <view class="progress-bar">
-          <view class="progress-fill" style="width: {{progress}}%"></view>
+      <!-- Result Section -->
+      <view wx:if="{{showResult && selectedFile}}" class="result-section">
+        <view class="result-header">
+          <view class="result-title-section">
+            <text class="result-title-icon">✨</text>
+            <text class="result-title-text">修复结果</text>
+          </view>
+          <button bindtap="handleTryAgain" class="btn-retry">🔄 再试一次</button>
+        </view>
+        
+        <view class="result-hint">
+          <text class="result-hint-text">查看修复前后的对比效果</text>
+        </view>
+
+        <!-- 滑动对比功能暂时隐藏 -->
+        <!-- <view class="flex justify-center mb-6">
+          <view class="toggle-container">
+            <button bindtap="setCompareMode" data-mode="side-by-side" 
+                    class="toggle-btn {{compareMode === 'side-by-side' ? 'active' : ''}}">
+              对比查看
+            </button>
+            <button bindtap="setCompareMode" data-mode="slider"
+                    class="toggle-btn {{compareMode === 'slider' ? 'active' : ''}}">
+              滑动对比
+            </button>
+          </view>
+        </view> -->
+
+        <view class="grid grid-cols-2 gap-4 mb-6">
+          <view wx:for="{{comparisonImages}}" wx:key="index">
+            <view class="flex items-center justify-between mb-2">
+              <text class="text-sm text-gray-700">{{item.label}}</text>
+              <text class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{{item.desc}}</text>
+            </view>
+            <view class="image-container" bindtap="openFullscreen" data-src="{{item.src}}" data-title="{{item.label}}">
+              <image src="{{item.src}}" mode="aspectFill" 
+                     class="w-full h-64 rounded-xl border-2 border-gray-200"
+                     style="{{item.enhanced ? 'filter: contrast(1.1) brightness(1.05) saturate(1.1);' : ''}}"></image>
+              <view class="image-overlay">
+                <view class="zoom-icon">
+                  <text class="text-white text-sm">🔍</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 滑动对比功能暂时隐藏 -->
+        <!-- <view wx:else class="mb-6">
+          <view class="slider-container" bindtouchmove="handleSliderMove">
+            <image src="{{comparisonImages[0].src}}" 
+                   mode="aspectFit" 
+                   class="slider-image-base"></image>
+            <view class="slider-top-wrapper" style="width: {{sliderPosition}}%;">
+              <image wx:if="{{comparisonImages[1] && comparisonImages[1].src}}" 
+                     src="{{comparisonImages[1].src}}" 
+                     mode="aspectFit" 
+                     class="slider-image-enhanced"
+                     style="width: {{sliderContainerWidth > 0 ? sliderContainerWidth : 375}}px;"></image>
+            </view>
+            <view class="slider-divider" style="left: {{sliderPosition}}%;">
+              <view class="slider-handle">
+                <text class="slider-handle-icon">↔</text>
+              </view>
+            </view>
+            <view class="slider-label slider-label-left">原图</view>
+            <view class="slider-label slider-label-right">修复后</view>
+          </view>
+        </view> -->
+
+        <view class="space-y-4">
+          <button bindtap="handleSaveImage" class="btn-download">
+            <text class="text-xl">💾</text>
+            <text>下载修复后的图片</text>
+          </button>
+          
+          <view class="flex gap-4">
+            <button bindtap="handleTryAgain" class="btn-secondary">🔄 重新修复</button>
+            <button open-type="share" class="btn-share">📤 分享小程序</button>
+          </view>
+          
+          <view class="share-hint">
+            <text class="text-xs text-gray-600">💡 朋友看到修复效果后，可直接点击进入小程序</text>
+          </view>
+        </view>
+
+        <view class="stats-card">
+          <view class="stats-header">
+            <text>📊</text>
+            <text>修复效果分析</text>
+          </view>
+          <view class="stats-grid">
+            <view class="stat-item">
+              <text class="text-gray-600">清晰度提升</text>
+              <text class="text-green-600">+25%</text>
+            </view>
+            <view class="stat-item">
+              <text class="text-gray-600">噪点减少</text>
+              <text class="text-green-600">-40%</text>
+            </view>
+            <view class="stat-item">
+              <text class="text-gray-600">色彩还原</text>
+              <text class="text-green-600">+18%</text>
+            </view>
+            <view class="stat-item">
+              <text class="text-gray-600">处理时间</text>
+              <text class="text-blue-600">{{processTime}}秒</text>
+            </view>
+          </view>
         </view>
       </view>
-      
-      <text class="processing-hint">请耐心等待，通常需要10-30秒</text>
     </view>
-  </view>
 
-  <!-- 法律条款区域 -->
-  <view class="legal-section">
-    <view class="legal-links">
-      <text class="legal-link" bindtap="openTerms">服务条款</text>
-      <text class="legal-separator">|</text>
-      <text class="legal-link" bindtap="openPrivacy">隐私政策</text>
+    <!-- Features -->
+    <view class="px-6 mb-6">
+      <view class="features-card">
+        <text class="text-center mb-4 text-gray-700 text-sm">核心特点</text>
+        <view class="grid grid-cols-3 gap-3">
+          <view wx:for="{{features}}" wx:key="index" class="feature-item">
+            <view class="feature-icon">{{item.icon}}</view>
+            <text class="text-xs text-gray-800 mb-1">{{item.title}}</text>
+            <text class="text-xs text-gray-600">{{item.desc}}</text>
+          </view>
+        </view>
+      </view>
     </view>
-    <text class="legal-notice">使用本服务即表示您同意相关条款</text>
+
+    <!-- Privacy -->
+    <view class="px-6 mb-6">
+      <view class="privacy-card">
+        <view class="flex items-center gap-3">
+          <view class="privacy-icon">🔒</view>
+          <view class="text-white flex-1">
+            <text class="privacy-title">隐私承诺</text>
+            <text class="privacy-desc">本地处理，不保存照片</text>
+          </view>
+          <view class="privacy-check">
+            <text class="text-white text-xs">✓</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Footer -->
+    <view class="p-6 text-center text-gray-500">
+      <view class="text-sm mb-2">
+        <text bindtap="openTerms" class="text-gray-500">服务条款</text>
+        <text> | </text>
+        <text bindtap="openPrivacy" class="text-gray-500">隐私政策</text>
+      </view>
+      <text class="text-xs">使用本服务即表示您同意相关条款</text>
+    </view>
+    
   </view>
 </view>

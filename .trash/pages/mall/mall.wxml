@@ -1,0 +1,142 @@
+<!-- 积分商城页面 -->
+<view class="mall-container">
+  <!-- 渐变背景 -->
+  <view class="mall-background"></view>
+  
+  <!-- 背景装饰元素 -->
+  <view class="decorative-elements">
+    <view class="decorative-circle decorative-circle-1"></view>
+    <view class="decorative-circle decorative-circle-2"></view>
+    <view class="floating-hearts">
+      <block wx:for="{{[0,1,2,3,4]}}" wx:key="*this">
+        <view class="heart-animation heart-{{index}}">💖</view>
+      </block>
+    </view>
+  </view>
+  
+  <!-- 手机容器 -->
+  <view class="mobile-container">
+    <!-- 顶部导航 -->
+    <view class="top-navigation">
+      <button class="nav-btn" bindtap="navigateBack">
+        <text class="nav-icon">←</text>
+      </button>
+      
+      <view class="nav-center">
+        <text class="nav-title">喵喵积分商城</text>
+        <text class="nav-subtitle">让美丽更有价值</text>
+      </view>
+      
+      <view class="nav-actions">
+        <button class="action-btn">
+          <text class="action-icon">🔍</text>
+        </button>
+        <button class="action-btn cart-btn">
+          <text class="action-icon">🛍️</text>
+          <block wx:if="{{cartCount > 0}}">
+            <view class="cart-badge">{{cartCount}}</view>
+          </block>
+        </button>
+      </view>
+    </view>
+    
+    <!-- 积分头部 -->
+    <view class="points-header">
+      <view class="points-info">
+        <view class="points-icon-wrapper">
+          <text class="points-icon">👑</text>
+        </view>
+        <view class="points-details">
+          <text class="points-label">分</text>
+          <text class="points-amount">{{userPoints}}</text>
+        </view>
+      </view>
+      
+      <view class="vip-info">
+        <view class="vip-badge">VIP {{userVipLevel}}</view>
+        <button class="gift-btn">
+          <text class="gift-icon">🎁</text>
+        </button>
+      </view>
+    </view>
+    
+    <!-- 分类标签 -->
+    <view class="category-tabs">
+      <scroll-view scroll-x class="tabs-scroll">
+        <view class="tabs-container">
+          <block wx:for="{{categories}}" wx:key="id">
+            <button class="tab-btn {{activeCategory === item.id ? 'active' : ''}}" 
+                    bindtap="switchCategory" 
+                    data-category="{{item.id}}">
+              <text class="tab-emoji">{{item.emoji}}</text>
+              <text class="tab-name">{{item.name}}</text>
+            </button>
+          </block>
+        </view>
+      </scroll-view>
+    </view>
+    
+    <!-- 限时特惠横幅 -->
+    <view class="special-banner">
+      <view class="banner-content">
+        <view class="banner-left">
+          <text class="banner-title">限时特惠 🎉</text>
+          <text class="banner-subtitle">猫咪系列全场8折</text>
+        </view>
+        <view class="banner-right">
+          <text class="banner-time-label">剩余时间</text>
+          <text class="banner-time">{{remainingTime}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 商品网格 -->
+    <scroll-view scroll-y class="product-grid">
+      <view class="products-container">
+        <block wx:for="{{filteredProducts}}" wx:key="id">
+          <view class="product-card">
+            <!-- 商品图片 -->
+            <view class="product-image-wrapper">
+              <image src="{{item.image}}" mode="aspectFill" class="product-image" />
+              
+              <!-- 限定标签 -->
+              <block wx:if="{{item.isLimited}}">
+                <view class="limited-badge">
+                  <text class="limited-icon">✨</text>
+                  <text class="limited-text">限定</text>
+                </view>
+              </block>
+              
+              <!-- 评分 -->
+              <view class="rating-badge">
+                <text class="star-icon">⭐</text>
+                <text class="rating-text">{{item.rating}}</text>
+              </view>
+            </view>
+            
+            <!-- 商品信息 -->
+            <view class="product-info">
+              <text class="product-name">{{item.name}}</text>
+              <text class="product-description">{{item.description}}</text>
+              <text class="sold-count">已兑换 {{item.soldCount}}+</text>
+              
+              <!-- 价格信息 -->
+              <view class="price-info">
+                <view class="points-price">
+                  <text class="points-amount">{{item.points}}</text>
+                  <text class="points-label">积分</text>
+                </view>
+                <text class="original-price">¥{{item.originalPrice}}</text>
+              </view>
+              
+              <!-- 兑换按钮 -->
+              <button class="exchange-btn" bindtap="exchangeProduct" data-product-id="{{item.id}}">
+                <text class="exchange-text">立即兑换</text>
+              </button>
+            </view>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </view>
+</view>

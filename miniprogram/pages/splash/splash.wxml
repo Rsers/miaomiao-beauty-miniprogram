@@ -1,0 +1,97 @@
+<!-- 启动页面 -->
+<view class="splash-container">
+  <!-- 渐变背景 -->
+  <view class="splash-background"></view>
+  
+  <!-- 装饰元素 -->
+  <view class="decorative-elements">
+    <!-- 浮动爪印 -->
+    <view class="paw-print paw-print-1">
+      <view class="paw-icon">🐾</view>
+    </view>
+    <view class="paw-print paw-print-2">
+      <view class="paw-icon">🐾</view>
+    </view>
+    <view class="paw-print paw-print-3">
+      <view class="paw-icon">🐾</view>
+    </view>
+    <view class="paw-print paw-print-4">
+      <view class="paw-icon">🐾</view>
+    </view>
+  </view>
+  
+  <!-- 主内容区域 -->
+  <view class="main-content" wx:if="{{showContent}}">
+    <!-- Logo容器 -->
+    <view class="logo-container">
+      <view class="logo-wrapper">
+        <!-- 小猫Logo SVG -->
+        <view class="cat-logo">
+          <!-- 猫头 -->
+          <view class="cat-head"></view>
+          <!-- 猫耳朵 -->
+          <view class="cat-ear cat-ear-left"></view>
+          <view class="cat-ear cat-ear-right"></view>
+          <!-- 内耳 -->
+          <view class="cat-inner-ear cat-inner-ear-left"></view>
+          <view class="cat-inner-ear cat-inner-ear-right"></view>
+          <!-- 眼睛 -->
+          <view class="cat-eye cat-eye-left"></view>
+          <view class="cat-eye cat-eye-right"></view>
+          <!-- 眼高光 -->
+          <view class="cat-eye-highlight cat-eye-highlight-left"></view>
+          <view class="cat-eye-highlight cat-eye-highlight-right"></view>
+          <!-- 鼻子 -->
+          <view class="cat-nose"></view>
+          <!-- 嘴巴 -->
+          <view class="cat-mouth cat-mouth-left"></view>
+          <view class="cat-mouth cat-mouth-right"></view>
+          <!-- 胡须 -->
+          <view class="cat-whisker cat-whisker-left-1"></view>
+          <view class="cat-whisker cat-whisker-left-2"></view>
+          <view class="cat-whisker cat-whisker-right-1"></view>
+          <view class="cat-whisker cat-whisker-right-2"></view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 应用名称 -->
+    <view class="app-title">
+      <text class="app-name">喵喵美颜</text>
+      <view class="title-underline"></view>
+    </view>
+    
+    <!-- 标语 -->
+    <view class="app-slogan">
+      <text class="slogan-text">喵喵一下，美美哒～</text>
+    </view>
+    
+    <!-- 加载区域 -->
+    <view class="loading-section">
+      <!-- 爪印加载动画 -->
+      <view class="paw-loading">
+        <view class="paw-loading-item" wx:for="{{[0,1,2,3]}}" wx:key="*this">
+          <text class="paw-loading-icon">🐾</text>
+        </view>
+      </view>
+      
+      <!-- 加载文字 -->
+      <view class="loading-text">
+        <text class="loading-text-content">{{loadingText}}</text>
+      </view>
+      
+      <!-- 加载点 -->
+      <view class="loading-dots">
+        <view class="dot" wx:for="{{[0,1,2]}}" wx:key="*this"></view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 跳过按钮 -->
+  <view class="skip-button" bindtap="onSkipSplash">
+    <text class="skip-text">跳过</text>
+  </view>
+  
+  <!-- 深度覆盖层 -->
+  <view class="depth-overlay"></view>
+</view>

@@ -1,0 +1,222 @@
+<!-- 个人资料页面 -->
+<view class="profile-container">
+  <!-- 渐变背景 -->
+  <view class="profile-background"></view>
+  
+  <!-- 背景装饰元素 -->
+  <view class="decorative-elements">
+    <view class="decorative-circle decorative-circle-1"></view>
+    <view class="decorative-circle decorative-circle-2"></view>
+    <view class="floating-hearts">
+      <block wx:for="{{[0,1,2,3,4]}}" wx:key="*this">
+        <view class="heart-animation heart-{{index}}">💖</view>
+      </block>
+    </view>
+  </view>
+  
+  <!-- 手机容器 -->
+  <view class="mobile-container">
+    <!-- 顶部导航 -->
+    <view class="top-navigation">
+      <button class="nav-btn" bindtap="navigateBack">
+        <text class="nav-icon">←</text>
+      </button>
+      
+      <view class="nav-center">
+        <text class="nav-title">个人中心</text>
+        <text class="nav-subtitle">喵喵美颜</text>
+      </view>
+      
+      <view class="nav-actions">
+        <button class="action-btn">
+          <text class="action-icon">⚙️</text>
+        </button>
+      </view>
+    </view>
+    
+    <!-- 滚动内容 -->
+    <scroll-view scroll-y class="scroll-content">
+      <view class="content-container">
+        <!-- 用户资料卡片 -->
+        <view class="user-profile-card">
+          <view class="profile-bg-decoration">
+            <view class="bg-circle bg-circle-1"></view>
+            <view class="bg-circle bg-circle-2"></view>
+          </view>
+          
+          <view class="profile-content">
+            <!-- 头像区域 -->
+            <view class="avatar-section">
+              <view class="avatar-frame">
+                <image src="{{userInfo.avatar}}" mode="aspectFill" class="user-avatar" />
+                <view class="vip-crown">
+                  <text class="crown-icon">👑</text>
+                </view>
+              </view>
+            </view>
+            
+            <!-- 用户信息 -->
+            <view class="user-info">
+              <view class="user-name-section">
+                <text class="user-name">{{userInfo.nickname}}</text>
+                <view class="vip-badge">
+                  <text class="vip-text">VIP</text>
+                </view>
+              </view>
+              <text class="user-title">{{userInfo.title}} · ID: {{userInfo.userId}}</text>
+              
+              <!-- 星级评分 -->
+              <view class="rating-section">
+                <block wx:for="{{[1,2,3,4,5]}}" wx:key="*this">
+                  <text class="star-icon">⭐</text>
+                </block>
+                <text class="rating-text">{{userInfo.rating}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 会员等级卡片 -->
+        <view class="membership-card">
+          <view class="card-header">
+            <text class="card-title">会员等级</text>
+            <view class="membership-badge">
+              <text class="membership-text">{{membershipInfo.level}}</text>
+            </view>
+          </view>
+          
+          <view class="membership-info">
+            <view class="membership-icon">
+              <text class="crown-icon">👑</text>
+            </view>
+            <view class="membership-details">
+              <text class="membership-name">{{membershipInfo.name}}</text>
+              <text class="membership-desc">{{membershipInfo.description}}</text>
+            </view>
+          </view>
+          
+          <!-- 经验值进度条 -->
+          <view class="progress-section">
+            <view class="progress-header">
+              <text class="progress-label">会员经验值</text>
+              <text class="progress-value">{{membershipInfo.currentExp}} / {{membershipInfo.maxExp}}</text>
+            </view>
+            <view class="progress-bar">
+              <view class="progress-fill" style="width: {{membershipInfo.progressPercent}}%"></view>
+            </view>
+            <text class="progress-tip">{{membershipInfo.nextLevelTip}}</text>
+          </view>
+          
+          <!-- 猫咪徽章 -->
+          <view class="badges-grid">
+            <block wx:for="{{badges}}" wx:key="id">
+              <view class="badge-item">
+                <view class="badge-icon {{item.colorClass}}">
+                  <text class="badge-emoji">{{item.emoji}}</text>
+                </view>
+                <text class="badge-name">{{item.name}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+        
+        <!-- 我的数据卡片 -->
+        <view class="stats-card">
+          <text class="card-title">我的数据</text>
+          
+          <view class="stats-grid">
+            <view class="stat-item stat-points">
+              <view class="stat-header">
+                <view class="stat-icon">
+                  <text class="stat-emoji">💰</text>
+                </view>
+                <text class="trend-icon">📈</text>
+              </view>
+              <text class="stat-value">{{stats.points}}</text>
+              <text class="stat-label">猫币余额</text>
+            </view>
+            
+            <view class="stat-item stat-invites">
+              <view class="stat-header">
+                <view class="stat-icon">
+                  <text class="stat-emoji">👥</text>
+                </view>
+                <text class="trend-icon">📈</text>
+              </view>
+              <text class="stat-value">{{stats.invites}}</text>
+              <text class="stat-label">邀请好友</text>
+            </view>
+            
+            <view class="stat-item stat-achievements">
+              <view class="stat-header">
+                <view class="stat-icon">
+                  <text class="stat-emoji">🏆</text>
+                </view>
+                <text class="trend-icon">📈</text>
+              </view>
+              <text class="stat-value">{{stats.achievements}}</text>
+              <text class="stat-label">成就徽章</text>
+            </view>
+            
+            <view class="stat-item stat-level">
+              <view class="stat-header">
+                <view class="stat-icon">
+                  <text class="stat-emoji">🎯</text>
+                </view>
+                <text class="trend-icon">📈</text>
+              </view>
+              <text class="stat-value">Lv.{{stats.level}}</text>
+              <text class="stat-label">当前等级</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 功能菜单 -->
+        <view class="function-menu">
+          <text class="card-title">功能菜单</text>
+          
+          <view class="menu-grid">
+            <block wx:for="{{menuItems}}" wx:key="id">
+              <view class="menu-item" bindtap="onMenuTap" data-menu="{{item.id}}">
+                <view class="menu-icon {{item.colorClass}}">
+                  <text class="menu-emoji">{{item.emoji}}</text>
+                </view>
+                <text class="menu-label">{{item.label}}</text>
+              </view>
+            </block>
+          </view>
+        </view>
+        
+        <!-- 设置菜单 -->
+        <view class="settings-menu">
+          <text class="card-title">设置与帮助</text>
+          
+          <view class="settings-list">
+            <block wx:for="{{settingsItems}}" wx:key="id">
+              <view class="setting-item" bindtap="onSettingTap" data-setting="{{item.id}}">
+                <view class="setting-left">
+                  <view class="setting-icon {{item.colorClass}}">
+                    <text class="setting-emoji">{{item.emoji}}</text>
+                  </view>
+                  <text class="setting-label">{{item.label}}</text>
+                </view>
+                <text class="setting-arrow">></text>
+              </view>
+            </block>
+            
+            <!-- 退出登录 -->
+            <view class="setting-item logout-item" bindtap="onLogout">
+              <view class="setting-left">
+                <view class="setting-icon logout-icon">
+                  <text class="setting-emoji">🚪</text>
+                </view>
+                <text class="setting-label logout-text">退出登录</text>
+              </view>
+              <text class="setting-arrow logout-arrow">></text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>
