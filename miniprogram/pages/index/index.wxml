@@ -93,10 +93,11 @@
         </view>
         
         <view class="result-hint">
-          <text class="result-hint-text">滑动分割线查看修复前后的对比效果</text>
+          <text class="result-hint-text">查看修复前后的对比效果</text>
         </view>
 
-        <view class="flex justify-center mb-6">
+        <!-- 滑动对比功能暂时隐藏 -->
+        <!-- <view class="flex justify-center mb-6">
           <view class="toggle-container">
             <button bindtap="setCompareMode" data-mode="side-by-side" 
                     class="toggle-btn {{compareMode === 'side-by-side' ? 'active' : ''}}">
@@ -107,9 +108,9 @@
               滑动对比
             </button>
           </view>
-        </view>
+        </view> -->
 
-        <view wx:if="{{compareMode === 'side-by-side'}}" class="grid grid-cols-2 gap-4 mb-6">
+        <view class="grid grid-cols-2 gap-4 mb-6">
           <view wx:for="{{comparisonImages}}" wx:key="index">
             <view class="flex items-center justify-between mb-2">
               <text class="text-sm text-gray-700">{{item.label}}</text>
@@ -128,13 +129,12 @@
           </view>
         </view>
 
-        <view wx:else class="mb-6">
+        <!-- 滑动对比功能暂时隐藏 -->
+        <!-- <view wx:else class="mb-6">
           <view class="slider-container" bindtouchmove="handleSliderMove">
-            <!-- 原图：底层，完整显示，居中展示，不改变图片本身尺寸 -->
             <image src="{{comparisonImages[0].src}}" 
                    mode="aspectFit" 
                    class="slider-image-base"></image>
-            <!-- 修复后图片：上层，通过wrapper的宽度裁剪显示范围，不改变图片本身尺寸 -->
             <view class="slider-top-wrapper" style="width: {{sliderPosition}}%;">
               <image wx:if="{{comparisonImages[1] && comparisonImages[1].src}}" 
                      src="{{comparisonImages[1].src}}" 
@@ -150,7 +150,7 @@
             <view class="slider-label slider-label-left">原图</view>
             <view class="slider-label slider-label-right">修复后</view>
           </view>
-        </view>
+        </view> -->
 
         <view class="space-y-4">
           <button bindtap="handleSaveImage" class="btn-download">

@@ -669,33 +669,39 @@ Component({
 
       wx.showToast({ title: '修复完成', icon: 'success' })
 
-      // 获取滑动对比容器的实际宽度
+      // 滚动到结果区域
       setTimeout(() => {
         wx.pageScrollTo({ selector: '.result-section', duration: 300 })
-        
-        // 获取容器宽度用于固定B图尺寸
-        const query = wx.createSelectorQuery().in(this)
-        query.select('.slider-container').boundingClientRect((rect: any) => {
-          if (rect && rect.width) {
-            this.setData({
-              sliderContainerWidth: rect.width
-            })
-            console.log('滑动对比容器宽度:', rect.width, 'px')
-            console.log('对比图片路径验证:')
-            console.log('comparisonImages[0]:', this.data.comparisonImages[0]?.src)
-            console.log('comparisonImages[1]:', this.data.comparisonImages[1]?.src)
-            console.log('两张图片是否相同:', this.data.comparisonImages[0]?.src === this.data.comparisonImages[1]?.src)
-          } else {
-            // 如果获取失败，使用默认值（iPhone 约375px）
-            const systemInfo = wx.getSystemInfoSync()
-            const defaultWidth = systemInfo.windowWidth || 375
-            this.setData({
-              sliderContainerWidth: defaultWidth
-            })
-            console.warn('无法获取容器宽度，使用默认值:', defaultWidth, 'px')
-          }
-        }).exec()
       }, 300)
+
+      // 滑动对比功能暂时隐藏，相关代码注释
+      // // 获取滑动对比容器的实际宽度
+      // setTimeout(() => {
+      //   wx.pageScrollTo({ selector: '.result-section', duration: 300 })
+      //   
+      //   // 获取容器宽度用于固定B图尺寸
+      //   const query = wx.createSelectorQuery().in(this)
+      //   query.select('.slider-container').boundingClientRect((rect: any) => {
+      //     if (rect && rect.width) {
+      //       this.setData({
+      //         sliderContainerWidth: rect.width
+      //       })
+      //       console.log('滑动对比容器宽度:', rect.width, 'px')
+      //       console.log('对比图片路径验证:')
+      //       console.log('comparisonImages[0]:', this.data.comparisonImages[0]?.src)
+      //       console.log('comparisonImages[1]:', this.data.comparisonImages[1]?.src)
+      //       console.log('两张图片是否相同:', this.data.comparisonImages[0]?.src === this.data.comparisonImages[1]?.src)
+      //     } else {
+      //       // 如果获取失败，使用默认值（iPhone 约375px）
+      //       const systemInfo = wx.getSystemInfoSync()
+      //       const defaultWidth = systemInfo.windowWidth || 375
+      //       this.setData({
+      //         sliderContainerWidth: defaultWidth
+      //       })
+      //       console.warn('无法获取容器宽度，使用默认值:', defaultWidth, 'px')
+      //     }
+      //   }).exec()
+      // }, 300)
     },
 
     handleError(msg = '处理失败') {
@@ -843,36 +849,36 @@ Component({
       wx.pageScrollTo({ scrollTop: 0, duration: 300 })
     },
 
-    setCompareMode(e: any) {
-      this.setData({
-        compareMode: e.currentTarget.dataset.mode,
-        sliderPosition: 50  // 重置滑块位置
-      })
-    },
+    // 滑动对比功能暂时隐藏
+    // setCompareMode(e: any) {
+    //   this.setData({
+    //     compareMode: e.currentTarget.dataset.mode,
+    //     sliderPosition: 50  // 重置滑块位置
+    //   })
+    // },
 
-    // 滑动对比功能
-    handleSliderMove(e: any) {
-      if (!this.data.selectedFile) return
+    // handleSliderMove(e: any) {
+    //   if (!this.data.selectedFile) return
 
-      const touch = e.touches[0]
-      const query = wx.createSelectorQuery().in(this)
+    //   const touch = e.touches[0]
+    //   const query = wx.createSelectorQuery().in(this)
 
-      query.select('.slider-container').boundingClientRect((rect: any) => {
-        if (!rect) return
+    //   query.select('.slider-container').boundingClientRect((rect: any) => {
+    //     if (!rect) return
 
-        const x = touch.clientX - rect.left
-        const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
+    //     const x = touch.clientX - rect.left
+    //     const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100))
 
-        // 只更新滑块位置，图片本身尺寸不改变，只是通过wrapper的宽度裁剪显示范围
-        this.setData({
-          sliderPosition: percentage
-        })
-      }).exec()
-    },
+    //     // 只更新滑块位置，图片本身尺寸不改变，只是通过wrapper的宽度裁剪显示范围
+    //     this.setData({
+    //       sliderPosition: percentage
+    //     })
+    //   }).exec()
+    // },
 
-    handleSliderEnd() {
-      // 可选：滑动结束后的处理
-    },
+    // handleSliderEnd() {
+    //   // 可选：滑动结束后的处理
+    // },
 
     openTerms() {
       wx.navigateTo({ url: '/pages/terms/terms' })
