@@ -2010,3 +2010,11 @@ button {
   color: #f59e0b;
   line-height: 1.6;
 }
+
+.quota-share-benefit {
+  font-size: 24rpx;
+  color: #ec4899;
+  line-height: 1.6;
+  text-align: center;
+  display: block;
+}
