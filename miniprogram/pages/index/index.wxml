@@ -60,7 +60,7 @@
           </view>
           
           <view class="quick-test-hint">
-            <text>选择测试图片，快速体验修复效果</text>
+            <text>选择测试图片，快速体验美颜效果</text>
           </view>
           
           <view class="quick-test-content {{quickTestExpanded ? 'expanded' : ''}}">
@@ -102,7 +102,7 @@
             <view wx:if="{{isProcessing}}" class="processing-overlay">
               <view class="text-center text-white p-6">
                 <view class="text-4xl mb-3 animate-pulse">✨😸✨</view>
-                <text class="text-lg mb-4">正在修复您的图片...</text>
+                <text class="text-lg mb-4">正在为您变美中...</text>
                 
                 <view class="progress-circle-wrapper">
                   <view class="progress-svg">
@@ -114,7 +114,7 @@
                   </view>
                 </view>
                 
-                <text class="text-sm opacity-80">喵喵正在努力修复中...</text>
+                <text class="text-sm opacity-80">喵喵正在施展魔法...</text>
               </view>
             </view>
           </view>
@@ -122,7 +122,7 @@
           <view class="flex gap-3 button-group-spacing">
             <button bindtap="chooseImage" disabled="{{isProcessing}}" class="btn-reselect">重新选择</button>
             <button bindtap="handleStartProcessing" disabled="{{isProcessing}}" class="btn-start">
-              {{isProcessing ? '修复中...' : '开始修复'}}
+              {{isProcessing ? '处理中...' : '立即变美'}}
             </button>
           </view>
         </view>
@@ -139,7 +139,7 @@
         </view>
         
         <view class="result-hint">
-          <text class="result-hint-text">查看修复前后的对比效果</text>
+          <text class="result-hint-text">查看美化前后的对比效果</text>
         </view>
         
         <!-- 放大查看引导 -->
@@ -214,7 +214,7 @@
           </button>
           
           <view class="flex gap-4">
-            <button bindtap="handleTryAgain" class="btn-secondary">🔄 重新修复</button>
+            <button bindtap="handleTryAgain" class="btn-secondary">🔄 再次美化</button>
             <button open-type="share" class="btn-share">📤 分享小程序</button>
           </view>
           
@@ -226,7 +226,7 @@
         <view class="stats-card">
           <view class="stats-header">
             <text>📊</text>
-            <text>修复效果分析</text>
+            <text>美颜效果分析</text>
           </view>
           
           <!-- 分辨率信息 -->
@@ -237,11 +237,11 @@
             </view>
             <view class="resolution-arrow">
               <text class="arrow-icon">⬇️</text>
-              <text class="arrow-text">智能修复</text>
+              <text class="arrow-text">魔法处理</text>
               <text class="arrow-icon">⬇️</text>
             </view>
             <view class="resolution-row">
-              <text class="resolution-label">✨ 修复后分辨率：</text>
+              <text class="resolution-label">✨ 美化后分辨率：</text>
               <text class="resolution-value highlight">{{enhancedResolution}}</text>
             </view>
             <view class="resolution-multiple" wx:if="{{resolutionMultiple > 1}}">
