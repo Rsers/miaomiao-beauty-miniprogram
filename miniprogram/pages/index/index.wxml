@@ -217,7 +217,7 @@
           <view wx:for="{{comparisonImages}}" wx:key="index">
             <view class="flex items-center justify-between mb-2">
               <text class="text-sm text-gray-700">{{item.label}}</text>
-              <text class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">{{item.desc}}</text>
+              <text class="{{item.enhanced ? 'desc-tag-enhanced' : 'desc-tag-normal'}}">{{item.desc}}</text>
             </view>
             <view class="image-container" bindtap="openFullscreen" data-src="{{item.src}}" data-title="{{item.label}}">
               <image src="{{item.src}}" mode="aspectFill" 
@@ -262,7 +262,6 @@
             </view>
             <view class="btn-content">
               <text class="btn-text-main">保存到相册</text>
-              <text class="btn-text-sub">长按分享给好友</text>
             </view>
           </button>
           

@@ -1571,7 +1571,7 @@ Component({
       
       // 分享给朋友
       const shareData: any = {
-        title: '超清魔法 - 喵喵美颜\n我刚把照片变超清了，你也来试试！',
+        title: '超清魔法 - 喵喵美颜\n我的照片秒变超美，自然又惊艳！',
         path: `/pages/index/index?from=${deviceId}`
       }
       

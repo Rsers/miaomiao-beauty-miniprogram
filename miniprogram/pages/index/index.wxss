@@ -2018,3 +2018,25 @@ button {
   text-align: center;
   display: block;
 }
+
+/* ===== 图片标签样式 ===== */
+/* 普通标签（美化前） */
+.desc-tag-normal {
+  font-size: 24rpx;
+  color: #9ca3af;
+  background-color: #f3f4f6;
+  padding: 8rpx 16rpx;
+  border-radius: 9999rpx;
+}
+
+/* 增强标签（权威出片） */
+.desc-tag-enhanced {
+  font-size: 28rpx;
+  font-weight: bold;
+  background: linear-gradient(135deg, #fef3f8 0%, #fce7f3 100%);
+  color: #ec4899;
+  padding: 10rpx 20rpx;
+  border-radius: 9999rpx;
+  border: 2rpx solid #fbcfe8;
+  box-shadow: 0 4rpx 12rpx rgba(236, 72, 153, 0.15);
+}
