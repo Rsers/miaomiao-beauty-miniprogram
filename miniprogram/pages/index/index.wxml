@@ -164,7 +164,7 @@
           </view>
           
           <view class="share-hint">
-            <text class="text-xs text-gray-600">💡 朋友看到修复效果后，可直接点击进入小程序</text>
+            <text class="text-xs text-gray-600">💡 分享到微信，让更多人发现这个好用的小程序</text>
           </view>
         </view>
 
