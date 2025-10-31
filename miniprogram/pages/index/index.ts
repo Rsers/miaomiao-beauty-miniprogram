@@ -1090,9 +1090,40 @@ Component({
       console.log('修复后网络URL（comparisonImages[1].src）:', this.data.comparisonImages[1]?.src)
       console.log('修复后本地缓存（localEnhancedImagePath）:', this.data.localEnhancedImagePath)
       
+      // 检测开发者工具环境：路径格式为 http://tmp/ 或 http://usr/ 说明在开发工具中
+      const isDevTools = (
+        (this.data.selectedFile?.preview && this.data.selectedFile.preview.startsWith('http://tmp/')) ||
+        (this.data.selectedFile?.preview && this.data.selectedFile.preview.startsWith('http://usr/'))
+      )
+      
+      if (isDevTools) {
+        console.warn('⚠️ 检测到开发者工具环境，路径格式不标准')
+        console.warn('开发工具中的路径:', this.data.selectedFile?.preview)
+        wx.showModal({
+          title: '开发工具预览限制',
+          content: '由于开发者工具的路径格式限制，图片预览可能无法正常工作。\n\n建议：\n1. 使用真机调试测试预览功能\n2. 或直接点击"下载修复后的图片"保存到相册',
+          showCancel: true,
+          cancelText: '知道了',
+          confirmText: '强制尝试',
+          success: (res) => {
+            if (res.confirm) {
+              // 用户选择强制尝试
+              this.doPreviewImage(src)
+            }
+          }
+        })
+        return
+      }
+      
+      // 真机环境：正常预览
+      this.doPreviewImage(src)
+    },
+    
+    // 实际执行预览的方法
+    doPreviewImage(src: string) {
       // 优化：原图和修复后的图片都使用标准化的本地路径
       const urls = this.data.comparisonImages.map((img: any, index: number) => {
-        // 原图（索引0）：优先使用标准化路径，解决 http://tmp/ 格式问题
+        // 原图（索引0）：优先使用标准化路径
         if (index === 0) {
           if (this.data.localOriginalImagePath) {
             console.log('✅ 原图使用标准化路径（可靠）:', this.data.localOriginalImagePath)
@@ -1167,7 +1198,11 @@ Component({
         current: currentSrc,
         fail: (err) => {
           console.error('预览图片失败:', err)
-          wx.showToast({ title: '预览失败，请重试', icon: 'none' })
+          wx.showModal({
+            title: '预览失败',
+            content: '图片预览失败，可能是开发工具环境限制。\n\n建议使用真机调试或直接下载图片查看。',
+            showCancel: false
+          })
         }
       })
     },
