@@ -178,6 +178,7 @@
   border: 6rpx dashed #f472b6;
   border-radius: 32rpx;
   padding: 64rpx;
+  margin-bottom: 80rpx;
   text-align: center;
   transition: transform 0.3s ease;
 }
