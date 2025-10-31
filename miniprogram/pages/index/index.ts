@@ -1554,6 +1554,15 @@ Component({
       wx.navigateTo({ url: '/pages/privacy/privacy' })
     },
 
+    openFeedback() {
+      // TODO: 实现用户反馈逻辑
+      wx.showToast({
+        title: '反馈功能开发中',
+        icon: 'none',
+        duration: 2000
+      })
+    },
+
     onShareAppMessage() {
       // 分享奖励：给分享者 +10 次
       QuotaManager.shareReward()

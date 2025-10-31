@@ -215,7 +215,7 @@
 
         <view class="grid grid-cols-2 gap-4 mb-6">
           <view wx:for="{{comparisonImages}}" wx:key="index">
-            <view class="flex items-center justify-between mb-2">
+            <view class="flex items-end justify-between mb-2" style="min-height: 60rpx;">
               <text class="text-sm text-gray-700">{{item.label}}</text>
               <text class="{{item.enhanced ? 'desc-tag-enhanced' : 'desc-tag-normal'}}">{{item.desc}}</text>
             </view>
@@ -368,6 +368,14 @@
           </view>
         </view>
       </view>
+    </view>
+
+    <!-- 用户反馈入口 -->
+    <view class="feedback-section">
+      <button bindtap="openFeedback" class="feedback-btn">
+        <text class="feedback-icon">💬</text>
+        <text class="feedback-text">意见反馈</text>
+      </button>
     </view>
 
     <!-- Footer -->

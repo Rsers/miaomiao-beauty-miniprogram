@@ -2040,3 +2040,37 @@ button {
   border: 2rpx solid #fbcfe8;
   box-shadow: 0 4rpx 12rpx rgba(236, 72, 153, 0.15);
 }
+
+/* ===== 用户反馈入口 ===== */
+.feedback-section {
+  padding: 32rpx 48rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.feedback-btn {
+  background: linear-gradient(135deg, #ffffff 0%, #fef3f8 100%);
+  border: 2rpx solid rgba(236, 72, 153, 0.2);
+  border-radius: 48rpx;
+  padding: 24rpx 48rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(236, 72, 153, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feedback-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(236, 72, 153, 0.15);
+}
+
+.feedback-icon {
+  font-size: 40rpx;
+}
+
+.feedback-text {
+  font-size: 28rpx;
+  color: #ec4899;
+  font-weight: 500;
+}
