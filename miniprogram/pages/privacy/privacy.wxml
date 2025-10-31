@@ -10,10 +10,10 @@
   <view class="promise-box">
     <text class="promise-icon">🔒</text>
     <text class="promise-title">我们的隐私承诺</text>
-    <text class="promise-text">✅ 我们不保存您的任何照片</text>
-    <text class="promise-text">✅ 图片处理完成后立即从服务器删除</text>
-    <text class="promise-text">✅ 不收集用户个人信息</text>
-    <text class="promise-text">✅ 不追踪用户行为</text>
+    <text class="promise-text">✅ 我们不会长期保存您的照片</text>
+    <text class="promise-text">✅ 图片处理完成后会尽快删除（通常在24小时内）</text>
+    <text class="promise-text">✅ 仅收集必要的基础信息</text>
+    <text class="promise-text">✅ 不会主动追踪用户隐私行为</text>
   </view>
 
   <!-- 内容区域 -->
@@ -24,13 +24,13 @@
       <text class="section-content">
         1.1 设备信息：设备型号、操作系统版本、小程序版本等基础信息<br/>
         1.2 使用信息：功能使用情况、处理次数等统计信息<br/>
-        1.3 图片信息：您上传的图片仅用于智能处理，处理完成后<strong>立即删除</strong><br/>
+        1.3 图片信息：您上传的图片仅用于智能处理，处理完成后<strong>会尽快删除</strong>（通常在24小时内）<br/>
         <br/>
         <strong>⚠️ 重要说明：</strong><br/>
-        • 我们<strong>不会</strong>在服务器上保存您的图片<br/>
-        • 图片处理完成后，服务器会<strong>立即删除</strong>所有图片数据<br/>
-        • 我们<strong>不会</strong>将您的图片用于任何其他用途<br/>
-        • 我们<strong>不会</strong>将您的图片分享给第三方
+        • 我们<strong>不会长期保存</strong>您的图片，仅在处理期间临时存储<br/>
+        • 图片处理完成后，服务器会<strong>尽快删除</strong>所有图片数据<br/>
+        • 除提供服务所需外，我们<strong>不会主动</strong>将您的图片用于其他用途<br/>
+        • 除法律法规要求外，我们<strong>不会主动</strong>将您的图片分享给第三方
       </text>
     </view>
 
@@ -50,12 +50,12 @@
       <text class="section-title">3. 信息存储与保护</text>
       <text class="section-content">
         3.1 存储期限：<br/>
-        • 图片文件：处理完成后<strong>立即删除</strong>，不保存任何图片<br/>
+        • 图片文件：处理完成后<strong>会尽快删除</strong>（通常在24小时内），不长期保存图片<br/>
         • 统计数据：仅保存匿名的使用统计信息<br/>
         <br/>
         3.2 存储安全：采用加密技术保护数据传输安全<br/>
         3.3 访问控制：严格限制数据访问权限<br/>
-        3.4 服务器安全：使用安全的云服务器，确保数据安全
+        3.4 服务器安全：使用安全的云服务器，努力确保数据安全
       </text>
     </view>
 
@@ -63,11 +63,11 @@
     <view class="section">
       <text class="section-title">4. 信息共享与披露</text>
       <text class="section-content">
-        4.1 我们<strong>不会</strong>向第三方出售、出租或分享您的个人信息<br/>
-        4.2 我们<strong>不会</strong>向第三方分享您的图片<br/>
-        4.3 仅在以下情况下可能共享匿名统计信息：<br/>
+        4.1 除以下情况外，我们<strong>不会主动</strong>向第三方出售、出租或分享您的个人信息<br/>
+        4.2 除以下情况外，我们<strong>不会主动</strong>向第三方分享您的图片<br/>
+        4.3 在以下情况下可能需要共享信息：<br/>
         • 获得您的明确同意<br/>
-        • 法律法规要求<br/>
+        • 法律法规要求或司法程序需要<br/>
         • 保护我们的合法权益<br/>
         • 保护用户或公众的安全
       </text>
@@ -89,8 +89,8 @@
       <text class="section-title">6. 第三方服务</text>
       <text class="section-content">
         6.1 云服务：使用安全的云服务提供商处理图片<br/>
-        6.2 所有第三方服务商都遵守严格的隐私保护规定<br/>
-        6.3 第三方服务商不会保存您的图片数据
+        6.2 我们要求所有第三方服务商遵守严格的隐私保护规定<br/>
+        6.3 我们要求第三方服务商不长期保存您的图片数据
       </text>
     </view>
 
@@ -100,7 +100,7 @@
       <text class="section-content">
         7.1 我们不会故意收集14岁以下儿童的个人信息<br/>
         7.2 如果您发现我们收集了儿童信息，请立即联系我们<br/>
-        7.3 我们会立即删除相关儿童信息<br/>
+        7.3 我们会尽快删除相关儿童信息<br/>
         7.4 建议儿童在监护人指导下使用本服务
       </text>
     </view>
@@ -111,7 +111,7 @@
       <text class="section-content">
         8.1 技术保护：使用HTTPS加密、防火墙等技术保护数据<br/>
         8.2 传输安全：所有数据传输都经过加密处理<br/>
-        8.3 自动删除：处理完成后自动删除所有图片数据<br/>
+        8.3 自动删除：处理完成后会自动删除图片数据（通常在24小时内）<br/>
         8.4 应急响应：建立数据安全事件应急响应机制
       </text>
     </view>
