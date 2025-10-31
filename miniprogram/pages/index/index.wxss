@@ -2001,21 +2001,24 @@ button {
 .quota-bonus-text {
   font-size: 24rpx;
   color: #10b981;
-  display: flex;
-  align-items: center;
+  line-height: 1.6;
+  text-align: left;
+  display: block;
 }
 
 .quota-warning-text {
   font-size: 24rpx;
   color: #f59e0b;
   line-height: 1.6;
+  text-align: left;
+  display: block;
 }
 
 .quota-share-benefit {
   font-size: 24rpx;
   color: #ec4899;
   line-height: 1.6;
-  text-align: center;
+  text-align: left;
   display: block;
 }
 
