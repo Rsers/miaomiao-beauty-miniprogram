@@ -42,7 +42,16 @@ Component({
     colorRestoration: 0, // 色彩还原百分比
     originalResolution: '', // 原始分辨率
     enhancedResolution: '', // 修复后分辨率
-    resolutionMultiple: 0 // 分辨率提升倍数
+    resolutionMultiple: 0, // 分辨率提升倍数
+    // 快速测试相关数据
+    quickTestExpanded: true,  // 快速测试区域是否展开
+    quickTestImages: [         // 测试图片列表
+      { id: 1, name: '测试1', path: '/assets/quick-test/121.jpg' },
+      { id: 2, name: '测试2', path: '/assets/quick-test/122.jpg' },
+      { id: 3, name: '测试3', path: '/assets/quick-test/123.jpg' },
+      { id: 4, name: '测试4', path: '/assets/quick-test/124.jpg' },
+      { id: 5, name: '测试5', path: '/assets/quick-test/125.jpg' }
+    ]
   },
 
   lifetimes: {
@@ -90,6 +99,75 @@ Component({
   progressTimer: null as any,
 
   methods: {
+    // 快速测试相关方法
+    toggleQuickTest() {
+      this.setData({
+        quickTestExpanded: !this.data.quickTestExpanded
+      })
+    },
+
+    selectQuickTestImage(e: any) {
+      const index = e.currentTarget.dataset.index
+      const testImage = this.data.quickTestImages[index]
+      
+      if (!testImage) {
+        console.error('测试图片不存在:', index)
+        return
+      }
+
+      console.log('选择快速测试图片:', testImage.path)
+
+      // 显示加载提示
+      wx.showLoading({
+        title: '加载测试图片...'
+      })
+
+      // 获取测试图片信息
+      wx.getImageInfo({
+        src: testImage.path,
+        success: (res) => {
+          wx.hideLoading()
+          
+          // 模拟文件大小（测试图片通常较小，这里给一个合理的估算值）
+          const estimatedSize = 500000 // 500KB
+          
+          this.setData({
+            selectedFile: {
+              preview: res.path,
+              name: testImage.name + '.jpg',
+              size: this.formatFileSize(estimatedSize),
+              sizeBytes: estimatedSize,
+              isQuickTest: true // 标记为快速测试图片
+            },
+            showResult: false,
+            progress: 0
+          })
+
+          wx.showToast({
+            title: '测试图片已加载',
+            icon: 'success'
+          })
+
+          // 可选：自动滚动到预览区域
+          setTimeout(() => {
+            wx.pageScrollTo({
+              scrollTop: 200,
+              duration: 300
+            })
+          }, 500)
+
+        },
+        fail: (error) => {
+          wx.hideLoading()
+          console.error('加载测试图片失败:', error)
+          wx.showToast({
+            title: '加载失败，请重试',
+            icon: 'error'
+          })
+        }
+      })
+    },
+
     formatFileSize(bytes: number): string {
       if (bytes === 0) return '0 B'
       const k = 1024
@@ -286,7 +364,8 @@ Component({
                   preview: file,
                   name: file.split('/').pop(),
                   size: this.formatFileSize(info.size),
-                  sizeBytes: info.size // 保存原始字节数，用于智能计算
+                  sizeBytes: info.size, // 保存原始字节数，用于智能计算
+                  isQuickTest: false // 标记为普通上传图片
                 },
                 showResult: false,
                 progress: 0
