@@ -104,51 +104,6 @@ Component({
       return cleanUrl
     },
 
-    // 测试API连接
-    testApiConnection() {
-      wx.showLoading({ title: '测试连接中...' })
-
-      // 测试预签名URL端点
-      wx.request({
-        url: `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PRESIGNED_URL}`,
-        method: 'POST',
-        data: {
-          user_id: 'test_user',
-          file_type: 'image/jpeg',
-          file_size: 0,
-          filename: 'test.jpg'
-        },
-        timeout: 10000,
-        success: (res) => {
-          wx.hideLoading()
-          console.log('API连接测试响应:', res)
-
-          if (res.statusCode === 200 && res.data.success) {
-            wx.showModal({
-              title: '连接测试',
-              content: 'API服务器连接正常，预签名URL功能可用',
-              showCancel: false
-            })
-          } else {
-            wx.showModal({
-              title: '连接测试',
-              content: `API服务器响应异常: ${res.statusCode}`,
-              showCancel: false
-            })
-          }
-        },
-        fail: (error) => {
-          wx.hideLoading()
-          console.error('API连接测试失败:', error)
-          wx.showModal({
-            title: '连接测试',
-            content: '无法连接到API服务器，请检查网络连接',
-            showCancel: false
-          })
-        }
-      })
-    },
-
     // 智能重试机制
     retryWithBackoff(error: any, retryCount: number = 0) {
       const maxRetries = this.data.maxRetries
