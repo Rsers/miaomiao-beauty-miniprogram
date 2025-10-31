@@ -273,7 +273,7 @@
     </view>
 
     <!-- Features -->
-    <view class="px-6 mb-6">
+    <view class="px-6 mb-6 mt-12">
       <view class="features-card">
         <text class="text-center mb-4 text-gray-700 text-sm">核心特点</text>
         <view class="grid grid-cols-3 gap-3">
