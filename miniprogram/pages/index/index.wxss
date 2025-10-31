@@ -1931,7 +1931,7 @@ button {
   background: linear-gradient(135deg, #ffffff 0%, #fef3f8 100%);
   border-radius: 24rpx;
   padding: 32rpx;
-  margin-top: -32rpx;
+  margin-top: 48rpx;
   margin-bottom: 32rpx;
   box-shadow: 0 8rpx 24rpx rgba(255, 154, 158, 0.15);
   border: 2rpx solid rgba(255, 154, 158, 0.2);
