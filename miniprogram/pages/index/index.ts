@@ -46,11 +46,11 @@ Component({
     // 快速测试相关数据
     quickTestExpanded: true,  // 快速测试区域是否展开
     quickTestImages: [         // 测试图片列表
-      { id: 1, name: '测试1', path: '../../assets/quick-test/121.jpg' },
-      { id: 2, name: '测试2', path: '../../assets/quick-test/122.jpg' },
-      { id: 3, name: '测试3', path: '../../assets/quick-test/123.jpg' },
-      { id: 4, name: '测试4', path: '../../assets/quick-test/124.jpg' },
-      { id: 5, name: '测试5', path: '../../assets/quick-test/125.jpg' }
+      { id: 1, name: '测试1', path: '/assets/quick-test/121.jpg' },
+      { id: 2, name: '测试2', path: '/assets/quick-test/122.jpg' },
+      { id: 3, name: '测试3', path: '/assets/quick-test/123.jpg' },
+      { id: 4, name: '测试4', path: '/assets/quick-test/124.jpg' },
+      { id: 5, name: '测试5', path: '/assets/quick-test/125.jpg' }
     ]
   },
 
