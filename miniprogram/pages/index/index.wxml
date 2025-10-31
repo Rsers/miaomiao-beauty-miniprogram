@@ -69,12 +69,12 @@
         
         <!-- 低额度警告（次高优先级，且无额外奖励时显示） -->
         <view class="quota-hint" wx:elif="{{quotaRemaining <= 5}}">
-          <text class="quota-warning-text">⚠️ 额度即将用完，分享可得 10 次额外额度</text>
+          <text class="quota-warning-text">⚠️ 额度即将用完，分享可获 10 次额外额度</text>
         </view>
         
         <!-- 分享鼓励与清零机制提示（额度正常时显示） -->
         <view class="quota-hint" wx:else>
-          <text class="quota-share-benefit">✨ 每日0点额度焕新！分享给好友：你得10次，她得20次！</text>
+          <text class="quota-share-benefit">✨ 每日0点额度焕新！分享给好友，你和她各获10次额外额度！</text>
         </view>
       </view>
       

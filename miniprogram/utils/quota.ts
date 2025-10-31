@@ -4,7 +4,7 @@
  * 规则：
  * - 每日基础额度：20 次
  * - 超过 20 次：友好提示，不强制阻止
- * - 分享奖励：分享者 +10 次，被分享者 +20 次
+ * - 分享奖励：分享者和被分享者各 +10 次
  * - 每日 0 点自动重置
  */
 
@@ -83,13 +83,13 @@ class QuotaManager {
 
   /**
    * 被分享奖励（给被分享者）
-   * 通过分享进入 +20 次
+   * 通过分享进入 +10 次
    */
   inviteReward(): void {
     const data = this.getTodayData();
-    data.bonus += 20;
+    data.bonus += 10;
     wx.setStorageSync(this.STORAGE_KEY, data);
-    console.log('邀请奖励：+20 次额度');
+    console.log('邀请奖励：+10 次额度');
   }
 
   /**
