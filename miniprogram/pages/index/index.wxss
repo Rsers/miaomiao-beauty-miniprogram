@@ -2029,16 +2029,13 @@ button {
   border-radius: 9999rpx;
 }
 
-/* 增强标签（权威出片） */
+/* 增强标签（权威出片） - 与普通标签样式一致，仅颜色不同 */
 .desc-tag-enhanced {
-  font-size: 28rpx;
-  font-weight: bold;
-  background: linear-gradient(135deg, #fef3f8 0%, #fce7f3 100%);
+  font-size: 24rpx;
   color: #ec4899;
-  padding: 10rpx 20rpx;
+  background-color: #f3f4f6;
+  padding: 8rpx 16rpx;
   border-radius: 9999rpx;
-  border: 2rpx solid #fbcfe8;
-  box-shadow: 0 4rpx 12rpx rgba(236, 72, 153, 0.15);
 }
 
 /* ===== 用户反馈入口 ===== */
