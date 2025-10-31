@@ -127,6 +127,8 @@ Component({
         src: testImage.path,
         success: (res) => {
           console.log('测试图片信息获取成功:', res)
+          console.log('原始路径:', testImage.path)
+          console.log('返回路径:', res.path)
           
           // 获取真实文件大小
           wx.getFileInfo({
@@ -137,9 +139,10 @@ Component({
               console.log('测试图片文件信息:', fileInfo)
               
               // 重置所有状态（与 handleTryAgain 一致）
+              // ⚠️ 关键：使用原始路径 testImage.path，而不是 res.path
               this.setData({
                 selectedFile: {
-                  preview: res.path,
+                  preview: testImage.path,  // 使用原始路径，而不是 res.path
                   name: testImage.name + '.jpg',
                   size: this.formatFileSize(fileInfo.size),
                   sizeBytes: fileInfo.size,
@@ -180,9 +183,10 @@ Component({
               console.error('获取文件信息失败:', err)
               
               // 即使获取文件大小失败，也继续使用估算值
+              // ⚠️ 关键：使用原始路径 testImage.path，而不是 res.path
               this.setData({
                 selectedFile: {
-                  preview: res.path,
+                  preview: testImage.path,  // 使用原始路径，而不是 res.path
                   name: testImage.name + '.jpg',
                   size: '未知大小',
                   sizeBytes: 500000, // 估算 500KB
