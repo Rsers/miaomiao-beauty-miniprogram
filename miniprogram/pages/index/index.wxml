@@ -129,7 +129,7 @@
         <view class="result-header">
           <view class="result-title-section">
             <text class="result-title-icon">✨</text>
-            <text class="result-title-text">修复结果</text>
+            <text class="result-title-text">惊艳呈现</text>
           </view>
           <button bindtap="handleTryAgain" class="btn-retry">🔄 再试一次</button>
         </view>
