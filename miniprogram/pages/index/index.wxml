@@ -25,7 +25,7 @@
       <view class="relative z-10">
         <view class="mb-6">
           <view class="text-3xl text-white mb-3 tracking-wide drop-shadow-md">
-            <text class="block text-2xl opacity-95 mb-1">图片修复</text>
+            <text class="block text-2xl opacity-95 mb-1">✨ 超清魔法</text>
             <text class="block text-4xl gradient-text">喵喵美颜</text>
           </view>
           <view class="w-16 h-1 bg-white opacity-60 rounded-full mx-auto mb-4"></view>
