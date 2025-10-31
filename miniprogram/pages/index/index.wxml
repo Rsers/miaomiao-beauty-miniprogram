@@ -74,7 +74,7 @@
         
         <!-- 分享鼓励与清零机制提示（额度正常时显示） -->
         <view class="quota-hint" wx:else>
-          <text class="quota-share-benefit">✨ 每日0点额度焕新！分享给好友，你和她各获10次额外额度！</text>
+          <text class="quota-share-benefit">✨ 每日0点额度焕新！分享给好友：你获10次，她也获10次！</text>
         </view>
       </view>
       
