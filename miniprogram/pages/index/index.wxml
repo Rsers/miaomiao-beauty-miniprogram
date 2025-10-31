@@ -25,13 +25,13 @@
       <view class="relative z-10">
         <view class="mb-6">
           <view class="text-3xl text-white mb-3 tracking-wide drop-shadow-md">
-            <text class="block text-2xl opacity-95 mb-1">图片修复</text>
+            <text class="block text-2xl opacity-95 mb-1">✨ 超清魔法</text>
             <text class="block text-4xl gradient-text">喵喵美颜</text>
           </view>
           <view class="w-16 h-1 bg-white opacity-60 rounded-full mx-auto mb-4"></view>
           <view class="text-lg text-white opacity-95 leading-relaxed tracking-wide">
-            <text class="block">让模糊照片变清晰</text>
-            <text class="block">恢复珍贵记忆</text>
+            <text class="block">🌸 自然变美 · 权威出片</text>
+            <text class="block">🎨 告别违和感 · 美得真实</text>
           </view>
         </view>
       </view>
@@ -41,7 +41,11 @@
       
       <!-- 快速测试区域 -->
       <view class="mt-4">
-        <view class="section-title-center">开始修复</view>
+        <view class="section-title-enhanced">
+          <view class="title-icon">✨</view>
+          <text class="title-text">开始你的变美之旅</text>
+          <view class="title-icon">✨</view>
+        </view>
         
         <!-- 快速测试折叠区域 -->
         <view class="quick-test-section">
@@ -129,13 +133,22 @@
         <view class="result-header">
           <view class="result-title-section">
             <text class="result-title-icon">✨</text>
-            <text class="result-title-text">修复结果</text>
+            <text class="result-title-text">惊艳呈现</text>
           </view>
           <button bindtap="handleTryAgain" class="btn-retry">🔄 再试一次</button>
         </view>
         
         <view class="result-hint">
           <text class="result-hint-text">查看修复前后的对比效果</text>
+        </view>
+        
+        <!-- 放大查看引导 -->
+        <view class="zoom-guide">
+          <view class="zoom-guide-icon">🔍</view>
+          <view class="zoom-guide-text">
+            <text class="zoom-guide-main">点击图片放大查看细节</text>
+            <text class="zoom-guide-sub">发丝清晰可见 · 眼睛更清澈 · 肤色更白皙 · 背景更清晰</text>
+          </view>
         </view>
 
         <!-- 滑动对比功能暂时隐藏 -->
@@ -206,7 +219,7 @@
           </view>
           
           <view class="share-hint">
-            <text class="text-xs text-gray-600">💡 分享到微信，让更多人发现这个好用的小程序</text>
+            <text class="text-xs text-gray-600">💡 分享给闺蜜好友，一起变美变自信</text>
           </view>
         </view>
 

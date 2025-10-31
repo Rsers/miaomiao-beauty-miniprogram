@@ -923,7 +923,7 @@ Component({
         processTime,
         comparisonImages: [
           { label: '原图', src: originalImageSrc, desc: '修复前', enhanced: false },
-          { label: '修复后', src: cleanUrl, desc: '清晰度提升', enhanced: true }
+          { label: '修复后', src: cleanUrl, desc: '✨ 权威出片', enhanced: true }
         ]
       })
 
