@@ -1925,3 +1925,162 @@ button {
   animation-delay: 3s, 0.8s;
   font-size: 38rpx;
 }
+
+/* ===== 额度显示卡片 ===== */
+.quota-card {
+  background: linear-gradient(135deg, #ffffff 0%, #fef3f8 100%);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-top: 48rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 154, 158, 0.15);
+  border: 2rpx solid rgba(255, 154, 158, 0.2);
+  animation: quotaCardFadeIn 0.5s ease-out;
+}
+
+@keyframes quotaCardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.quota-main {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.quota-icon {
+  font-size: 56rpx;
+  animation: quotaIconPulse 2s ease-in-out infinite;
+}
+
+@keyframes quotaIconPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.quota-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  flex: 1;
+}
+
+.quota-title {
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+.quota-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ff6b9d 0%, #c77dff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'SF Mono', 'Menlo', monospace;
+  letter-spacing: 2rpx;
+}
+
+.quota-hint {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid rgba(255, 154, 158, 0.2);
+}
+
+.quota-bonus-text {
+  font-size: 24rpx;
+  color: #10b981;
+  line-height: 1.6;
+  text-align: left;
+  display: block;
+}
+
+.quota-warning-text {
+  font-size: 24rpx;
+  color: #f59e0b;
+  line-height: 1.6;
+  text-align: left;
+  display: block;
+}
+
+.quota-share-benefit {
+  font-size: 24rpx;
+  color: #ec4899;
+  line-height: 1.6;
+  text-align: left;
+  display: block;
+}
+
+/* ===== 图片标签样式 ===== */
+/* 普通标签（美化前） */
+.desc-tag-normal {
+  font-size: 24rpx;
+  color: #9ca3af;
+  background-color: #f3f4f6;
+  padding: 8rpx 16rpx;
+  border-radius: 9999rpx;
+}
+
+/* 增强标签（权威出片） - 与普通标签样式一致，仅颜色不同 */
+.desc-tag-enhanced {
+  font-size: 24rpx;
+  color: #ec4899;
+  background-color: #f3f4f6;
+  padding: 8rpx 16rpx;
+  border-radius: 9999rpx;
+}
+
+/* ===== 用户反馈入口 ===== */
+.feedback-section {
+  padding: 32rpx 48rpx;
+  display: flex;
+  justify-content: center;
+}
+
+.feedback-btn {
+  background: linear-gradient(135deg, #ffffff 0%, #fef3f8 100%);
+  border: 2rpx solid rgba(236, 72, 153, 0.2);
+  border-radius: 48rpx;
+  padding: 24rpx 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(236, 72, 153, 0.1);
+  transition: all 0.3s ease;
+}
+
+.feedback-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(236, 72, 153, 0.15);
+}
+
+.feedback-icon {
+  font-size: 40rpx;
+}
+
+.feedback-text {
+  font-size: 28rpx;
+  color: #ec4899;
+  font-weight: 500;
+}
+
+/* ===== 对比图片标签行（确保对齐） ===== */
+.comparison-label-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 64rpx;
+  margin-bottom: 16rpx;
+}
