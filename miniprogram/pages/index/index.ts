@@ -511,17 +511,97 @@ Component({
           wx.getFileInfo({
             filePath: file,
             success: (info) => {
-              this.setData({
-                selectedFile: {
-                  preview: file,
-                  name: file.split('/').pop(),
-                  size: this.formatFileSize(info.size),
-                  sizeBytes: info.size, // 保存原始字节数，用于智能计算
-                  isQuickTest: false // 标记为普通上传图片
-                },
-                showResult: false,
-                progress: 0
-              })
+              const originalSize = info.size
+              const MAX_SIZE = 500 * 1024 // 500 KB
+              
+              // 如果文件大于 500 KB，需要压缩
+              if (originalSize > MAX_SIZE) {
+                console.log(`图片过大 (${this.formatFileSize(originalSize)})，开始智能压缩...`)
+                
+                wx.showLoading({
+                  title: '正在优化图片...',
+                  mask: true
+                })
+                
+                // 使用微信API压缩图片
+                wx.compressImage({
+                  src: file,
+                  quality: 80, // 80%质量，足够清晰
+                  success: (compressRes) => {
+                    wx.hideLoading()
+                    
+                    // 获取压缩后的文件信息
+                    wx.getFileInfo({
+                      filePath: compressRes.tempFilePath,
+                      success: (compressInfo) => {
+                        const compressedSize = compressInfo.size
+                        const compressionRatio = ((1 - compressedSize / originalSize) * 100).toFixed(1)
+                        
+                        console.log(`✅ 压缩完成: ${this.formatFileSize(originalSize)} → ${this.formatFileSize(compressedSize)} (节省${compressionRatio}%)`)
+                        
+                        this.setData({
+                          selectedFile: {
+                            preview: compressRes.tempFilePath, // 使用压缩后的图片
+                            name: file.split('/').pop(),
+                            size: this.formatFileSize(compressedSize),
+                            sizeBytes: compressedSize,
+                            isQuickTest: false,
+                            isCompressed: true, // 标记已压缩
+                            originalSize: this.formatFileSize(originalSize) // 保存原始大小
+                          },
+                          showResult: false,
+                          progress: 0
+                        })
+                        
+                        // 提示用户已优化
+                        wx.showToast({
+                          title: '图片已优化',
+                          icon: 'success',
+                          duration: 1500
+                        })
+                      }
+                    })
+                  },
+                  fail: (err) => {
+                    wx.hideLoading()
+                    console.error('压缩失败，使用原图:', err)
+                    
+                    // 压缩失败，使用原图（风险：可能内存溢出）
+                    this.setData({
+                      selectedFile: {
+                        preview: file,
+                        name: file.split('/').pop(),
+                        size: this.formatFileSize(originalSize),
+                        sizeBytes: originalSize,
+                        isQuickTest: false
+                      },
+                      showResult: false,
+                      progress: 0
+                    })
+                    
+                    wx.showToast({
+                      title: '图片较大，可能处理较慢',
+                      icon: 'none',
+                      duration: 2000
+                    })
+                  }
+                })
+              } else {
+                // 文件小于 500 KB，直接使用
+                console.log(`图片大小适中 (${this.formatFileSize(originalSize)})，无需压缩`)
+                
+                this.setData({
+                  selectedFile: {
+                    preview: file,
+                    name: file.split('/').pop(),
+                    size: this.formatFileSize(originalSize),
+                    sizeBytes: originalSize,
+                    isQuickTest: false
+                  },
+                  showResult: false,
+                  progress: 0
+                })
+              }
             }
           })
         }
