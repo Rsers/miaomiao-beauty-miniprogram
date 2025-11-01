@@ -2,6 +2,7 @@
 const app = getApp<IAppOption>()
 const { enhanceImageSimple } = require('../../utils/api')
 const { handleApiError, checkNetworkStatus } = require('../../utils/errorHandler')
+const config = require('../../utils/config')
 import QuotaManager from '../../utils/quota'
 
 const API_CONFIG = {
