@@ -523,13 +523,27 @@ Component({
                   mask: true
                 })
                 
+                // 智能计算压缩质量（根据文件大小动态调整）
+                let quality = 80
+                if (originalSize > 5 * 1024 * 1024) {
+                  quality = 30  // >5MB: 30%
+                } else if (originalSize > 3 * 1024 * 1024) {
+                  quality = 40  // >3MB: 40%
+                } else if (originalSize > 2 * 1024 * 1024) {
+                  quality = 50  // >2MB: 50%
+                } else if (originalSize > 1 * 1024 * 1024) {
+                  quality = 60  // >1MB: 60%
+                } else {
+                  quality = 70  // >500KB: 70%
+                }
+                
+                console.log(`根据文件大小 (${this.formatFileSize(originalSize)})，使用压缩质量: ${quality}%`)
+                
                 // 使用微信API压缩图片
                 wx.compressImage({
                   src: file,
-                  quality: 80, // 80%质量，足够清晰
+                  quality: quality,
                   success: (compressRes) => {
-                    wx.hideLoading()
-                    
                     // 获取压缩后的文件信息
                     wx.getFileInfo({
                       filePath: compressRes.tempFilePath,
@@ -539,26 +553,95 @@ Component({
                         
                         console.log(`✅ 压缩完成: ${this.formatFileSize(originalSize)} → ${this.formatFileSize(compressedSize)} (节省${compressionRatio}%)`)
                         
-                        this.setData({
-                          selectedFile: {
-                            preview: compressRes.tempFilePath, // 使用压缩后的图片
-                            name: file.split('/').pop(),
-                            size: this.formatFileSize(compressedSize),
-                            sizeBytes: compressedSize,
-                            isQuickTest: false,
-                            isCompressed: true, // 标记已压缩
-                            originalSize: this.formatFileSize(originalSize) // 保存原始大小
-                          },
-                          showResult: false,
-                          progress: 0
-                        })
-                        
-                        // 提示用户已优化
-                        wx.showToast({
-                          title: '图片已优化',
-                          icon: 'success',
-                          duration: 1500
-                        })
+                        // 如果压缩后还是太大，再次压缩
+                        if (compressedSize > MAX_SIZE && quality > 20) {
+                          console.log(`⚠️ 压缩后仍然过大，尝试更激进的压缩...`)
+                          
+                          wx.compressImage({
+                            src: compressRes.tempFilePath,
+                            quality: 20, // 使用最低质量
+                            success: (secondCompressRes) => {
+                              wx.hideLoading()
+                              
+                              wx.getFileInfo({
+                                filePath: secondCompressRes.tempFilePath,
+                                success: (secondCompressInfo) => {
+                                  const finalSize = secondCompressInfo.size
+                                  const finalRatio = ((1 - finalSize / originalSize) * 100).toFixed(1)
+                                  
+                                  console.log(`✅ 二次压缩完成: ${this.formatFileSize(originalSize)} → ${this.formatFileSize(finalSize)} (节省${finalRatio}%)`)
+                                  
+                                  this.setData({
+                                    selectedFile: {
+                                      preview: secondCompressRes.tempFilePath,
+                                      name: file.split('/').pop(),
+                                      size: this.formatFileSize(finalSize),
+                                      sizeBytes: finalSize,
+                                      isQuickTest: false,
+                                      isCompressed: true,
+                                      originalSize: this.formatFileSize(originalSize)
+                                    },
+                                    showResult: false,
+                                    progress: 0
+                                  })
+                                  
+                                  wx.showToast({
+                                    title: '图片已优化',
+                                    icon: 'success',
+                                    duration: 1500
+                                  })
+                                }
+                              })
+                            },
+                            fail: () => {
+                              // 二次压缩失败，使用第一次压缩结果
+                              wx.hideLoading()
+                              
+                              this.setData({
+                                selectedFile: {
+                                  preview: compressRes.tempFilePath,
+                                  name: file.split('/').pop(),
+                                  size: this.formatFileSize(compressedSize),
+                                  sizeBytes: compressedSize,
+                                  isQuickTest: false,
+                                  isCompressed: true,
+                                  originalSize: this.formatFileSize(originalSize)
+                                },
+                                showResult: false,
+                                progress: 0
+                              })
+                              
+                              wx.showToast({
+                                title: '图片已优化',
+                                icon: 'success',
+                                duration: 1500
+                              })
+                            }
+                          })
+                        } else {
+                          // 压缩满足要求
+                          wx.hideLoading()
+                          
+                          this.setData({
+                            selectedFile: {
+                              preview: compressRes.tempFilePath,
+                              name: file.split('/').pop(),
+                              size: this.formatFileSize(compressedSize),
+                              sizeBytes: compressedSize,
+                              isQuickTest: false,
+                              isCompressed: true,
+                              originalSize: this.formatFileSize(originalSize)
+                            },
+                            showResult: false,
+                            progress: 0
+                          })
+                          
+                          wx.showToast({
+                            title: '图片已优化',
+                            icon: 'success',
+                            duration: 1500
+                          })
+                        }
                       }
                     })
                   },
