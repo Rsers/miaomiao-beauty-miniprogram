@@ -2192,6 +2192,7 @@ button {
 }
 
 .btn-modal-share,
+.btn-modal-continue,
 .btn-modal-cancel {
   flex: 1;
   height: 100rpx;
@@ -2219,6 +2220,20 @@ button {
 
 .btn-modal-share:active {
   background: #fef3f8;
+}
+
+.btn-modal-continue {
+  color: #3b82f6;
+  font-weight: bold;
+  border-right: 1rpx solid #f0f0f0;
+}
+
+.btn-modal-continue::after {
+  border: none;
+}
+
+.btn-modal-continue:active {
+  background: #eff6ff;
 }
 
 .btn-modal-cancel {

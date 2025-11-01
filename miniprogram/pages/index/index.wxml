@@ -99,7 +99,7 @@
           </view>
           
           <view class="quick-test-hint">
-            <text>选择测试图片，快速体验美颜效果</text>
+            <text>一键体验高清美颜效果</text>
           </view>
           
           <view class="quick-test-content {{quickTestExpanded ? 'expanded' : ''}}">
@@ -113,7 +113,6 @@
                   data-index="{{index}}"
                 >
                   <image src="{{item.path}}" mode="aspectFill" class="quick-test-image"></image>
-                  <view class="quick-test-name">{{item.name}}</view>
                 </view>
               </view>
             </scroll-view>
@@ -413,8 +412,8 @@
           <text class="btn-text">立即分享</text>
         </button>
         
-        <button bindtap="closeQuotaModal" class="btn-modal-cancel">
-          知道了
+        <button bindtap="continueProcessing" class="btn-modal-continue">
+          继续处理
         </button>
       </view>
     </view>

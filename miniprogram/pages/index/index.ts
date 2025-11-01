@@ -51,12 +51,15 @@ Component({
     resolutionMultiple: 0, // 分辨率提升倍数
     // 快速测试相关数据
     quickTestExpanded: true,  // 快速测试区域是否展开
-    quickTestImages: [         // 测试图片列表
-      { id: 1, name: '测试1', path: '/assets/quick-test/121.jpg' },
-      { id: 2, name: '测试2', path: '/assets/quick-test/122.jpg' },
-      { id: 3, name: '测试3', path: '/assets/quick-test/123.jpg' },
-      { id: 4, name: '测试4', path: '/assets/quick-test/124.jpg' },
-      { id: 5, name: '测试5', path: '/assets/quick-test/125.jpg' }
+    quickTestImages: [         // 示例图片列表
+      { id: 1, name: '女性1', path: '/assets/quick-test/121.jpg' },
+      { id: 2, name: '女性2', path: '/assets/quick-test/122.jpg' },
+      { id: 3, name: '男性1', path: '/assets/quick-test/123.jpg' },
+      { id: 4, name: '男性2', path: '/assets/quick-test/124.jpg' },
+      { id: 5, name: '宠物1', path: '/assets/quick-test/125.jpg' },
+      { id: 6, name: '宠物2', path: '/assets/quick-test/126.jpg' },
+      { id: 7, name: '风景1', path: '/assets/quick-test/127.jpg' },
+      { id: 8, name: '风景2', path: '/assets/quick-test/128.jpg' }
     ],
     // 额度相关数据
     quotaRemaining: 20,   // 剩余额度
@@ -210,22 +213,22 @@ Component({
       const testImage = this.data.quickTestImages[index]
       
       if (!testImage) {
-        console.error('测试图片不存在:', index)
+        console.error('示例图片不存在:', index)
         return
       }
 
-      console.log('选择快速测试图片:', testImage.path)
+      console.log('选择快速体验图片:', testImage.path)
 
       // 显示加载提示
       wx.showLoading({
-        title: '加载测试图片...'
+        title: '加载示例图片...'
       })
 
-      // 获取测试图片信息
+      // 获取示例图片信息
       wx.getImageInfo({
         src: testImage.path,
         success: (res) => {
-          console.log('测试图片信息获取成功:', res)
+          console.log('示例图片信息获取成功:', res)
           console.log('原始路径:', testImage.path)
           console.log('返回路径:', res.path)
           
@@ -235,7 +238,7 @@ Component({
             success: (fileInfo) => {
               wx.hideLoading()
               
-              console.log('测试图片文件信息:', fileInfo)
+              console.log('示例图片文件信息:', fileInfo)
               
               // 重置所有状态（与 handleTryAgain 一致）
               // ⚠️ 关键：使用原始路径 testImage.path，而不是 res.path
@@ -245,7 +248,7 @@ Component({
                   name: testImage.name + '.jpg',
                   size: this.formatFileSize(fileInfo.size),
                   sizeBytes: fileInfo.size,
-                  isQuickTest: true // 标记为快速测试图片
+                  isQuickTest: true // 标记为快速体验图片
                 },
                 showResult: false,
                 progress: 0,
@@ -264,7 +267,7 @@ Component({
               })
 
               wx.showToast({
-                title: '测试图片已加载',
+                title: '示例图片已加载',
                 icon: 'success',
                 duration: 1500
               })
@@ -308,7 +311,7 @@ Component({
               })
               
               wx.showToast({
-                title: '测试图片已加载',
+                title: '示例图片已加载',
                 icon: 'success',
                 duration: 1500
               })
@@ -317,7 +320,7 @@ Component({
         },
         fail: (error) => {
           wx.hideLoading()
-          console.error('加载测试图片失败:', error)
+          console.error('加载示例图片失败:', error)
           wx.showModal({
             title: '加载失败',
             content: `图片路径：${testImage.path}\n错误：${error.errMsg || '未知错误'}\n\n请检查图片是否存在。`,
@@ -814,54 +817,47 @@ Component({
     handleStartProcessing() {
       if (!this.data.selectedFile) return
 
-      // 1. 检查额度
-      const canUse = QuotaManager.useQuota()
+      // 1. 先检查剩余额度（不扣除）
+      const remaining = QuotaManager.getRemaining()
       
-      // 2. 如果刚好用完基础额度，显示友好提示
-      if (!canUse) {
-        const remaining = QuotaManager.getRemaining()
-        
-        // ✅ 使用自定义弹窗（支持 open-type="share" 按钮）
-        if (remaining > 0 && remaining <= 10) {
-          // 剩余额度较少，显示分享鼓励弹窗
-          this.setData({
-            showQuotaModal: true,
-            quotaRemaining: remaining
-          })
-          this.updateQuotaDisplay()
-          return
-        } else if (remaining === 0) {
-          // 额度用完，显示分享或等待明天的提示
-          wx.showModal({
-            title: '💎 温馨提示',
-            content: `今日额度已用完\n\n🎁 分享给好友：你获10次，她也获10次\n或者明天 0 点后再来`,
-            confirmText: '立即分享',
-            cancelText: '知道了',
-            success: (res) => {
-              if (res.confirm) {
-                // 引导分享（微信限制，无法代码触发）
-                wx.showToast({
-                  title: '请点击右上角"..."分享',
-                  icon: 'none',
-                  duration: 2000
-                })
-              }
+      // 2. 如果额度不足，显示提示并 return（不扣除额度）
+      if (remaining <= 0) {
+        // 额度用完，显示分享或等待明天的提示
+        wx.showModal({
+          title: '💎 温馨提示',
+          content: `今日额度已用完\n\n🎁 分享给好友：你获10次，她也获10次\n或者明天 0 点后再来`,
+          confirmText: '立即分享',
+          cancelText: '知道了',
+          success: (res) => {
+            if (res.confirm) {
+              // 引导分享（微信限制，无法代码触发）
+              wx.showToast({
+                title: '请点击右上角"..."分享',
+                icon: 'none',
+                duration: 2000
+              })
             }
-          })
-        } else {
-          // 有额外额度，直接继续
-          this.proceedToProcess()
-        }
-        
-        // 更新显示
+            // 注意：点击"知道了"不做任何操作，直接返回
+          }
+        })
         this.updateQuotaDisplay()
-        return
+        return  // ✅ 关键：不扣除额度，直接返回
       }
       
-      // 3. 更新显示
-      this.updateQuotaDisplay()
+      // 3. 如果剩余额度较少（1-10次），显示鼓励弹窗
+      if (remaining > 0 && remaining <= 10) {
+        // ✅ 使用自定义弹窗（支持 open-type="share" 按钮）
+        this.setData({
+          showQuotaModal: true,
+          quotaRemaining: remaining
+        })
+        this.updateQuotaDisplay()
+        return  // ✅ 等待用户在弹窗中点击"继续处理"
+      }
       
-      // 4. 继续处理
+      // 4. 额度充足，直接扣除额度并继续处理
+      QuotaManager.useQuota()
+      this.updateQuotaDisplay()
       this.proceedToProcess()
     },
     
@@ -1880,6 +1876,24 @@ Component({
       this.setData({ 
         showQuotaModal: false 
       })
+    },
+
+    /**
+     * 用户点击"继续处理"按钮（从弹窗中）
+     * 扣除额度并继续处理图片
+     */
+    continueProcessing() {
+      // 1. 关闭弹窗
+      this.setData({ 
+        showQuotaModal: false 
+      })
+      
+      // 2. 扣除额度
+      QuotaManager.useQuota()
+      this.updateQuotaDisplay()
+      
+      // 3. 继续处理
+      this.proceedToProcess()
     },
 
     /**
