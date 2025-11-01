@@ -128,6 +128,7 @@ Component({
         quotaBonus: bonus
       })
       
+      console.log('🔥🔥🔥 代码版本: 1.0.4-timeout-60s (config.timeout=' + config.timeout + 'ms) 🔥🔥🔥')
       console.log('额度更新:', { remaining, used, total, bonus })
     },
 
