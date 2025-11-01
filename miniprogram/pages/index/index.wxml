@@ -189,7 +189,7 @@
         <view class="result-hint">
           <text class="result-hint-text">查看美化前后的对比效果</text>
         </view>
-        
+
         <!-- 放大查看引导 -->
         <view class="zoom-guide">
           <view class="zoom-guide-icon">🔍</view>
@@ -370,14 +370,6 @@
       </view>
     </view>
 
-    <!-- 用户反馈入口 -->
-    <view class="feedback-section">
-      <button bindtap="openFeedback" class="feedback-btn">
-        <text class="feedback-icon">💬</text>
-        <text class="feedback-text">意见反馈</text>
-      </button>
-    </view>
-
     <!-- Footer -->
     <view class="p-6 text-center text-gray-500">
       <view class="text-sm mb-2">
@@ -388,5 +380,43 @@
       <text class="text-xs">使用本服务即表示您同意相关条款</text>
     </view>
     
+  </view>
+      
+  <!-- 自定义额度提示弹窗 -->
+  <view class="quota-modal" wx:if="{{showQuotaModal}}" catchtouchmove="preventTouchMove">
+    <!-- 遮罩层 -->
+    <view class="modal-mask" bindtap="closeQuotaModal"></view>
+    
+    <!-- 弹窗内容 -->
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">💎 温馨提示</text>
+      </view>
+      
+      <view class="modal-body">
+        <text class="quota-text">当前剩余：{{quotaRemaining}} 次</text>
+        <view class="share-benefit">
+          <text class="benefit-icon">🎁</text>
+          <text class="benefit-text">分享给好友：你获10次，她也获10次！</text>
+        </view>
+        <text class="call-to-action">立即分享，额度翻倍！</text>
+      </view>
+      
+      <view class="modal-footer">
+        <!-- ✅ 直接在弹窗里放分享按钮 -->
+        <button 
+          open-type="share" 
+          class="btn-modal-share"
+          bindtap="handleModalShare"
+        >
+          <text class="btn-icon">✨</text>
+          <text class="btn-text">立即分享</text>
+        </button>
+        
+        <button bindtap="closeQuotaModal" class="btn-modal-cancel">
+          知道了
+        </button>
+      </view>
+    </view>
   </view>
 </view>

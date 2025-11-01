@@ -1,13 +1,16 @@
 // utils/config.js
 const config = {
+    // 版本号（用于验证代码是否最新）
+    version: '1.0.4-timeout-60s',
+
     // API基础URL
     baseURL: 'https://www.gongjuxiang.work',
 
     // 超时时间（毫秒）
-    timeout: 30000, // 30秒（处理一张图片需要7秒，30秒足够）
+    timeout: 60000, // ✅ 改为60秒（大图片/GPU繁忙时需要更多时间）
 
     // 全局处理超时（毫秒）
-    globalTimeout: 30000, // 30秒全局超时保护
+    globalTimeout: 60000, // ✅ 改为60秒全局超时保护
 
     // 请求头
     headers: {

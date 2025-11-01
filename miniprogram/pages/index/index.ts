@@ -2,6 +2,7 @@
 const app = getApp<IAppOption>()
 const { enhanceImageSimple } = require('../../utils/api')
 const { handleApiError, checkNetworkStatus } = require('../../utils/errorHandler')
+const config = require('../../utils/config')
 import QuotaManager from '../../utils/quota'
 
 const API_CONFIG = {
@@ -14,6 +15,10 @@ const API_CONFIG = {
     ENHANCE_BY_KEY: '/api/v1/enhance-by-key'
   }
 }
+
+// ==================== 内存管理：临时文件跟踪 ====================
+// 使用 Component 外部变量（不需要响应式）
+let tempFiles: string[] = []
 
 Component({
   data: {
@@ -57,7 +62,8 @@ Component({
     quotaRemaining: 20,   // 剩余额度
     quotaUsed: 0,         // 已使用次数
     quotaTotal: 20,       // 总额度
-    quotaBonus: 0         // 额外获得额度
+    quotaBonus: 0,        // 额外获得额度
+    showQuotaModal: false // 是否显示额度提示弹窗
   },
 
   lifetimes: {
@@ -105,6 +111,9 @@ Component({
       
       // 检查是否通过分享进入
       this.checkShareInvite()
+      
+      // 初始化内存警告监听
+      this.setupMemoryWarningListener()
     }
   },
 
@@ -127,6 +136,7 @@ Component({
         quotaBonus: bonus
       })
       
+      console.log('🔥🔥🔥 代码版本: 1.0.4-timeout-60s (config.timeout=' + config.timeout + 'ms) 🔥🔥🔥')
       console.log('额度更新:', { remaining, used, total, bonus })
     },
 
@@ -497,31 +507,307 @@ Component({
       })
     },
 
+    // ==================== 智能压缩 + 内存管理 ====================
+    
+    /**
+     * 选择图片（无感智能压缩 + 内存管理）
+     */
     chooseImage() {
       wx.chooseImage({
         count: 1,
         sizeType: ['original'],
         sourceType: ['album', 'camera'],
-        success: (res) => {
+        success: async (res) => {
           const file = res.tempFilePaths[0]
-
-          wx.getFileInfo({
-            filePath: file,
-            success: (info) => {
-              this.setData({
-                selectedFile: {
-                  preview: file,
-                  name: file.split('/').pop(),
-                  size: this.formatFileSize(info.size),
-                  sizeBytes: info.size, // 保存原始字节数，用于智能计算
-                  isQuickTest: false // 标记为普通上传图片
-                },
-                showResult: false,
-                progress: 0
-              })
+          
+          // 记录原始文件
+          this.trackTempFile(file)
+          
+          try {
+            // 智能压缩
+            const compressedPath = await this.compressImageWithIntelligence(file)
+            
+            // 获取压缩后的文件信息
+            wx.getFileInfo({
+              filePath: compressedPath,
+              success: (info) => {
+                this.setData({
+                  selectedFile: {
+                    preview: compressedPath,
+                    name: file.split('/').pop(),
+                    size: this.formatFileSize(info.size),
+                    sizeBytes: info.size,
+                    isQuickTest: false
+                  },
+                  showResult: false,
+                  progress: 0
+                })
+              }
+            })
+          } catch (error) {
+            console.error('智能压缩失败，使用原图:', error)
+            
+            // 降级处理：使用原图
+            wx.getFileInfo({
+              filePath: file,
+              success: (info) => {
+                this.setData({
+                  selectedFile: {
+                    preview: file,
+                    name: file.split('/').pop(),
+                    size: this.formatFileSize(info.size),
+                    sizeBytes: info.size,
+                    isQuickTest: false
+                  },
+                  showResult: false,
+                  progress: 0
+                })
+              }
+            })
+          }
+        }
+      })
+    },
+    
+    /**
+     * 智能压缩图片（核心函数）
+     */
+    async compressImageWithIntelligence(tempFilePath: string): Promise<string> {
+      try {
+        // 1. 获取图片信息
+        const imageInfo = await this.getImageInfo(tempFilePath)
+        const fileInfo = await this.getFileInfo(tempFilePath)
+        
+        console.log('📷 原始图片信息:', {
+          width: imageInfo.width,
+          height: imageInfo.height,
+          size: `${(fileInfo.size / 1024 / 1024).toFixed(2)} MB`,
+          path: tempFilePath
+        })
+        
+        // 2. 计算压缩参数
+        const compressParams = this.calculateCompressParams(imageInfo, fileInfo)
+        
+        console.log('🎯 压缩策略:', compressParams)
+        
+        // 3. 执行压缩
+        const compressedPath = await this.compressImage(tempFilePath, compressParams)
+        
+        // 4. 验证压缩结果
+        const compressedInfo = await this.getFileInfo(compressedPath)
+        const compressionRatio = ((1 - compressedInfo.size / fileInfo.size) * 100).toFixed(1)
+        
+        console.log('✅ 压缩完成:', {
+          size: `${(compressedInfo.size / 1024).toFixed(2)} KB`,
+          compressionRatio: `${compressionRatio}%`,
+          path: compressedPath
+        })
+        
+        // 5. 记录压缩后的临时文件
+        this.trackTempFile(compressedPath)
+        
+        return compressedPath
+        
+      } catch (error) {
+        console.warn('⚠️ 智能压缩失败，使用原图:', error)
+        throw error // 抛出错误，由上层处理降级
+      }
+    },
+    
+    /**
+     * 获取图片信息
+     */
+    async getImageInfo(filePath: string): Promise<WechatMiniprogram.GetImageInfoSuccessCallbackResult> {
+      return new Promise((resolve, reject) => {
+        wx.getImageInfo({
+          src: filePath,
+          success: resolve,
+          fail: reject
+        })
+      })
+    },
+    
+    /**
+     * 获取文件信息（大小）
+     */
+    async getFileInfo(filePath: string): Promise<WechatMiniprogram.GetFileInfoSuccessCallbackResult> {
+      return new Promise((resolve, reject) => {
+        wx.getFileSystemManager().getFileInfo({
+          filePath,
+          success: resolve,
+          fail: reject
+        })
+      })
+    },
+    
+    /**
+     * 智能压缩参数计算算法
+     */
+    calculateCompressParams(
+      imageInfo: WechatMiniprogram.GetImageInfoSuccessCallbackResult,
+      fileInfo: WechatMiniprogram.GetFileInfoSuccessCallbackResult
+    ): { quality: number; compressedWidth?: number; compressedHeight?: number } {
+      const { width, height } = imageInfo
+      const fileSizeKB = fileInfo.size / 1024
+      const fileSizeMB = fileSizeKB / 1024
+      
+      // 目标参数
+      const MAX_SIZE = 1920  // 最大边长（GFPGAN 最佳输入）
+      const TARGET_SIZE_KB = 400  // 目标文件大小 KB
+      
+      let targetWidth = width
+      let targetHeight = height
+      let needResize = false
+      
+      // 1. 计算目标分辨率
+      if (width > MAX_SIZE || height > MAX_SIZE) {
+        const ratio = Math.min(MAX_SIZE / width, MAX_SIZE / height)
+        targetWidth = Math.floor(width * ratio)
+        targetHeight = Math.floor(height * ratio)
+        needResize = true
+        
+        console.log(`📐 需要调整尺寸: ${width}×${height} → ${targetWidth}×${targetHeight}`)
+      }
+      
+      // 2. 计算压缩质量（基于文件大小）
+      let quality = this.calculateQualityBySize(fileSizeMB, targetWidth, targetHeight)
+      
+      // 3. 如果文件很大但分辨率合适，主要靠质量压缩
+      if (fileSizeMB > 2 && !needResize) {
+        quality = Math.max(70, quality - 5)
+      }
+      
+      // 确保质量在合理范围内（70-85%，保留人脸细节）
+      quality = Math.max(70, Math.min(85, quality))
+      
+      console.log(`🎨 最终参数: 质量${quality}%, 尺寸${targetWidth}×${targetHeight}`)
+      
+      return {
+        quality,
+        compressedWidth: needResize ? targetWidth : undefined,
+        compressedHeight: needResize ? targetHeight : undefined
+      }
+    },
+    
+    /**
+     * 基于文件大小计算质量
+     * 优化版本：更精细的质量控制，确保压缩后在 300-500 KB 范围
+     */
+    calculateQualityBySize(fileSizeMB: number, width: number, height: number): number {
+      // 根据真实测试数据优化：
+      // 4.24 MB 原图 + 质量75% = 450-480 KB（理想）
+      // 4.24 MB 原图 + 质量78% = 508 KB（稍超）
+      
+      if (fileSizeMB > 8) {
+        return 70  // 超大型文件（>8MB）- 使用最低质量
+      } else if (fileSizeMB > 5) {
+        return 72  // 大型文件（5-8MB）
+      } else if (fileSizeMB > 4) {
+        return 75  // 中大型文件（4-5MB）✅ 优化点：原78% → 75%
+      } else if (fileSizeMB > 3) {
+        return 77  // 中等文件（3-4MB）
+      } else if (fileSizeMB > 2) {
+        return 78  // 中小型文件（2-3MB）
+      } else if (fileSizeMB > 1) {
+        return 80  // 小型文件（1-2MB）
+      } else {
+        return 82  // 合适大小（<1MB）
+      }
+    },
+    
+    /**
+     * 执行压缩
+     */
+    async compressImage(
+      tempFilePath: string, 
+      params: { quality: number; compressedWidth?: number; compressedHeight?: number }
+    ): Promise<string> {
+      return new Promise((resolve, reject) => {
+        wx.compressImage({
+          src: tempFilePath,
+          quality: params.quality,
+          compressedWidth: params.compressedWidth,
+          compressedHeight: params.compressedHeight,
+          success: (res) => {
+            console.log('✅ wx.compressImage 成功:', res.tempFilePath)
+            resolve(res.tempFilePath)
+          },
+          fail: (error) => {
+            console.error('❌ wx.compressImage 失败:', error)
+            reject(error)
+          }
+        })
+      })
+    },
+    
+    /**
+     * 跟踪临时文件
+     */
+    trackTempFile(filePath: string): void {
+      tempFiles.push(filePath)
+      console.log(`📂 跟踪临时文件: ${filePath}, 当前数量: ${tempFiles.length}`)
+    },
+    
+    /**
+     * 清理临时文件
+     */
+    cleanupTempFiles(): void {
+      const fileManager = wx.getFileSystemManager()
+      
+      console.log(`🧹 开始清理 ${tempFiles.length} 个临时文件`)
+      
+      tempFiles.forEach(filePath => {
+        try {
+          fileManager.unlink({
+            filePath,
+            success: () => {
+              console.log(`✅ 清理成功: ${filePath}`)
+            },
+            fail: (error) => {
+              console.warn(`⚠️ 清理失败: ${filePath}`, error)
             }
           })
+        } catch (error) {
+          console.warn(`⚠️ 清理异常: ${filePath}`, error)
         }
+      })
+      
+      tempFiles = []
+      console.log('✅ 临时文件清理完成')
+    },
+    
+    /**
+     * 内存警告监听
+     */
+    setupMemoryWarningListener(): void {
+      wx.onMemoryWarning((res) => {
+        console.warn('⚠️ 内存警告:', res.level)
+        
+        if (res.level >= 10) {
+          // 紧急内存清理
+          this.emergencyCleanup()
+        }
+      })
+    },
+    
+    /**
+     * 紧急内存清理
+     */
+    emergencyCleanup(): void {
+      console.log('🚨 执行紧急内存清理')
+      
+      // 1. 立即清理所有临时文件
+      this.cleanupTempFiles()
+      
+      // 2. 强制垃圾回收（如果可用）
+      if ((wx as any).triggerGC) {
+        (wx as any).triggerGC()
+      }
+      
+      wx.showToast({
+        title: '内存不足，已自动清理',
+        icon: 'none',
+        duration: 2000
       })
     },
 
@@ -535,32 +821,37 @@ Component({
       if (!canUse) {
         const remaining = QuotaManager.getRemaining()
         
-        wx.showModal({
-          title: '💎 温馨提示',
-          content: remaining > 10 
-            ? `今日基础额度已用完\n\n当前剩余：${remaining} 次（分享获得）` 
-            : remaining > 0 
-              ? `当前剩余：${remaining} 次\n\n🎁 分享给好友：你获10次，她也获10次！\n立即分享，额度翻倍！`
-              : `今日额度已用完\n\n🎁 分享给好友：你获10次，她也获10次\n或者明天 0 点后再来`,
-          confirmText: remaining > 0 ? '继续使用' : '立即分享',
-          cancelText: '知道了',
-          success: (res) => {
-            if (res.confirm) {
-              if (remaining > 0) {
-                // 继续使用额外额度
-                this.proceedToProcess()
-              } else {
-                // 引导分享
-                // 微信小程序无法直接触发分享，只能提示用户
+        // ✅ 使用自定义弹窗（支持 open-type="share" 按钮）
+        if (remaining > 0 && remaining <= 10) {
+          // 剩余额度较少，显示分享鼓励弹窗
+          this.setData({
+            showQuotaModal: true,
+            quotaRemaining: remaining
+          })
+          this.updateQuotaDisplay()
+          return
+        } else if (remaining === 0) {
+          // 额度用完，显示分享或等待明天的提示
+          wx.showModal({
+            title: '💎 温馨提示',
+            content: `今日额度已用完\n\n🎁 分享给好友：你获10次，她也获10次\n或者明天 0 点后再来`,
+            confirmText: '立即分享',
+            cancelText: '知道了',
+            success: (res) => {
+              if (res.confirm) {
+                // 引导分享（微信限制，无法代码触发）
                 wx.showToast({
-                  title: '请点击右上角分享',
+                  title: '请点击右上角"..."分享',
                   icon: 'none',
                   duration: 2000
                 })
               }
             }
-          }
-        })
+          })
+        } else {
+          // 有额外额度，直接继续
+          this.proceedToProcess()
+        }
         
         // 更新显示
         this.updateQuotaDisplay()
@@ -619,18 +910,18 @@ Component({
 
       this.startProgressAnimation()
 
-      // 设置全局超时保护（30秒后强制停止）
+      // 设置全局超时保护（60秒后强制停止 - 大图片需要更多时间）
       globalTimeoutId = setTimeout(() => {
-        console.warn('全局超时保护触发：30秒内未完成处理')
+        console.warn('全局超时保护触发：60秒内未完成处理')
         this.cleanupProcessing()
         wx.hideLoading()
         wx.showModal({
           title: '处理超时',
-          content: '处理时间超过30秒，请检查网络连接或稍后重试',
+          content: '处理时间超过60秒，请检查网络连接或稍后重试',
           showCancel: false,
           confirmText: '确定'
         })
-      }, 30000)
+      }, 60000)  // ✅ 改为60秒（原30秒太短）
 
       try {
         // 不显示 wx.showLoading，页面内已有进度显示（processing-overlay）
@@ -1496,6 +1787,9 @@ Component({
         this.progressTimer = null
       }
 
+      // 清理临时文件
+      this.cleanupTempFiles()
+
       this.setData({
         selectedFile: null,
         showResult: false,
@@ -1567,6 +1861,34 @@ Component({
       })
     },
 
+    /**
+     * 关闭额度提示弹窗
+     */
+    closeQuotaModal() {
+      this.setData({ 
+        showQuotaModal: false 
+      })
+    },
+
+    /**
+     * 弹窗内的分享按钮点击（记录用户意图）
+     */
+    handleModalShare() {
+      // 分享逻辑会在 onShareAppMessage 里处理
+      // 这里只需要关闭弹窗
+      console.log('用户点击了弹窗内的分享按钮')
+      this.setData({ 
+        showQuotaModal: false 
+      })
+    },
+
+    /**
+     * 阻止弹窗下方页面滚动
+     */
+    preventTouchMove() {
+      return false
+    },
+
     onShareAppMessage() {
       // 分享奖励：给分享者 +10 次
       QuotaManager.shareReward()
@@ -1613,5 +1935,8 @@ Component({
       clearInterval(this.progressTimer)
       this.progressTimer = null
     }
+    
+    // 清理临时文件
+    this.cleanupTempFiles()
   }
 })

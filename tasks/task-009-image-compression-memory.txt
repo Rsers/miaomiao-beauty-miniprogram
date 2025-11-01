@@ -1,0 +1,136 @@
+任务：微信小程序图片智能压缩 + 内存管理（无感处理）
+
+## 背景
+- 用户从手机相册选择高分辨率照片（可能 4-10 MB）
+- 上传到 GPU 服务器使用 GFPGAN 进行人脸修复
+- 当前问题：内存占用过高导致小程序崩溃（iOS 限制 200-400 MB）
+
+## 核心需求
+1. **无感压缩**：用户选择图片后，自动智能压缩，无任何提示
+2. **目标大小**：300-500 KB（小红书级别，GFPGAN 效果依然很好）
+3. **目标分辨率**：1024-1920px（GFPGAN 会放大到 2048px）
+4. **保持质量**：压缩质量 75-80%，保留人脸细节
+5. **内存管理**：严格控制内存，防止小程序崩溃
+
+## 处理流程
+```
+用户选择图片 → wx.chooseImage
+    ↓
+[步骤1] 立即智能压缩
+    - 获取图片信息（分辨率、大小）
+    - 根据实际情况计算压缩参数
+    - wx.compressImage 一次性压缩到目标
+    - 目标：300-500 KB，1024-1920px
+    ↓
+[步骤2] 上传到 COS
+    - 使用压缩后的图片
+    - 上传完成后立即释放本地引用
+    ↓
+[步骤3] 调用 GFPGAN
+    - GPU 服务器处理（本地无压力）
+    ↓
+[步骤4] 下载结果
+    - 分段下载（onProgressUpdate）
+    - 边下载边展示进度
+    ↓
+[步骤5] 展示结果
+    - 使用 Image 组件懒加载
+    - 清理临时文件
+```
+
+## 内存管理策略
+1. **及时释放引用**
+   ```javascript
+   // 每个步骤完成后
+   tempFilePath = null;
+   compressedPath = null;
+   ```
+
+2. **使用文件系统而非内存缓存**
+   ```javascript
+   // 不要缓存 base64 或 buffer
+   // 直接使用临时文件路径
+   wx.getFileSystemManager().unlink()
+   ```
+
+3. **监控内存使用**
+   ```javascript
+   wx.onMemoryWarning((res) => {
+     if (res.level >= 10) {
+       // 主动清理缓存
+     }
+   });
+   ```
+
+4. **分段处理大文件**
+   ```javascript
+   // 下载时使用流式处理
+   wx.downloadFile({
+     url: resultUrl,
+     onProgressUpdate: (res) => {
+       // 实时更新进度，不缓存整个文件
+     }
+   });
+   ```
+
+## 智能压缩算法
+```javascript
+function calculateCompressParams(imageInfo) {
+  const { width, height, size } = imageInfo;
+  
+  // 1. 计算目标分辨率
+  const MAX_SIZE = 1920; // 最大边长
+  const MIN_SIZE = 1024; // 最小边长
+  
+  let targetWidth = width;
+  let targetHeight = height;
+  
+  if (width > MAX_SIZE || height > MAX_SIZE) {
+    const ratio = Math.min(MAX_SIZE / width, MAX_SIZE / height);
+    targetWidth = Math.floor(width * ratio);
+    targetHeight = Math.floor(height * ratio);
+  }
+  
+  // 2. 计算压缩质量
+  const fileSizeMB = size / 1024 / 1024;
+  let quality = 80;
+  
+  if (fileSizeMB > 5) {
+    quality = 70; // 大图片降低质量
+  } else if (fileSizeMB > 2) {
+    quality = 75;
+  }
+  
+  return { targetWidth, targetHeight, quality };
+}
+```
+
+## 关键代码要求
+1. **修改文件**：`miniprogram/pages/index/index.ts`
+2. **函数**：`handleChooseImage()` - 添加智能压缩逻辑
+3. **无感处理**：不使用 `wx.showModal` 或 `wx.showToast` 提示用户
+4. **错误处理**：压缩失败时使用原图（fallback）
+5. **日志记录**：console.log 记录压缩前后的大小和分辨率
+
+## 测试场景
+1. **场景1**：用户选择 4.4 MB 原图（3024x4032）
+   - 预期：压缩到 400-500 KB（1920px）
+   
+2. **场景2**：用户选择 300 KB 小红书图（1080x1350）
+   - 预期：不压缩或轻微压缩（已经合适）
+   
+3. **场景3**：用户选择 10 MB 超高清图（4096x5120）
+   - 预期：压缩到 300-400 KB（1024px）
+
+## 输出要求
+1. 完整的 `handleChooseImage` 函数（包含智能压缩）
+2. `compressImage` 辅助函数
+3. `calculateCompressParams` 算法
+4. 内存管理相关代码
+5. 详细注释说明每个步骤
+
+## 技术栈
+- TypeScript
+- 微信小程序 API（wx.chooseImage, wx.compressImage, wx.getImageInfo）
+- 异步流程控制（async/await）
+

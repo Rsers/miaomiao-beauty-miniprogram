@@ -12,9 +12,9 @@ function enhanceImage(imagePath, onProgress) {
         const startTime = Date.now()
         let timeoutId = null
 
-        // 设置全局超时保护（30秒）
+        // 设置全局超时保护（60秒 - 大图片处理需要更多时间）
         timeoutId = setTimeout(() => {
-            reject(new Error('处理超时：30秒内未完成，请检查网络连接或稍后重试'))
+            reject(new Error('处理超时：60秒内未完成，请检查网络连接或稍后重试'))
         }, config.globalTimeout)
 
         // 步骤1: 获取预签名URL
