@@ -58,6 +58,12 @@ class QuotaManager {
     const data = this.getTodayData();
     const remainingBefore = this.getRemaining(); // 使用前的剩余额度
 
+    // ✅ 修复：如果额度已用完，不再增加used
+    if (remainingBefore <= 0) {
+      console.log('❌ 额度已用完，拒绝扣除');
+      return false;
+    }
+
     // 记录使用次数
     data.used++;
     wx.setStorageSync(this.STORAGE_KEY, data);
