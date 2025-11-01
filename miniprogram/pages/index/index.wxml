@@ -389,4 +389,42 @@
     </view>
     
   </view>
+
+  <!-- 自定义额度提示弹窗 -->
+  <view class="quota-modal" wx:if="{{showQuotaModal}}" catchtouchmove="preventTouchMove">
+    <!-- 遮罩层 -->
+    <view class="modal-mask" bindtap="closeQuotaModal"></view>
+    
+    <!-- 弹窗内容 -->
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">💎 温馨提示</text>
+      </view>
+      
+      <view class="modal-body">
+        <text class="quota-text">当前剩余：{{quotaRemaining}} 次</text>
+        <view class="share-benefit">
+          <text class="benefit-icon">🎁</text>
+          <text class="benefit-text">分享给好友：你获10次，她也获10次！</text>
+        </view>
+        <text class="call-to-action">立即分享，额度翻倍！</text>
+      </view>
+      
+      <view class="modal-footer">
+        <!-- ✅ 直接在弹窗里放分享按钮 -->
+        <button 
+          open-type="share" 
+          class="btn-modal-share"
+          bindtap="handleModalShare"
+        >
+          <text class="btn-icon">✨</text>
+          <text class="btn-text">立即分享</text>
+        </button>
+        
+        <button bindtap="closeQuotaModal" class="btn-modal-cancel">
+          知道了
+        </button>
+      </view>
+    </view>
+  </view>
 </view>

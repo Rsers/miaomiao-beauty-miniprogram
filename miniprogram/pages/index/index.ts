@@ -57,7 +57,8 @@ Component({
     quotaRemaining: 20,   // 剩余额度
     quotaUsed: 0,         // 已使用次数
     quotaTotal: 20,       // 总额度
-    quotaBonus: 0         // 额外获得额度
+    quotaBonus: 0,        // 额外获得额度
+    showQuotaModal: false // 是否显示额度提示弹窗
   },
 
   lifetimes: {
@@ -535,32 +536,37 @@ Component({
       if (!canUse) {
         const remaining = QuotaManager.getRemaining()
         
-        wx.showModal({
-          title: '💎 温馨提示',
-          content: remaining > 10 
-            ? `今日基础额度已用完\n\n当前剩余：${remaining} 次（分享获得）` 
-            : remaining > 0 
-              ? `当前剩余：${remaining} 次\n\n🎁 分享给好友：你获10次，她也获10次！\n立即分享，额度翻倍！`
-              : `今日额度已用完\n\n🎁 分享给好友：你获10次，她也获10次\n或者明天 0 点后再来`,
-          confirmText: remaining > 0 ? '继续使用' : '立即分享',
-          cancelText: '知道了',
-          success: (res) => {
-            if (res.confirm) {
-              if (remaining > 0) {
-                // 继续使用额外额度
-                this.proceedToProcess()
-              } else {
-                // 引导分享
-                // 微信小程序无法直接触发分享，只能提示用户
+        // ✅ 使用自定义弹窗（支持 open-type="share" 按钮）
+        if (remaining > 0 && remaining <= 10) {
+          // 剩余额度较少，显示分享鼓励弹窗
+          this.setData({
+            showQuotaModal: true,
+            quotaRemaining: remaining
+          })
+          this.updateQuotaDisplay()
+          return
+        } else if (remaining === 0) {
+          // 额度用完，显示分享或等待明天的提示
+          wx.showModal({
+            title: '💎 温馨提示',
+            content: `今日额度已用完\n\n🎁 分享给好友：你获10次，她也获10次\n或者明天 0 点后再来`,
+            confirmText: '立即分享',
+            cancelText: '知道了',
+            success: (res) => {
+              if (res.confirm) {
+                // 引导分享（微信限制，无法代码触发）
                 wx.showToast({
-                  title: '请点击右上角分享',
+                  title: '请点击右上角"..."分享',
                   icon: 'none',
                   duration: 2000
                 })
               }
             }
-          }
-        })
+          })
+        } else {
+          // 有额外额度，直接继续
+          this.proceedToProcess()
+        }
         
         // 更新显示
         this.updateQuotaDisplay()
@@ -1565,6 +1571,34 @@ Component({
         icon: 'none',
         duration: 2000
       })
+    },
+
+    /**
+     * 关闭额度提示弹窗
+     */
+    closeQuotaModal() {
+      this.setData({ 
+        showQuotaModal: false 
+      })
+    },
+
+    /**
+     * 弹窗内的分享按钮点击（记录用户意图）
+     */
+    handleModalShare() {
+      // 分享逻辑会在 onShareAppMessage 里处理
+      // 这里只需要关闭弹窗
+      console.log('用户点击了弹窗内的分享按钮')
+      this.setData({ 
+        showQuotaModal: false 
+      })
+    },
+
+    /**
+     * 阻止弹窗下方页面滚动
+     */
+    preventTouchMove() {
+      return false
     },
 
     onShareAppMessage() {
