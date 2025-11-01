@@ -59,8 +59,13 @@ Component({
     quotaUsed: 0,         // 已使用次数
     quotaTotal: 20,       // 总额度
     quotaBonus: 0,        // 额外获得额度
-    showQuotaModal: false // 是否显示额度提示弹窗
+    showQuotaModal: false, // 是否显示额度提示弹窗
+    // 内存管理相关
+    tempFiles: [] as string[] // 临时文件路径列表（用于清理）
   },
+
+  // 临时文件管理数组（用于内存清理）
+  tempFiles: [] as string[],
 
   lifetimes: {
     attached() {
@@ -107,6 +112,9 @@ Component({
       
       // 检查是否通过分享进入
       this.checkShareInvite()
+      
+      // 初始化内存警告监听
+      this.setupMemoryWarningListener()
     }
   },
 
@@ -500,194 +508,298 @@ Component({
       })
     },
 
+    // ==================== 智能压缩 + 内存管理 ====================
+    
+    /**
+     * 选择图片（无感智能压缩 + 内存管理）
+     */
     chooseImage() {
       wx.chooseImage({
         count: 1,
         sizeType: ['original'],
         sourceType: ['album', 'camera'],
-        success: (res) => {
+        success: async (res) => {
           const file = res.tempFilePaths[0]
-
-          wx.getFileInfo({
-            filePath: file,
-            success: (info) => {
-              const originalSize = info.size
-              const MAX_SIZE = 500 * 1024 // 500 KB
-              
-              // 如果文件大于 500 KB，需要压缩
-              if (originalSize > MAX_SIZE) {
-                console.log(`图片过大 (${this.formatFileSize(originalSize)})，开始智能压缩...`)
-                
-                wx.showLoading({
-                  title: '正在优化图片...',
-                  mask: true
-                })
-                
-                // 智能计算压缩质量（根据文件大小动态调整）
-                let quality = 80
-                if (originalSize > 5 * 1024 * 1024) {
-                  quality = 30  // >5MB: 30%
-                } else if (originalSize > 3 * 1024 * 1024) {
-                  quality = 40  // >3MB: 40%
-                } else if (originalSize > 2 * 1024 * 1024) {
-                  quality = 50  // >2MB: 50%
-                } else if (originalSize > 1 * 1024 * 1024) {
-                  quality = 60  // >1MB: 60%
-                } else {
-                  quality = 70  // >500KB: 70%
-                }
-                
-                console.log(`根据文件大小 (${this.formatFileSize(originalSize)})，使用压缩质量: ${quality}%`)
-                
-                // 使用微信API压缩图片
-                wx.compressImage({
-                  src: file,
-                  quality: quality,
-                  success: (compressRes) => {
-                    // 获取压缩后的文件信息
-                    wx.getFileInfo({
-                      filePath: compressRes.tempFilePath,
-                      success: (compressInfo) => {
-                        const compressedSize = compressInfo.size
-                        const compressionRatio = ((1 - compressedSize / originalSize) * 100).toFixed(1)
-                        
-                        console.log(`✅ 压缩完成: ${this.formatFileSize(originalSize)} → ${this.formatFileSize(compressedSize)} (节省${compressionRatio}%)`)
-                        
-                        // 如果压缩后还是太大，再次压缩
-                        if (compressedSize > MAX_SIZE && quality > 20) {
-                          console.log(`⚠️ 压缩后仍然过大，尝试更激进的压缩...`)
-                          
-                          wx.compressImage({
-                            src: compressRes.tempFilePath,
-                            quality: 20, // 使用最低质量
-                            success: (secondCompressRes) => {
-                              wx.hideLoading()
-                              
-                              wx.getFileInfo({
-                                filePath: secondCompressRes.tempFilePath,
-                                success: (secondCompressInfo) => {
-                                  const finalSize = secondCompressInfo.size
-                                  const finalRatio = ((1 - finalSize / originalSize) * 100).toFixed(1)
-                                  
-                                  console.log(`✅ 二次压缩完成: ${this.formatFileSize(originalSize)} → ${this.formatFileSize(finalSize)} (节省${finalRatio}%)`)
-                                  
-                                  this.setData({
-                                    selectedFile: {
-                                      preview: secondCompressRes.tempFilePath,
-                                      name: file.split('/').pop(),
-                                      size: this.formatFileSize(finalSize),
-                                      sizeBytes: finalSize,
-                                      isQuickTest: false,
-                                      isCompressed: true,
-                                      originalSize: this.formatFileSize(originalSize)
-                                    },
-                                    showResult: false,
-                                    progress: 0
-                                  })
-                                  
-                                  wx.showToast({
-                                    title: '图片已优化',
-                                    icon: 'success',
-                                    duration: 1500
-                                  })
-                                }
-                              })
-                            },
-                            fail: () => {
-                              // 二次压缩失败，使用第一次压缩结果
-                              wx.hideLoading()
-                              
-                              this.setData({
-                                selectedFile: {
-                                  preview: compressRes.tempFilePath,
-                                  name: file.split('/').pop(),
-                                  size: this.formatFileSize(compressedSize),
-                                  sizeBytes: compressedSize,
-                                  isQuickTest: false,
-                                  isCompressed: true,
-                                  originalSize: this.formatFileSize(originalSize)
-                                },
-                                showResult: false,
-                                progress: 0
-                              })
-                              
-                              wx.showToast({
-                                title: '图片已优化',
-                                icon: 'success',
-                                duration: 1500
-                              })
-                            }
-                          })
-                        } else {
-                          // 压缩满足要求
-                          wx.hideLoading()
-                          
-                          this.setData({
-                            selectedFile: {
-                              preview: compressRes.tempFilePath,
-                              name: file.split('/').pop(),
-                              size: this.formatFileSize(compressedSize),
-                              sizeBytes: compressedSize,
-                              isQuickTest: false,
-                              isCompressed: true,
-                              originalSize: this.formatFileSize(originalSize)
-                            },
-                            showResult: false,
-                            progress: 0
-                          })
-                          
-                          wx.showToast({
-                            title: '图片已优化',
-                            icon: 'success',
-                            duration: 1500
-                          })
-                        }
-                      }
-                    })
-                  },
-                  fail: (err) => {
-                    wx.hideLoading()
-                    console.error('压缩失败，使用原图:', err)
-                    
-                    // 压缩失败，使用原图（风险：可能内存溢出）
-                    this.setData({
-                      selectedFile: {
-                        preview: file,
-                        name: file.split('/').pop(),
-                        size: this.formatFileSize(originalSize),
-                        sizeBytes: originalSize,
-                        isQuickTest: false
-                      },
-                      showResult: false,
-                      progress: 0
-                    })
-                    
-                    wx.showToast({
-                      title: '图片较大，可能处理较慢',
-                      icon: 'none',
-                      duration: 2000
-                    })
-                  }
-                })
-              } else {
-                // 文件小于 500 KB，直接使用
-                console.log(`图片大小适中 (${this.formatFileSize(originalSize)})，无需压缩`)
-                
+          
+          // 记录原始文件
+          this.trackTempFile(file)
+          
+          try {
+            // 智能压缩
+            const compressedPath = await this.compressImageWithIntelligence(file)
+            
+            // 获取压缩后的文件信息
+            wx.getFileInfo({
+              filePath: compressedPath,
+              success: (info) => {
                 this.setData({
                   selectedFile: {
-                    preview: file,
+                    preview: compressedPath,
                     name: file.split('/').pop(),
-                    size: this.formatFileSize(originalSize),
-                    sizeBytes: originalSize,
+                    size: this.formatFileSize(info.size),
+                    sizeBytes: info.size,
                     isQuickTest: false
                   },
                   showResult: false,
                   progress: 0
                 })
               }
+            })
+          } catch (error) {
+            console.error('智能压缩失败，使用原图:', error)
+            
+            // 降级处理：使用原图
+            wx.getFileInfo({
+              filePath: file,
+              success: (info) => {
+                this.setData({
+                  selectedFile: {
+                    preview: file,
+                    name: file.split('/').pop(),
+                    size: this.formatFileSize(info.size),
+                    sizeBytes: info.size,
+                    isQuickTest: false
+                  },
+                  showResult: false,
+                  progress: 0
+                })
+              }
+            })
+          }
+        }
+      })
+    },
+    
+    /**
+     * 智能压缩图片（核心函数）
+     */
+    async compressImageWithIntelligence(tempFilePath: string): Promise<string> {
+      try {
+        // 1. 获取图片信息
+        const imageInfo = await this.getImageInfo(tempFilePath)
+        const fileInfo = await this.getFileInfo(tempFilePath)
+        
+        console.log('📷 原始图片信息:', {
+          width: imageInfo.width,
+          height: imageInfo.height,
+          size: `${(fileInfo.size / 1024 / 1024).toFixed(2)} MB`,
+          path: tempFilePath
+        })
+        
+        // 2. 计算压缩参数
+        const compressParams = this.calculateCompressParams(imageInfo, fileInfo)
+        
+        console.log('🎯 压缩策略:', compressParams)
+        
+        // 3. 执行压缩
+        const compressedPath = await this.compressImage(tempFilePath, compressParams)
+        
+        // 4. 验证压缩结果
+        const compressedInfo = await this.getFileInfo(compressedPath)
+        const compressionRatio = ((1 - compressedInfo.size / fileInfo.size) * 100).toFixed(1)
+        
+        console.log('✅ 压缩完成:', {
+          size: `${(compressedInfo.size / 1024).toFixed(2)} KB`,
+          compressionRatio: `${compressionRatio}%`,
+          path: compressedPath
+        })
+        
+        // 5. 记录压缩后的临时文件
+        this.trackTempFile(compressedPath)
+        
+        return compressedPath
+        
+      } catch (error) {
+        console.warn('⚠️ 智能压缩失败，使用原图:', error)
+        throw error // 抛出错误，由上层处理降级
+      }
+    },
+    
+    /**
+     * 获取图片信息
+     */
+    async getImageInfo(filePath: string): Promise<WechatMiniprogram.GetImageInfoSuccessCallbackResult> {
+      return new Promise((resolve, reject) => {
+        wx.getImageInfo({
+          src: filePath,
+          success: resolve,
+          fail: reject
+        })
+      })
+    },
+    
+    /**
+     * 获取文件信息（大小）
+     */
+    async getFileInfo(filePath: string): Promise<WechatMiniprogram.GetFileInfoSuccessCallbackResult> {
+      return new Promise((resolve, reject) => {
+        wx.getFileSystemManager().getFileInfo({
+          filePath,
+          success: resolve,
+          fail: reject
+        })
+      })
+    },
+    
+    /**
+     * 智能压缩参数计算算法
+     */
+    calculateCompressParams(
+      imageInfo: WechatMiniprogram.GetImageInfoSuccessCallbackResult,
+      fileInfo: WechatMiniprogram.GetFileInfoSuccessCallbackResult
+    ): { quality: number; compressedWidth?: number; compressedHeight?: number } {
+      const { width, height } = imageInfo
+      const fileSizeKB = fileInfo.size / 1024
+      const fileSizeMB = fileSizeKB / 1024
+      
+      // 目标参数
+      const MAX_SIZE = 1920  // 最大边长（GFPGAN 最佳输入）
+      const TARGET_SIZE_KB = 400  // 目标文件大小 KB
+      
+      let targetWidth = width
+      let targetHeight = height
+      let needResize = false
+      
+      // 1. 计算目标分辨率
+      if (width > MAX_SIZE || height > MAX_SIZE) {
+        const ratio = Math.min(MAX_SIZE / width, MAX_SIZE / height)
+        targetWidth = Math.floor(width * ratio)
+        targetHeight = Math.floor(height * ratio)
+        needResize = true
+        
+        console.log(`📐 需要调整尺寸: ${width}×${height} → ${targetWidth}×${targetHeight}`)
+      }
+      
+      // 2. 计算压缩质量（基于文件大小）
+      let quality = this.calculateQualityBySize(fileSizeMB, targetWidth, targetHeight)
+      
+      // 3. 如果文件很大但分辨率合适，主要靠质量压缩
+      if (fileSizeMB > 2 && !needResize) {
+        quality = Math.max(70, quality - 5)
+      }
+      
+      // 确保质量在合理范围内（70-85%，保留人脸细节）
+      quality = Math.max(70, Math.min(85, quality))
+      
+      console.log(`🎨 最终参数: 质量${quality}%, 尺寸${targetWidth}×${targetHeight}`)
+      
+      return {
+        quality,
+        compressedWidth: needResize ? targetWidth : undefined,
+        compressedHeight: needResize ? targetHeight : undefined
+      }
+    },
+    
+    /**
+     * 基于文件大小计算质量
+     */
+    calculateQualityBySize(fileSizeMB: number, width: number, height: number): number {
+      if (fileSizeMB > 8) {
+        return 72  // 超大型文件
+      } else if (fileSizeMB > 5) {
+        return 75  // 大型文件
+      } else if (fileSizeMB > 3) {
+        return 78  // 中等文件
+      } else if (fileSizeMB > 1) {
+        return 80  // 小型文件
+      } else {
+        return 82  // 合适大小
+      }
+    },
+    
+    /**
+     * 执行压缩
+     */
+    async compressImage(
+      tempFilePath: string, 
+      params: { quality: number; compressedWidth?: number; compressedHeight?: number }
+    ): Promise<string> {
+      return new Promise((resolve, reject) => {
+        wx.compressImage({
+          src: tempFilePath,
+          quality: params.quality,
+          compressedWidth: params.compressedWidth,
+          compressedHeight: params.compressedHeight,
+          success: (res) => {
+            console.log('✅ wx.compressImage 成功:', res.tempFilePath)
+            resolve(res.tempFilePath)
+          },
+          fail: (error) => {
+            console.error('❌ wx.compressImage 失败:', error)
+            reject(error)
+          }
+        })
+      })
+    },
+    
+    /**
+     * 跟踪临时文件
+     */
+    trackTempFile(filePath: string): void {
+      this.tempFiles.push(filePath)
+      console.log(`📂 跟踪临时文件: ${filePath}, 当前数量: ${this.tempFiles.length}`)
+    },
+    
+    /**
+     * 清理临时文件
+     */
+    cleanupTempFiles(): void {
+      const fileManager = wx.getFileSystemManager()
+      
+      console.log(`🧹 开始清理 ${this.tempFiles.length} 个临时文件`)
+      
+      this.tempFiles.forEach(filePath => {
+        try {
+          fileManager.unlink({
+            filePath,
+            success: () => {
+              console.log(`✅ 清理成功: ${filePath}`)
+            },
+            fail: (error) => {
+              console.warn(`⚠️ 清理失败: ${filePath}`, error)
             }
           })
+        } catch (error) {
+          console.warn(`⚠️ 清理异常: ${filePath}`, error)
         }
+      })
+      
+      this.tempFiles = []
+      console.log('✅ 临时文件清理完成')
+    },
+    
+    /**
+     * 内存警告监听
+     */
+    setupMemoryWarningListener(): void {
+      wx.onMemoryWarning((res) => {
+        console.warn('⚠️ 内存警告:', res.level)
+        
+        if (res.level >= 10) {
+          // 紧急内存清理
+          this.emergencyCleanup()
+        }
+      })
+    },
+    
+    /**
+     * 紧急内存清理
+     */
+    emergencyCleanup(): void {
+      console.log('🚨 执行紧急内存清理')
+      
+      // 1. 立即清理所有临时文件
+      this.cleanupTempFiles()
+      
+      // 2. 强制垃圾回收（如果可用）
+      if ((wx as any).triggerGC) {
+        (wx as any).triggerGC()
+      }
+      
+      wx.showToast({
+        title: '内存不足，已自动清理',
+        icon: 'none',
+        duration: 2000
       })
     },
 
@@ -1667,6 +1779,9 @@ Component({
         this.progressTimer = null
       }
 
+      // 清理临时文件
+      this.cleanupTempFiles()
+
       this.setData({
         selectedFile: null,
         showResult: false,
@@ -1812,5 +1927,8 @@ Component({
       clearInterval(this.progressTimer)
       this.progressTimer = null
     }
+    
+    // 清理临时文件
+    this.cleanupTempFiles()
   }
 })
