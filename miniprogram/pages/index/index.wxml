@@ -370,14 +370,6 @@
       </view>
     </view>
 
-    <!-- 用户反馈入口 -->
-    <view class="feedback-section">
-      <button bindtap="openFeedback" class="feedback-btn">
-        <text class="feedback-icon">💬</text>
-        <text class="feedback-text">意见反馈</text>
-      </button>
-    </view>
-
     <!-- Footer -->
     <view class="p-6 text-center text-gray-500">
       <view class="text-sm mb-2">
