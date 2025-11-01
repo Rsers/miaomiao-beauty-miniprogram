@@ -691,18 +691,27 @@ Component({
     
     /**
      * 基于文件大小计算质量
+     * 优化版本：更精细的质量控制，确保压缩后在 300-500 KB 范围
      */
     calculateQualityBySize(fileSizeMB: number, width: number, height: number): number {
+      // 根据真实测试数据优化：
+      // 4.24 MB 原图 + 质量75% = 450-480 KB（理想）
+      // 4.24 MB 原图 + 质量78% = 508 KB（稍超）
+      
       if (fileSizeMB > 8) {
-        return 72  // 超大型文件
+        return 70  // 超大型文件（>8MB）- 使用最低质量
       } else if (fileSizeMB > 5) {
-        return 75  // 大型文件
+        return 72  // 大型文件（5-8MB）
+      } else if (fileSizeMB > 4) {
+        return 75  // 中大型文件（4-5MB）✅ 优化点：原78% → 75%
       } else if (fileSizeMB > 3) {
-        return 78  // 中等文件
+        return 77  // 中等文件（3-4MB）
+      } else if (fileSizeMB > 2) {
+        return 78  // 中小型文件（2-3MB）
       } else if (fileSizeMB > 1) {
-        return 80  // 小型文件
+        return 80  // 小型文件（1-2MB）
       } else {
-        return 82  // 合适大小
+        return 82  // 合适大小（<1MB）
       }
     },
     
