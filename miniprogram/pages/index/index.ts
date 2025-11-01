@@ -16,6 +16,10 @@ const API_CONFIG = {
   }
 }
 
+// ==================== 内存管理：临时文件跟踪 ====================
+// 使用 Component 外部变量（不需要响应式）
+let tempFiles: string[] = []
+
 Component({
   data: {
     sliderPosition: 50,
@@ -59,13 +63,8 @@ Component({
     quotaUsed: 0,         // 已使用次数
     quotaTotal: 20,       // 总额度
     quotaBonus: 0,        // 额外获得额度
-    showQuotaModal: false, // 是否显示额度提示弹窗
-    // 内存管理相关
-    tempFiles: [] as string[] // 临时文件路径列表（用于清理）
+    showQuotaModal: false // 是否显示额度提示弹窗
   },
-
-  // 临时文件管理数组（用于内存清理）
-  tempFiles: [] as string[],
 
   lifetimes: {
     attached() {
@@ -736,8 +735,8 @@ Component({
      * 跟踪临时文件
      */
     trackTempFile(filePath: string): void {
-      this.tempFiles.push(filePath)
-      console.log(`📂 跟踪临时文件: ${filePath}, 当前数量: ${this.tempFiles.length}`)
+      tempFiles.push(filePath)
+      console.log(`📂 跟踪临时文件: ${filePath}, 当前数量: ${tempFiles.length}`)
     },
     
     /**
@@ -746,9 +745,9 @@ Component({
     cleanupTempFiles(): void {
       const fileManager = wx.getFileSystemManager()
       
-      console.log(`🧹 开始清理 ${this.tempFiles.length} 个临时文件`)
+      console.log(`🧹 开始清理 ${tempFiles.length} 个临时文件`)
       
-      this.tempFiles.forEach(filePath => {
+      tempFiles.forEach(filePath => {
         try {
           fileManager.unlink({
             filePath,
@@ -764,7 +763,7 @@ Component({
         }
       })
       
-      this.tempFiles = []
+      tempFiles = []
       console.log('✅ 临时文件清理完成')
     },
     
