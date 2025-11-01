@@ -2,7 +2,7 @@
 const config = {
     // 版本号（用于验证代码是否最新）
     version: '1.0.4-timeout-60s',
-    
+
     // API基础URL
     baseURL: 'https://www.gongjuxiang.work',
 

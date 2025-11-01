@@ -189,7 +189,7 @@
         <view class="result-hint">
           <text class="result-hint-text">查看美化前后的对比效果</text>
         </view>
-        
+
         <!-- 放大查看引导 -->
         <view class="zoom-guide">
           <view class="zoom-guide-icon">🔍</view>
@@ -381,7 +381,7 @@
     </view>
     
   </view>
-
+      
   <!-- 自定义额度提示弹窗 -->
   <view class="quota-modal" wx:if="{{showQuotaModal}}" catchtouchmove="preventTouchMove">
     <!-- 遮罩层 -->
