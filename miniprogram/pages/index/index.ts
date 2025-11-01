@@ -625,18 +625,18 @@ Component({
 
       this.startProgressAnimation()
 
-      // 设置全局超时保护（30秒后强制停止）
+      // 设置全局超时保护（60秒后强制停止 - 大图片需要更多时间）
       globalTimeoutId = setTimeout(() => {
-        console.warn('全局超时保护触发：30秒内未完成处理')
+        console.warn('全局超时保护触发：60秒内未完成处理')
         this.cleanupProcessing()
         wx.hideLoading()
         wx.showModal({
           title: '处理超时',
-          content: '处理时间超过30秒，请检查网络连接或稍后重试',
+          content: '处理时间超过60秒，请检查网络连接或稍后重试',
           showCancel: false,
           confirmText: '确定'
         })
-      }, 30000)
+      }, 60000)  // ✅ 改为60秒（原30秒太短）
 
       try {
         // 不显示 wx.showLoading，页面内已有进度显示（processing-overlay）
